@@ -123,13 +123,17 @@ Along with sending PrivateToken from the Initial Issuer to the Origin, the Clien
 
 ## Origin/Issuer/Attester deployment
 
-Uses VOPRF
+VOPRF recommended.
 Origin is the Reverse Origin.
+
+TODO: Add diagram
 
 ## Split Origin-Attester deployment
 
 Uses BlindRSA, or SHOULD NOT VOPRF with a shared secret.
 Origin is the Initial Attester/Issuer.
+
+TODO: add diagram
 
 ## Arbitrary batched tokens
 
