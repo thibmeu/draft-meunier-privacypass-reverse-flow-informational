@@ -11,10 +11,6 @@ consensus: true
 v: 3
 area: "Security"
 workgroup: "Privacy Pass"
-keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
 venue:
   group: "Privacy Pass"
   type: "Working Group"
