@@ -56,7 +56,7 @@ informative:
 
 --- abstract
 
-This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
+This document specifies an instantiation of Privacy Pass Architecture {{!RFC9576}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
 It describes the conceptual model of Privacy Pass reverse flow and its protocols,
 its security and privacy goals, practical deployment models, and recommendations
@@ -67,7 +67,7 @@ goals are fulfilled.
 
 # Introduction
 
-This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
+This document specifies an instantiation of Privacy Pass Architecture {{!RFC9576}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
 In other words, it specifies a way for the Origin to act as a joint Attester/Issuer.
 
@@ -84,7 +84,7 @@ New terminology is defined below
 
 Flow: Direction from PrivateToken issuance to its redemption. The entity starting the flow acts as an Issuer, while the end of the flow acts as an Origin. The Client is always included, as it finalises the TokenResponse, and coordinate interactions.
 Initial Flow: Issuer -> Attester -> Client -> Origin. This flow produces a PrivateToken that is used by the Origin to kickstart a Reverse Flow.
-Reverse Flow: Issuer <- Attester <- Client <- Origin. This flow allows Origin to issues PrivateToken. In the reverse flow, the Origin operates one or more Issuer, and the Client MAY provide these tokens either to the Initial Attester/Issuer, or use them against the Origin 
+Reverse Flow: Issuer <- Attester <- Client <- Origin. This flow allows Origin to issues PrivateToken. In the reverse flow, the Origin operates one or more Issuer, and the Client MAY provide these tokens either to the Initial Attester/Issuer, or use them against the Origin
 Initial Attester/Issuer: Attester/Issuer part of the Initial Flow
 Origin Issuer: Issuer operated by the Origin
 Origin PrivateToken: PrivateToken issued by the Origin
@@ -162,7 +162,7 @@ We RECOMMEND that:
 
 In Privacy Pass with a reverse flow, the Origin MAY operate multiple Issuers, with arbitrary metadata associated to them. A malicious Origin MAY uses this opportunity to associate certain token values to a specific set of Clients.
 
-Let's consider the following deployment: the Origin operates two issuers A and B. The Client sends Token_A, and [TokenRequest_A, TokenRequest_B]. Issuer B is associated to a croissant aficionados.
+Let's consider the following deployment: the Origin operates two issuers A and B. The Client sends Token_A, and (TokenRequest_A, TokenRequest_B). Issuer B is associated to a croissant aficionados.
 
 If a Client requests croissant, or sends Token_B, the origin will provide TokenResponse_B. If not, it provides TokenResponse_A.
 
