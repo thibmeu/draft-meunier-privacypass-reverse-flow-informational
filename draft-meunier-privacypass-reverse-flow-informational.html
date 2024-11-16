@@ -1280,7 +1280,8 @@ Reverse Origin: An entity that consumes the Origin PrivateToken. It can be the O
       </h2>
 <p id="section-3-1">Along with sending their PrivateToken for authentication (as specified in RFC9576), Client
 sends TokenRequest<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">+---------------+    +--------+                                       +--------+         +----------+ +--------+
+<p id="section-3-2"><code>aasvg
++---------------+    +--------+                                       +--------+         +----------+ +--------+
 | Origin Issuer |    | Origin |                                       | Client |         | Attester | | Issuer |
 +---+-----------+    +---+----+                                       +---+----+         +----+-----+ +---+----+
     |                    |                                                |                   |           |
@@ -1294,7 +1295,8 @@ sends TokenRequest<a href="#section-3-1" class="pilcrow">¶</a></p>
     |&lt;-- TokenRequest ---|                                                |                   |           |
     |-- TokenResponse --&gt;|                                                |                   |           |
     |                    |--- Response+TokenResponse(Origin Issuer) -----&gt;+                   |           |
-    |                    |                                                |                   |           |<a href="#section-3-2" class="pilcrow">¶</a></p>
+    |                    |                                                |                   |           |
+</code><a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">TODO:
 1. How are TokenRequest provided?
 2. How are TokenResponse provided?
