@@ -60,7 +60,7 @@ CAPTCHA might consume a type 0x0002 public veriable token, and use it to issue 3
 
 We reuse terminology from {{RFC9576}}.
 
-New terminology is defined below
+The following terms are used throughout this document:
 
 Flow:
 : Direction from PrivateToken issuance to its redemption. The entity starting the flow acts as an Issuer, while the end of the flow acts as an Origin. The Client is always included, as it finalises the TokenResponse, and coordinate interactions.
