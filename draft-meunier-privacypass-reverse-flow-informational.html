@@ -1161,7 +1161,7 @@ goals are fulfilled.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-deployment" class="internal xref">Deployment</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-protocol-overview" class="internal xref">Protocol overview</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
                 <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-client-behaviour" class="internal xref">Client behaviour</a></p>
@@ -1171,9 +1171,6 @@ goals are fulfilled.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-split-origin-attester-deplo" class="internal xref">Split Origin-Attester deployment</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
-                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-arbitrary-batched-tokens" class="internal xref">Arbitrary batched tokens</a></p>
 </li>
             </ul>
 </li>
@@ -1217,7 +1214,13 @@ goals are fulfilled.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-1-1">This document specifies an instantiation of Privacy Pass Architecture <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
-In other words, it specifies a way for the Origin to act as a joint Attester/Issuer.<a href="#section-1-1" class="pilcrow">¶</a></p>
+In other words, it specifies a way for the Origin to act as a joint Attester/Issuer.
+A Client that has already been authorised to access an Origin can maintain that access,
+without losing the unlinkable property provided by Privacy Pass. In addition, it allows
+an Origin to define its own issuance policy based on an initial bootstraping attestation
+method. For instance, an Origin that wants to grant 30 access for users that solved a
+CAPTCHA might consume a type 0x0002 public veriable token, and use it to issue 30 type
+0x0001 private tokens.<a href="#section-1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
@@ -1229,7 +1232,7 @@ In other words, it specifies a way for the Origin to act as a joint Attester/Iss
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">We reuse terminology from RFC9576: https://datatracker.ietf.org/doc/html/rfc9576#name-terminology<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-2">We reuse terminology from <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <p id="section-2-3">New terminology is defined below<a href="#section-2-3" class="pilcrow">¶</a></p>
 <p id="section-2-4">Flow: Direction from PrivateToken issuance to its redemption. The entity starting the flow acts as an Issuer, while the end of the flow acts as an Origin. The Client is always included, as it finalises the TokenResponse, and coordinate interactions.
 Initial Flow: Issuer -&gt; Attester -&gt; Client -&gt; Origin. This flow produces a PrivateToken that is used by the Origin to kickstart a Reverse Flow.
@@ -1240,10 +1243,10 @@ Origin PrivateToken: PrivateToken issued by the Origin
 Reverse Origin: An entity that consumes the Origin PrivateToken. It can be the Origin, or the Initial Attester/Issuer<a href="#section-2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="deployment">
+<div id="protocol-overview">
 <section id="section-3">
-      <h2 id="name-deployment">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-deployment" class="section-name selfRef">Deployment</a>
+      <h2 id="name-protocol-overview">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-protocol-overview" class="section-name selfRef">Protocol overview</a>
       </h2>
 <p id="section-3-1">Along with sending their PrivateToken for authentication (as specified in RFC9576), Client
 sends TokenRequest<a href="#section-3-1" class="pilcrow">¶</a></p>
@@ -1291,7 +1294,8 @@ sends TokenRequest<a href="#section-3-1" class="pilcrow">¶</a></p>
             <path d="M 216,192 L 232,192" fill="none" stroke="black"></path>
             <path d="M 584,192 L 600,192" fill="none" stroke="black"></path>
             <path d="M 48,208 L 64,208" fill="none" stroke="black"></path>
-            <path d="M 184,208 L 200,208" fill="none" stroke="black"></path>
+            <path d="M 184,208 L 208,208" fill="none" stroke="black"></path>
+            <path d="M 40,224 L 56,224" fill="none" stroke="black"></path>
             <path d="M 184,224 L 200,224" fill="none" stroke="black"></path>
             <path d="M 216,240 L 232,240" fill="none" stroke="black"></path>
             <path d="M 552,240 L 592,240" fill="none" stroke="black"></path>
@@ -1321,7 +1325,6 @@ sends TokenRequest<a href="#section-3-1" class="pilcrow">¶</a></p>
               <text x="376" y="196">Request+Token+TokenRequest(Origin</text>
               <text x="544" y="196">Issuer)</text>
               <text x="124" y="212">TokenRequest</text>
-              <text x="52" y="228">--</text>
               <text x="120" y="228">TokenResponse</text>
               <text x="360" y="244">Response+TokenResponse(Origin</text>
               <text x="512" y="244">Issuer)</text>
@@ -1329,17 +1332,30 @@ sends TokenRequest<a href="#section-3-1" class="pilcrow">¶</a></p>
           </svg><a href="#section-3-2.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-3-3">TODO:
-1. How are TokenRequest provided?
-2. How are TokenResponse provided?
-3. What are the error codes
-&lt; binary HTTP sounds like an overkill, but fits.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-3">The initial flow matches the one defined by <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>. A Client gets challenged when
+accessing a resource on an Origin. The Client goes to the Attester to get issue a Token.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Through configuration mechanism not defined in this document, the Client is aware the Origin
+acts as a Reverse Flow issuer.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">This is an extension of <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>. The Client sends Request+Token+TokenRequest(Origin Issuer).
+The Origin runs the issuance protocol based, and returns Response+TokenResponse(Origin Issuer).<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen through a new HTTP Header <code>PrivacyPass-Reverse</code>.
+<code>PrivacyPass-Reverse</code> is a base64url encoded binary encoded HTTP message, respectively per <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> and <span>[<a href="#RFC9292" class="cite xref">RFC9292</a>]</span>.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-3-7.1">
+          <p id="section-3-7.1.1">The use of binary encoding avoids the definition of a new ad-hoc encoding of request, response, and
+associated errors for each Privacy Pass issuance protocols. This matches the architecture as defined in <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>.<a href="#section-3-7.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 <div id="client-behaviour">
 <section id="section-3.1">
         <h3 id="name-client-behaviour">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-client-behaviour" class="section-name selfRef">Client behaviour</a>
         </h3>
-<p id="section-3.1-1">Along with sending PrivateToken from the Initial Issuer to the Origin, the Client sends one or more TokenRequest as defined in RFC9578 or draft-batched-tokens.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">Along with sending PrivateToken from the Initial Issuer to the Origin, the Client sends one TokenRequest as defined in <span>[<a href="#RFC9578" class="cite xref">RFC9578</a>]</span> or draft-batched-tokens.
+The Client <span class="bcp14">SHOULD</span> consider Privacy Pass Reverse Flow like the initial flow. The Client
+is responsible to coordinate between the different entities.
+Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client <span class="bcp14">SHOULD</span>
+account for possible privacy leakage.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="originissuerattester-deployment">
@@ -1347,9 +1363,94 @@ sends TokenRequest<a href="#section-3-1" class="pilcrow">¶</a></p>
         <h3 id="name-origin-issuer-attester-depl">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-origin-issuer-attester-depl" class="section-name selfRef">Origin/Issuer/Attester deployment</a>
         </h3>
-<p id="section-3.2-1">VOPRF recommended.
-Origin is the Reverse Origin.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">TODO: Add diagram<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">In this model, the Origin, Attester, and Issuer are all operated by the same
+entity, as shown in <a href="#fig-deploy-shared" class="auto internal xref">Figure 1</a>. The Reverse Flow is the same as
+the Initial Flow, except for the request/response encapsulation.
+The Origin is the Reverse Origin.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<span id="name-shared-deployment-model"></span><div id="fig-deploy-shared">
+<figure id="figure-1">
+          <div id="section-3.2-2.1">
+            <div class="alignLeft art-svg artwork" id="section-3.2-2.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="272" width="528" viewBox="0 0 528 272" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,48 L 8,80" fill="none" stroke="black"></path>
+                <path d="M 40,80 L 40,256" fill="none" stroke="black"></path>
+                <path d="M 80,48 L 80,80" fill="none" stroke="black"></path>
+                <path d="M 144,32 L 144,80" fill="none" stroke="black"></path>
+                <path d="M 168,48 L 168,80" fill="none" stroke="black"></path>
+                <path d="M 216,80 L 216,104" fill="none" stroke="black"></path>
+                <path d="M 216,120 L 216,160" fill="none" stroke="black"></path>
+                <path d="M 256,48 L 256,80" fill="none" stroke="black"></path>
+                <path d="M 304,48 L 304,80" fill="none" stroke="black"></path>
+                <path d="M 344,80 L 344,96" fill="none" stroke="black"></path>
+                <path d="M 344,128 L 344,192" fill="none" stroke="black"></path>
+                <path d="M 376,48 L 376,80" fill="none" stroke="black"></path>
+                <path d="M 424,48 L 424,80" fill="none" stroke="black"></path>
+                <path d="M 456,80 L 456,256" fill="none" stroke="black"></path>
+                <path d="M 496,48 L 496,80" fill="none" stroke="black"></path>
+                <path d="M 520,48 L 520,80" fill="none" stroke="black"></path>
+                <path d="M 144,32 L 504,32" fill="none" stroke="black"></path>
+                <path d="M 8,48 L 80,48" fill="none" stroke="black"></path>
+                <path d="M 168,48 L 256,48" fill="none" stroke="black"></path>
+                <path d="M 304,48 L 376,48" fill="none" stroke="black"></path>
+                <path d="M 424,48 L 496,48" fill="none" stroke="black"></path>
+                <path d="M 8,80 L 80,80" fill="none" stroke="black"></path>
+                <path d="M 168,80 L 256,80" fill="none" stroke="black"></path>
+                <path d="M 304,80 L 376,80" fill="none" stroke="black"></path>
+                <path d="M 424,80 L 496,80" fill="none" stroke="black"></path>
+                <path d="M 160,96 L 208,96" fill="none" stroke="black"></path>
+                <path d="M 224,96 L 336,96" fill="none" stroke="black"></path>
+                <path d="M 352,96 L 448,96" fill="none" stroke="black"></path>
+                <path d="M 464,96 L 504,96" fill="none" stroke="black"></path>
+                <path d="M 48,112 L 304,112" fill="none" stroke="black"></path>
+                <path d="M 440,112 L 456,112" fill="none" stroke="black"></path>
+                <path d="M 48,142 L 72,142" fill="none" stroke="black"></path>
+                <path d="M 48,146 L 72,146" fill="none" stroke="black"></path>
+                <path d="M 184,142 L 208,142" fill="none" stroke="black"></path>
+                <path d="M 184,146 L 208,146" fill="none" stroke="black"></path>
+                <path d="M 40,176 L 128,176" fill="none" stroke="black"></path>
+                <path d="M 248,176 L 336,176" fill="none" stroke="black"></path>
+                <path d="M 48,192 L 128,192" fill="none" stroke="black"></path>
+                <path d="M 256,192 L 344,192" fill="none" stroke="black"></path>
+                <path d="M 40,224 L 96,224" fill="none" stroke="black"></path>
+                <path d="M 384,224 L 448,224" fill="none" stroke="black"></path>
+                <path d="M 48,240 L 120,240" fill="none" stroke="black"></path>
+                <path d="M 368,240 L 448,240" fill="none" stroke="black"></path>
+                <path d="M 504,32 C 512.83064,32 520,39.16936 520,48" fill="none" stroke="black"></path>
+                <path d="M 160,96 C 151.16936,96 144,88.83064 144,80" fill="none" stroke="black"></path>
+                <path d="M 504,96 C 512.83064,96 520,88.83064 520,80" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="456,224 444,218.4 444,229.6" fill="black" transform="rotate(0,448,224)"></polygon>
+                <polygon class="arrowhead" points="344,176 332,170.4 332,181.6" fill="black" transform="rotate(0,336,176)"></polygon>
+                <polygon class="arrowhead" points="216,144 204,138.4 204,149.6" fill="black" transform="rotate(0,208,144)"></polygon>
+                <polygon class="arrowhead" points="56,240 44,234.4 44,245.6" fill="black" transform="rotate(180,48,240)"></polygon>
+                <polygon class="arrowhead" points="56,192 44,186.4 44,197.6" fill="black" transform="rotate(180,48,192)"></polygon>
+                <polygon class="arrowhead" points="56,144 44,138.4 44,149.6" fill="black" transform="rotate(180,48,144)"></polygon>
+                <polygon class="arrowhead" points="56,112 44,106.4 44,117.6" fill="black" transform="rotate(180,48,112)"></polygon>
+                <g class="text">
+                  <text x="44" y="68">Client</text>
+                  <text x="212" y="68">Attester</text>
+                  <text x="340" y="68">Issuer</text>
+                  <text x="460" y="68">Origin</text>
+                  <text x="372" y="116">TokenChallenge</text>
+                  <text x="128" y="148">Attestation</text>
+                  <text x="188" y="180">TokenRequest</text>
+                  <text x="192" y="196">TokenResponse</text>
+                  <text x="208" y="228">Token+TokenRequest(Origin</text>
+                  <text x="344" y="228">Issuer)</text>
+                  <text x="212" y="244">TokenResponse(Origin</text>
+                  <text x="328" y="244">Issuer)</text>
+                </g>
+              </svg><a href="#section-3.2-2.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-shared-deployment-model" class="selfRef">Shared Deployment Model</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.2-3">Similar to the original Shared Deployment Model, the Attester,
+Issuer, and Origin share the attestation, issuance, and redemption
+contexts. Even if this context changes between the Initial and
+Reverse Flow, attestation mechanism that can uniquely identify
+a Client are not appropriate as they could lead to unlinkability violations.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="split-origin-attester-deployment">
@@ -1357,17 +1458,208 @@ Origin is the Reverse Origin.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
         <h3 id="name-split-origin-attester-deplo">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-split-origin-attester-deplo" class="section-name selfRef">Split Origin-Attester deployment</a>
         </h3>
-<p id="section-3.3-1">Uses BlindRSA, or <span class="bcp14">SHOULD NOT</span> VOPRF with a shared secret.
-Origin is the Initial Attester/Issuer.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">TODO: add diagram<a href="#section-3.3-2" class="pilcrow">¶</a></p>
-</section>
+<p id="section-3.3-1">In this model, the Attester and Issuer are operated by the same entity
+that is separate from the Origin. The Origin trusts the joint Attester
+and Issuer to perform attestation and issue Tokens.
+Origin Tokens can then be sent by Client on new requests, as long as the
+Reverse Origin trusts the Origin to perform attestation and issue Tokens.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<span id="name-joint-attester-and-issuer-d"></span><div id="fig-deploy-joint-issuer">
+<figure id="figure-2">
+          <div id="section-3.3-2.1">
+            <div class="alignLeft art-svg artwork" id="section-3.3-2.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="272" width="920" viewBox="0 0 920 272" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,48 L 8,80" fill="none" stroke="black"></path>
+                <path d="M 40,80 L 40,256" fill="none" stroke="black"></path>
+                <path d="M 136,48 L 136,80" fill="none" stroke="black"></path>
+                <path d="M 176,48 L 176,80" fill="none" stroke="black"></path>
+                <path d="M 208,80 L 208,256" fill="none" stroke="black"></path>
+                <path d="M 248,48 L 248,80" fill="none" stroke="black"></path>
+                <path d="M 568,48 L 568,80" fill="none" stroke="black"></path>
+                <path d="M 600,80 L 600,256" fill="none" stroke="black"></path>
+                <path d="M 640,48 L 640,80" fill="none" stroke="black"></path>
+                <path d="M 688,32 L 688,80" fill="none" stroke="black"></path>
+                <path d="M 712,48 L 712,80" fill="none" stroke="black"></path>
+                <path d="M 760,80 L 760,144" fill="none" stroke="black"></path>
+                <path d="M 760,192 L 760,256" fill="none" stroke="black"></path>
+                <path d="M 800,48 L 800,80" fill="none" stroke="black"></path>
+                <path d="M 816,48 L 816,80" fill="none" stroke="black"></path>
+                <path d="M 856,80 L 856,256" fill="none" stroke="black"></path>
+                <path d="M 888,48 L 888,80" fill="none" stroke="black"></path>
+                <path d="M 912,48 L 912,80" fill="none" stroke="black"></path>
+                <path d="M 688,32 L 896,32" fill="none" stroke="black"></path>
+                <path d="M 8,48 L 136,48" fill="none" stroke="black"></path>
+                <path d="M 176,48 L 248,48" fill="none" stroke="black"></path>
+                <path d="M 568,48 L 640,48" fill="none" stroke="black"></path>
+                <path d="M 712,48 L 800,48" fill="none" stroke="black"></path>
+                <path d="M 816,48 L 888,48" fill="none" stroke="black"></path>
+                <path d="M 8,80 L 136,80" fill="none" stroke="black"></path>
+                <path d="M 176,80 L 248,80" fill="none" stroke="black"></path>
+                <path d="M 568,80 L 640,80" fill="none" stroke="black"></path>
+                <path d="M 712,80 L 800,80" fill="none" stroke="black"></path>
+                <path d="M 816,80 L 888,80" fill="none" stroke="black"></path>
+                <path d="M 704,96 L 752,96" fill="none" stroke="black"></path>
+                <path d="M 768,96 L 848,96" fill="none" stroke="black"></path>
+                <path d="M 864,96 L 896,96" fill="none" stroke="black"></path>
+                <path d="M 208,112 L 224,112" fill="none" stroke="black"></path>
+                <path d="M 432,112 L 592,112" fill="none" stroke="black"></path>
+                <path d="M 608,126 L 624,126" fill="none" stroke="black"></path>
+                <path d="M 608,130 L 624,130" fill="none" stroke="black"></path>
+                <path d="M 736,126 L 752,126" fill="none" stroke="black"></path>
+                <path d="M 736,130 L 752,130" fill="none" stroke="black"></path>
+                <path d="M 600,160 L 672,160" fill="none" stroke="black"></path>
+                <path d="M 792,160 L 848,160" fill="none" stroke="black"></path>
+                <path d="M 608,176 L 672,176" fill="none" stroke="black"></path>
+                <path d="M 800,176 L 856,176" fill="none" stroke="black"></path>
+                <path d="M 216,192 L 232,192" fill="none" stroke="black"></path>
+                <path d="M 584,192 L 600,192" fill="none" stroke="black"></path>
+                <path d="M 48,208 L 64,208" fill="none" stroke="black"></path>
+                <path d="M 184,208 L 208,208" fill="none" stroke="black"></path>
+                <path d="M 40,224 L 56,224" fill="none" stroke="black"></path>
+                <path d="M 184,224 L 200,224" fill="none" stroke="black"></path>
+                <path d="M 216,240 L 232,240" fill="none" stroke="black"></path>
+                <path d="M 552,240 L 592,240" fill="none" stroke="black"></path>
+                <path d="M 896,32 C 904.83064,32 912,39.16936 912,48" fill="none" stroke="black"></path>
+                <path d="M 704,96 C 695.16936,96 688,88.83064 688,80" fill="none" stroke="black"></path>
+                <path d="M 896,96 C 904.83064,96 912,88.83064 912,80" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="856,160 844,154.4 844,165.6" fill="black" transform="rotate(0,848,160)"></polygon>
+                <polygon class="arrowhead" points="760,128 748,122.4 748,133.6" fill="black" transform="rotate(0,752,128)"></polygon>
+                <polygon class="arrowhead" points="616,176 604,170.4 604,181.6" fill="black" transform="rotate(180,608,176)"></polygon>
+                <polygon class="arrowhead" points="616,128 604,122.4 604,133.6" fill="black" transform="rotate(180,608,128)"></polygon>
+                <polygon class="arrowhead" points="600,240 588,234.4 588,245.6" fill="black" transform="rotate(0,592,240)"></polygon>
+                <polygon class="arrowhead" points="600,112 588,106.4 588,117.6" fill="black" transform="rotate(0,592,112)"></polygon>
+                <polygon class="arrowhead" points="224,192 212,186.4 212,197.6" fill="black" transform="rotate(180,216,192)"></polygon>
+                <polygon class="arrowhead" points="208,224 196,218.4 196,229.6" fill="black" transform="rotate(0,200,224)"></polygon>
+                <polygon class="arrowhead" points="56,208 44,202.4 44,213.6" fill="black" transform="rotate(180,48,208)"></polygon>
+                <g class="text">
+                  <text x="44" y="68">Origin</text>
+                  <text x="100" y="68">Issuer</text>
+                  <text x="212" y="68">Origin</text>
+                  <text x="604" y="68">Client</text>
+                  <text x="756" y="68">Attester</text>
+                  <text x="852" y="68">Issuer</text>
+                  <text x="292" y="116">TokenChallenge</text>
+                  <text x="388" y="116">(Issuer)</text>
+                  <text x="680" y="132">Attestation</text>
+                  <text x="732" y="164">TokenRequest</text>
+                  <text x="736" y="180">TokenResponse</text>
+                  <text x="376" y="196">Request+Token+TokenRequest(Origin</text>
+                  <text x="544" y="196">Issuer)</text>
+                  <text x="124" y="212">TokenRequest</text>
+                  <text x="120" y="228">TokenResponse</text>
+                  <text x="360" y="244">Response+TokenResponse(Origin</text>
+                  <text x="512" y="244">Issuer)</text>
+                </g>
+              </svg><a href="#section-3.3-2.1.1" class="pilcrow">¶</a>
 </div>
-<div id="arbitrary-batched-tokens">
-<section id="section-3.4">
-        <h3 id="name-arbitrary-batched-tokens">
-<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-arbitrary-batched-tokens" class="section-name selfRef">Arbitrary batched tokens</a>
-        </h3>
-<p id="section-3.4-1">Allows for more than one token to be provided.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-joint-attester-and-issuer-d" class="selfRef">Joint Attester and Issuer Deployment Model</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.3-3">The Origin Issuer <span class="bcp14">MUST</span> not issue privately verifiable tokens, as this would
+lead to secret material being shared between the Origin and the Reverse Origin.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">A particular deployment model is when the Reverse Origin is the Attester/Issuer.
+This model is described in <a href="#fig-deploy-joint-issuer-reserve" class="auto internal xref">Figure 3</a><a href="#section-3.3-4" class="pilcrow">¶</a></p>
+<span id="name-joint-attester-and-issuer-de"></span><div id="fig-deploy-joint-issuer-reserve">
+<figure id="figure-3">
+          <div id="section-3.3-5.1">
+            <div class="alignLeft art-svg artwork" id="section-3.3-5.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="920" viewBox="0 0 920 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,48 L 8,80" fill="none" stroke="black"></path>
+                <path d="M 40,80 L 40,272" fill="none" stroke="black"></path>
+                <path d="M 136,48 L 136,80" fill="none" stroke="black"></path>
+                <path d="M 176,48 L 176,80" fill="none" stroke="black"></path>
+                <path d="M 208,80 L 208,272" fill="none" stroke="black"></path>
+                <path d="M 248,48 L 248,80" fill="none" stroke="black"></path>
+                <path d="M 568,48 L 568,80" fill="none" stroke="black"></path>
+                <path d="M 600,80 L 600,272" fill="none" stroke="black"></path>
+                <path d="M 640,48 L 640,80" fill="none" stroke="black"></path>
+                <path d="M 688,32 L 688,80" fill="none" stroke="black"></path>
+                <path d="M 712,48 L 712,80" fill="none" stroke="black"></path>
+                <path d="M 760,80 L 760,144" fill="none" stroke="black"></path>
+                <path d="M 760,192 L 760,248" fill="none" stroke="black"></path>
+                <path d="M 800,48 L 800,80" fill="none" stroke="black"></path>
+                <path d="M 816,48 L 816,80" fill="none" stroke="black"></path>
+                <path d="M 856,80 L 856,272" fill="none" stroke="black"></path>
+                <path d="M 888,48 L 888,80" fill="none" stroke="black"></path>
+                <path d="M 912,48 L 912,80" fill="none" stroke="black"></path>
+                <path d="M 688,32 L 896,32" fill="none" stroke="black"></path>
+                <path d="M 8,48 L 136,48" fill="none" stroke="black"></path>
+                <path d="M 176,48 L 248,48" fill="none" stroke="black"></path>
+                <path d="M 568,48 L 640,48" fill="none" stroke="black"></path>
+                <path d="M 712,48 L 800,48" fill="none" stroke="black"></path>
+                <path d="M 816,48 L 888,48" fill="none" stroke="black"></path>
+                <path d="M 8,80 L 136,80" fill="none" stroke="black"></path>
+                <path d="M 176,80 L 248,80" fill="none" stroke="black"></path>
+                <path d="M 568,80 L 640,80" fill="none" stroke="black"></path>
+                <path d="M 712,80 L 800,80" fill="none" stroke="black"></path>
+                <path d="M 816,80 L 888,80" fill="none" stroke="black"></path>
+                <path d="M 704,96 L 752,96" fill="none" stroke="black"></path>
+                <path d="M 768,96 L 848,96" fill="none" stroke="black"></path>
+                <path d="M 864,96 L 896,96" fill="none" stroke="black"></path>
+                <path d="M 208,112 L 224,112" fill="none" stroke="black"></path>
+                <path d="M 432,112 L 592,112" fill="none" stroke="black"></path>
+                <path d="M 608,126 L 624,126" fill="none" stroke="black"></path>
+                <path d="M 608,130 L 624,130" fill="none" stroke="black"></path>
+                <path d="M 736,126 L 752,126" fill="none" stroke="black"></path>
+                <path d="M 736,130 L 752,130" fill="none" stroke="black"></path>
+                <path d="M 600,160 L 672,160" fill="none" stroke="black"></path>
+                <path d="M 792,160 L 848,160" fill="none" stroke="black"></path>
+                <path d="M 608,176 L 672,176" fill="none" stroke="black"></path>
+                <path d="M 800,176 L 856,176" fill="none" stroke="black"></path>
+                <path d="M 216,192 L 232,192" fill="none" stroke="black"></path>
+                <path d="M 584,192 L 600,192" fill="none" stroke="black"></path>
+                <path d="M 48,208 L 64,208" fill="none" stroke="black"></path>
+                <path d="M 184,208 L 208,208" fill="none" stroke="black"></path>
+                <path d="M 40,224 L 56,224" fill="none" stroke="black"></path>
+                <path d="M 184,224 L 200,224" fill="none" stroke="black"></path>
+                <path d="M 216,240 L 232,240" fill="none" stroke="black"></path>
+                <path d="M 552,240 L 592,240" fill="none" stroke="black"></path>
+                <path d="M 600,256 L 696,256" fill="none" stroke="black"></path>
+                <path d="M 760,256 L 848,256" fill="none" stroke="black"></path>
+                <path d="M 896,32 C 904.83064,32 912,39.16936 912,48" fill="none" stroke="black"></path>
+                <path d="M 704,96 C 695.16936,96 688,88.83064 688,80" fill="none" stroke="black"></path>
+                <path d="M 896,96 C 904.83064,96 912,88.83064 912,80" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="856,256 844,250.4 844,261.6" fill="black" transform="rotate(0,848,256)"></polygon>
+                <polygon class="arrowhead" points="856,160 844,154.4 844,165.6" fill="black" transform="rotate(0,848,160)"></polygon>
+                <polygon class="arrowhead" points="760,128 748,122.4 748,133.6" fill="black" transform="rotate(0,752,128)"></polygon>
+                <polygon class="arrowhead" points="616,176 604,170.4 604,181.6" fill="black" transform="rotate(180,608,176)"></polygon>
+                <polygon class="arrowhead" points="616,128 604,122.4 604,133.6" fill="black" transform="rotate(180,608,128)"></polygon>
+                <polygon class="arrowhead" points="600,240 588,234.4 588,245.6" fill="black" transform="rotate(0,592,240)"></polygon>
+                <polygon class="arrowhead" points="600,112 588,106.4 588,117.6" fill="black" transform="rotate(0,592,112)"></polygon>
+                <polygon class="arrowhead" points="224,192 212,186.4 212,197.6" fill="black" transform="rotate(180,216,192)"></polygon>
+                <polygon class="arrowhead" points="208,224 196,218.4 196,229.6" fill="black" transform="rotate(0,200,224)"></polygon>
+                <polygon class="arrowhead" points="56,208 44,202.4 44,213.6" fill="black" transform="rotate(180,48,208)"></polygon>
+                <g class="text">
+                  <text x="44" y="68">Origin</text>
+                  <text x="100" y="68">Issuer</text>
+                  <text x="212" y="68">Origin</text>
+                  <text x="604" y="68">Client</text>
+                  <text x="756" y="68">Attester</text>
+                  <text x="852" y="68">Issuer</text>
+                  <text x="292" y="116">TokenChallenge</text>
+                  <text x="388" y="116">(Issuer)</text>
+                  <text x="680" y="132">Attestation</text>
+                  <text x="732" y="164">TokenRequest</text>
+                  <text x="736" y="180">TokenResponse</text>
+                  <text x="376" y="196">Request+Token+TokenRequest(Origin</text>
+                  <text x="544" y="196">Issuer)</text>
+                  <text x="124" y="212">TokenRequest</text>
+                  <text x="120" y="228">TokenResponse</text>
+                  <text x="360" y="244">Response+TokenResponse(Origin</text>
+                  <text x="512" y="244">Issuer)</text>
+                  <text x="728" y="260">Token</text>
+                  <text x="760" y="276">|</text>
+                </g>
+              </svg><a href="#section-3.3-5.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<a href="#name-joint-attester-and-issuer-de" class="selfRef">Joint Attester and Issuer Deployment Model with reverse</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.3-6">This deployment <span class="bcp14">SHOULD</span> not allow the Reverse Origin to infer the request made
+to the Origin, as it would break unlinkability.<a href="#section-3.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1450,13 +1742,25 @@ In general, limiting the amount of metadata permitted helps limit the extent to 
       <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC4648">[RFC4648]</dt>
+      <dd>
+<span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <span class="seriesInfo">RFC 4648</span>, <span class="seriesInfo">DOI 10.17487/RFC4648</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4648">https://www.rfc-editor.org/rfc/rfc4648</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
       <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC9292">[RFC9292]</dt>
+      <dd>
+<span class="refAuthor">Thomson, M.</span> and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Binary Representation of HTTP Messages"</span>, <span class="seriesInfo">RFC 9292</span>, <span class="seriesInfo">DOI 10.17487/RFC9292</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9292">https://www.rfc-editor.org/rfc/rfc9292</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC9576">[RFC9576]</dt>
+      <dd>
+<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Iyengar, J.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"The Privacy Pass Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-architecture-16</span>, <time datetime="2023-09-25" class="refDate">25 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-16">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-architecture-16</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9578">[RFC9578]</dt>
     <dd>
-<span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Iyengar, J.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"The Privacy Pass Architecture"</span>, <span class="seriesInfo">RFC 9576</span>, <span class="seriesInfo">DOI 10.17487/RFC9576</span>, <time datetime="2024-06" class="refDate">June 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9576">https://www.rfc-editor.org/rfc/rfc9576</a>&gt;</span>. </dd>
+<span class="refAuthor">Celi, S.</span>, <span class="refAuthor">Davidson, A.</span>, <span class="refAuthor">Valdez, S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Privacy Pass Issuance Protocols"</span>, <span class="seriesInfo">RFC 9578</span>, <span class="seriesInfo">DOI 10.17487/RFC9578</span>, <time datetime="2024-06" class="refDate">June 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9578">https://www.rfc-editor.org/rfc/rfc9578</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
