@@ -4,8 +4,8 @@
 
 Privacy Pass                                                  T. Meunier
 Internet-Draft                                           Cloudflare Inc.
-Intended status: Informational                          16 November 2024
-Expires: 20 May 2025
+Intended status: Informational                          18 December 2024
+Expires: 21 June 2025
 
 
                        Privacy Pass Reverse Flow
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 May 2025.
+   This Internet-Draft will expire on 21 June 2025.
 
 Copyright Notice
 
@@ -132,17 +132,21 @@ Table of Contents
    Along with sending their PrivateToken for authentication (as
    specified in RFC9576), Client sends TokenRequest
 
-   aasvg +---------------+ +--------+ +--------+ +----------+
-   +--------+ | Origin Issuer | | Origin | | Client | | Attester | |
-   Issuer | +---+-----------+ +---+----+ +---+----+ +----+-----+
-   +---+----+ | | | | | | |<----- Request
-   ---------------------------------+ | | | +-- TokenChallenge (Issuer)
-   -------------------->| | | | | |<== Attestation ==>| | | | | | | | |
-   +--------- TokenRequest ------->| | | |<-------- TokenResponse
-   -------+ | |<-- Request+Token+TokenRequest(Origin Issuer)
-   --+ | | |<-- TokenRequest ---| | | | |-- TokenResponse
-   -->| | | | | |--- Response+TokenResponse(Origin Issuer)
-   ----->+ | | | | | | |
++---------------+    +--------+                                       +--------+         +----------+ +--------+
+| Origin Issuer |    | Origin |                                       | Client |         | Attester | | Issuer |
++---+-----------+    +---+----+                                       +---+----+         +----+-----+ +---+----+
+    |                    |                                                |                   |           |
+    |                    |<----- Request ---------------------------------+                   |           |
+    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
+    |                    |                                                |<== Attestation ==>|           |
+    |                    |                                                |                   |           |
+    |                    |                                                +--------- TokenRequest ------->|
+    |                    |                                                |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
+    |<-- TokenRequest ---|                                                |                   |           |
+    |-- TokenResponse -->|                                                |                   |           |
+    |                    |--- Response+TokenResponse(Origin Issuer) ----->+                   |           |
+    |                    |                                                |                   |           |
 
    TODO: 1.  How are TokenRequest provided? 2.  How are TokenResponse
    provided? 3.  What are the error codes < binary HTTP sounds like an
