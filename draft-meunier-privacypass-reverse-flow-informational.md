@@ -32,7 +32,7 @@ informative:
 
 --- abstract
 
-This document specifies an instantiation of Privacy Pass Architecture {{!RFC9576}}
+This document specifies an instantiation of Privacy Pass Architecture {{!RFC9576=I-D.ietf-privacypass-architecture}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
 It describes the conceptual model of Privacy Pass reverse flow and its protocols,
 its security and privacy goals, practical deployment models, and recommendations
@@ -43,18 +43,22 @@ goals are fulfilled.
 
 # Introduction
 
-This document specifies an instantiation of Privacy Pass Architecture {{!RFC9576}}
+This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
 In other words, it specifies a way for the Origin to act as a joint Attester/Issuer.
-
-
+A Client that has already been authorised to access an Origin can maintain that access,
+without losing the unlinkable property provided by Privacy Pass. In addition, it allows
+an Origin to define its own issuance policy based on an initial bootstraping attestation
+method. For instance, an Origin that wants to grant 30 access for users that solved a
+CAPTCHA might consume a type 0x0002 public veriable token, and use it to issue 30 type
+0x0001 private tokens.
 
 
 # Terminology
 
 {::boilerplate bcp14-tagged}
 
-We reuse terminology from RFC9576: https://datatracker.ietf.org/doc/html/rfc9576#name-terminology
+We reuse terminology from {{RFC9576}}.
 
 New terminology is defined below
 
@@ -66,7 +70,7 @@ Origin Issuer: Issuer operated by the Origin
 Origin PrivateToken: PrivateToken issued by the Origin
 Reverse Origin: An entity that consumes the Origin PrivateToken. It can be the Origin, or the Initial Attester/Issuer
 
-# Deployment
+# Protocol overview
 
 Along with sending their PrivateToken for authentication (as specified in RFC9576), Client
 sends TokenRequest
@@ -83,39 +87,124 @@ sends TokenRequest
     |                    |                                                +--------- TokenRequest ------->|
     |                    |                                                |<-------- TokenResponse -------+
     |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
-    |<-- TokenRequest ---|                                                |                   |           |
-    |-- TokenResponse -->|                                                |                   |           |
-    |                    |--- Response+TokenResponse(Origin Issuer) ----->+                   |           |
+    |<-- TokenRequest ---+                                                |                   |           |
+    +-- TokenResponse -->|                                                |                   |           |
+    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
     |                    |                                                |                   |           |
 ~~~
 
-TODO:
-1. How are TokenRequest provided?
-2. How are TokenResponse provided?
-3. What are the error codes
-< binary HTTP sounds like an overkill, but fits.
+The initial flow matches the one defined by {{ RFC9576 }}. A Client gets challenged when
+accessing a resource on an Origin. The Client goes to the Attester to get issue a Token.
+
+Through configuration mechanism not defined in this document, the Client is aware the Origin
+acts as a Reverse Flow issuer.
+
+This is an extension of {{ RFC9576 }}. The Client sends Request+Token+TokenRequest(Origin Issuer).
+The Origin runs the issuance protocol based, and returns Response+TokenResponse(Origin Issuer).
+
+TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen through a new HTTP Header `PrivacyPass-Reverse`.
+`PrivacyPass-Reverse` is a base64url encoded binary encoded HTTP message, respectively per {{!RFC4648}} and {{!RFC9292}}.
+
+> The use of binary encoding avoids the definition of a new ad-hoc encoding of request, response, and
+> associated errors for each Privacy Pass issuance protocols. This matches the architecture as defined in {{!RFC9576}}.
+
 
 ## Client behaviour
 
-Along with sending PrivateToken from the Initial Issuer to the Origin, the Client sends one or more TokenRequest as defined in RFC9578 or draft-batched-tokens.
+Along with sending PrivateToken from the Initial Issuer to the Origin, the Client sends one TokenRequest as defined in {{!RFC9578}} or draft-batched-tokens.
+The Client SHOULD consider Privacy Pass Reverse Flow like the initial flow. The Client
+is responsible to coordinate between the different entities.
+Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client SHOULD
+account for possible privacy leakage.
 
 ## Origin/Issuer/Attester deployment
 
-VOPRF recommended.
-Origin is the Reverse Origin.
+In this model, the Origin, Attester, and Issuer are all operated by the same
+entity, as shown in {{fig-deploy-shared}}. The Reverse Flow is the same as
+the Initial Flow, except for the request/response encapsulation.
+The Origin is the Reverse Origin.
 
-TODO: Add diagram
+~~~ aasvg
+                 +---------------------------------------------.
++--------+       |  +----------+     +--------+     +--------+  |
+| Client |       |  | Attester |     | Issuer |     | Origin |  |
++---+----+       |  +-----+----+     +----+---+     +---+----+  |
+    |             `-------|---------------|-------------|------'
+    |<-------------------------------- TokenChallenge --+
+    |                     |               |             |
+    |<=== Attestation ===>|               |             |
+    |                     |               |             |
+    +----------- TokenRequest ----------->|             |
+    |<---------- TokenResponse -----------+             |
+    |                                                   |
+    +------- Token+TokenRequest(Origin Issuer) -------->+
+    |<--------- TokenResponse(Origin Issuer) -----------|
+    |                                                   |
+~~~
+{: #fig-deploy-shared title="Shared Deployment Model"}
+
+Similar to the original Shared Deployment Model, the Attester,
+Issuer, and Origin share the attestation, issuance, and redemption
+contexts. Even if this context changes between the Initial and
+Reverse Flow, attestation mechanism that can uniquely identify
+a Client are not appropriate as they could lead to unlinkability violations.
 
 ## Split Origin-Attester deployment
 
-Uses BlindRSA, or SHOULD NOT VOPRF with a shared secret.
-Origin is the Initial Attester/Issuer.
+In this model, the Attester and Issuer are operated by the same entity
+that is separate from the Origin. The Origin trusts the joint Attester
+and Issuer to perform attestation and issue Tokens.
+Origin Tokens can then be sent by Client on new requests, as long as the
+Reverse Origin trusts the Origin to perform attestation and issue Tokens.
 
-TODO: add diagram
+~~~aasvg
+                                                                                     +--------------------------.
++---------------+    +--------+                                       +--------+     |  +----------+ +--------+  |
+| Origin Issuer |    | Origin |                                       | Client |     |  | Attester | | Issuer |  |
++---+-----------+    +---+----+                                       +---+----+     |  +-----+----+ +----+---+  |
+    |                    |                                                |           `-------|-----------|-----'
+    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
+    |                    |                                                |<== Attestation ==>|           |
+    |                    |                                                |                   |           |
+    |                    |                                                +--------- TokenRequest ------->|
+    |                    |                                                |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
+    |<-- TokenRequest ---+                                                |                   |           |
+    +-- TokenResponse -->|                                                |                   |           |
+    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
+    |                    |                                                |                   |           |
+~~~
+{: #fig-deploy-joint-issuer title="Joint Attester and Issuer Deployment Model"}
 
-## Arbitrary batched tokens
+The Origin Issuer MUST not issue privately verifiable tokens, as this would
+lead to secret material being shared between the Origin and the Reverse Origin.
 
-Allows for more than one token to be provided.
+A particular deployment model is when the Reverse Origin is the Attester/Issuer.
+This model is described in {{fig-deploy-joint-issuer-reserve}}
+
+~~~aasvg
+                                                                                     +--------------------------.
++---------------+    +--------+                                       +--------+     |  +----------+ +--------+  |
+| Origin Issuer |    | Origin |                                       | Client |     |  | Attester | | Issuer |  |
++---+-----------+    +---+----+                                       +---+----+     |  +-----+----+ +----+---+  |
+    |                    |                                                |           `-------|-----------|-----'
+    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
+    |                    |                                                |<== Attestation ==>|           |
+    |                    |                                                |                   |           |
+    |                    |                                                +--------- TokenRequest ------->|
+    |                    |                                                |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
+    |<-- TokenRequest ---+                                                |                   |           |
+    +-- TokenResponse -->|                                                |                   |           |
+    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
+    |                    |                                                +------------ Token ----------->|
+    |                    |                                                |                   |           |
+~~~
+{: #fig-deploy-joint-issuer-reserve title="Joint Attester and Issuer Deployment Model with reverse"}
+
+This deployment SHOULD not allow the Reverse Origin to infer the request made
+to the Origin, as it would break unlinkability.
+
 
 # Privacy Considerations
 
