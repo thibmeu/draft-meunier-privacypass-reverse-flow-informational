@@ -130,7 +130,7 @@ The Origin is the Reverse Origin.
 | Client |       |  | Attester |     | Issuer |     | Origin |  |
 +---+----+       |  +-----+----+     +----+---+     +---+----+  |
     |             `-------|---------------|-------------|------'
-    |<-------------------------------- TokenChallenge --+
+    |<----------------------- TokenChallenge (Issuer) --+
     |                     |               |             |
     |<=== Attestation ===>|               |             |
     |                     |               |             |
@@ -210,7 +210,7 @@ to the Origin, as it would break unlinkability.
 
 Privacy Pass RFC 9576 states
 
-    In general, limiting the amount of metadata permitted helps limit the extent to which metadata can uniquely identify individual Clients. Failure to bound the number of possible metadata values can therefore lead to a reduction in Client privacy. Most token types do not admit any metadata, so this bound is implicitly enforced.
+> In general, limiting the amount of metadata permitted helps limit the extent to which metadata can uniquely identify individual Clients. Failure to bound the number of possible metadata values can therefore lead to a reduction in Client privacy. Most token types do not admit any metadata, so this bound is implicitly enforced.
 
 In privacy pass with a reverse flow, users are provided with new PrivateTokens depending on their request. They can spend these tokens to continue making further requests.
 
@@ -221,9 +221,9 @@ While the token are still unlinkable, the token_key_id associated to them repres
 When setting up a reverse flow deployment, an Origin MAY setup up multiple Issuers, and assign them some metadata to them. The amount of possible metadata grows as 2^(origin_issuers).
 
 We RECOMMEND that:
-    1. Origin defines their anonimity sets, and deploy no more than log2(#anonimity_sets). This bounds the possible anonimity sets by design.
-    2. Client to only send 1 PrivateToken per request. This is inline with RFC9577 and RFC (Web Authentication) which only allows one challenge response to be provided as part of Authorization HTTP header.
-    3. Issuers metadata to be publicly disclosed via an origin endpoint, and externally monitored
+1. Origin defines their anonimity sets, and deploy no more than log2(#anonimity_sets). This bounds the possible anonimity sets by design.
+2. Client to only send 1 PrivateToken per request. This is inline with RFC9577 and RFC (Web Authentication) which only allows one challenge response to be provided as part of Authorization HTTP header.
+3. Issuers metadata to be publicly disclosed via an origin endpoint, and externally monitored
 
 ## Token for specific Clients
 
@@ -235,9 +235,9 @@ If a Client requests croissant, or sends Token_B, the origin will provide TokenR
 
 Over time, this means the Origin is able to track croissants aficionados.
 
-To mitigate this, we recommend:
-    1. The initial PrivateToken to be provided by an Issuer not in control of the Origin. The joint Origin/Attester/Issuer model SHOULD NOT be used.
-    2. Clients to reset their state regularly with the initial Issuer.
+To mitigate this, we RECOMMEND:
+1. The initial PrivateToken to be provided by an Issuer not in control of the Origin. The joint Origin/Attester/Issuer model SHOULD NOT be used.
+2. Clients to reset their state regularly with the initial Issuer.
 
 ## Sending multiple tokens
 
