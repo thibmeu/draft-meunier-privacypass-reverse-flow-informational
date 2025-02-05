@@ -383,7 +383,11 @@ Table of Contents
 6.  Normative References
 
    [BATCHED_TOKENS]
-              "*** BROKEN REFERENCE ***".
+              Robert, R., Wood, C. A., and T. Meunier, "Batched Token
+              Issuance Protocol", Work in Progress, Internet-Draft,
+              draft-ietf-privacypass-batched-tokens-04, 2 February 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-
+              privacypass-batched-tokens-04>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
