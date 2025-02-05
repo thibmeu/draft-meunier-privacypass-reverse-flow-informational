@@ -128,7 +128,7 @@ TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen through a ne
 
 > The use of binary encoding avoids the definition of a new ad-hoc encoding of request, response, and
 > associated errors for each Privacy Pass issuance protocols. This matches the architecture as defined in {{!RFC9576}}.
-> An alternative is to use arbitrary batched tokens as defined in {{!BATCHED_TOKENS=I-D.ietf-draft-privacypass-batched-tokens}}
+> An alternative is to use arbitrary batched tokens as defined in {{!BATCHED_TOKENS=I-D.draft-ietf-privacypass-batched-tokens-04}}
 > batched tokens have a slight overhead, but already provide a base for encoding arbitrary token requests, response, and errors
 
 ## Client behaviour
