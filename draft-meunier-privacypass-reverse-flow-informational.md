@@ -128,14 +128,14 @@ TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen through a ne
 
 > The use of binary encoding avoids the definition of a new ad-hoc encoding of request, response, and
 > associated errors for each Privacy Pass issuance protocols. This matches the architecture as defined in {{!RFC9576}}.
-> An alternative is to use arbitrary batched tokens as defined in {{BATCHED-TOKENS=I-D.ietf-draft-privacypass-batched-tokens}}
+> An alternative is to use arbitrary batched tokens as defined in {{!BATCHED_TOKENS=I-D.ietf-draft-privacypass-batched-tokens}}
 > batched tokens have a slight overhead, but already provide a base for encoding arbitrary token requests, response, and errors
 
 ## Client behaviour
 
 Along with sending PrivateToken from the Initial Issuer to the Origin, the
 Client sends one TokenRequest as defined in {{!RFC9578}} or
-draft-batched-tokens.
+{{!BATCHED_TOKENS}}
 The Client SHOULD consider Privacy Pass Reverse Flow like the initial flow.
 The Client is responsible to coordinate between the different entities.
 Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client
