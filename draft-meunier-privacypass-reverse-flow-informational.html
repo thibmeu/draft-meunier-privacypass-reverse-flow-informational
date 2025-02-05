@@ -14,15 +14,15 @@ its security and privacy goals, practical deployment models, and recommendations
 for each deployment model, to help ensure that the desired security and privacy
 goals are fulfilled. 
     " name="description">
-<meta content="xml2rfc 3.25.0" name="generator">
+<meta content="xml2rfc 3.26.0" name="generator">
 <meta content="draft-meunier-privacypass-reverse-flow-informational-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.25.0
+  xml2rfc 3.26.0
     Python 3.12.8
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.4
+    Jinja2 3.1.5
     lxml 5.3.0
     platformdirs 4.3.6
     pycountry 24.6.1
@@ -1048,11 +1048,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Privacy Pass Reverse Flow</td>
-<td class="right">December 2024</td>
+<td class="right">February 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Meunier</td>
-<td class="center">Expires 21 June 2025</td>
+<td class="center">Expires 9 August 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-meunier-privacypass-reverse-flow-informational-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-12-18" class="published">18 December 2024</time>
+<time datetime="2025-02-05" class="published">5 February 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-06-21">21 June 2025</time></dd>
+<dd class="expires"><time datetime="2025-08-09">9 August 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1125,7 +1125,7 @@ goals are fulfilled.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1134,7 +1134,7 @@ goals are fulfilled.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2024 IETF Trust and the persons identified as the
+            Copyright (c) 2025 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1237,17 +1237,24 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <span class="break"></span><dl class="dlParallel" id="section-2-4">
         <dt id="section-2-4.1">Flow:</dt>
         <dd style="margin-left: 1.5em" id="section-2-4.2">
-          <p id="section-2-4.2.1">Direction from PrivateToken issuance to its redemption. The entity starting the flow acts as an Issuer, while the end of the flow acts as an Origin. The Client is always included, as it finalises the TokenResponse, and coordinate interactions.<a href="#section-2-4.2.1" class="pilcrow">¶</a></p>
+          <p id="section-2-4.2.1">Direction from PrivateToken issuance to its redemption. The entity starting
+the flow acts as an Issuer, while the end of the flow acts as an Origin. The
+Client is always included, as it finalises the TokenResponse, and coordinate
+interactions.<a href="#section-2-4.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-2-4.3">Initial Flow:</dt>
         <dd style="margin-left: 1.5em" id="section-2-4.4">
-          <p id="section-2-4.4.1">Issuer -&gt; Attester -&gt; Client -&gt; Origin. This flow produces a PrivateToken that is used by the Origin to kickstart a Reverse Flow.<a href="#section-2-4.4.1" class="pilcrow">¶</a></p>
+          <p id="section-2-4.4.1">Issuer -&gt; Attester -&gt; Client -&gt; Origin. This flow produces a PrivateToken that
+is used by the Origin to kickstart a Reverse Flow.<a href="#section-2-4.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-2-4.5">Reverse Flow:</dt>
         <dd style="margin-left: 1.5em" id="section-2-4.6">
-          <p id="section-2-4.6.1">Issuer &lt;- Attester &lt;- Client &lt;- Origin. This flow allows Origin to issues PrivateToken. In the reverse flow, the Origin operates one or more Issuer, and the Client <span class="bcp14">MAY</span> provide these tokens either to the Initial Attester/Issuer, or use them against the Origin<a href="#section-2-4.6.1" class="pilcrow">¶</a></p>
+          <p id="section-2-4.6.1">Issuer &lt;- Attester &lt;- Client &lt;- Origin. This flow allows Origin to issues
+PrivateToken. In the reverse flow, the Origin operates one or more Issuer, and
+the Client <span class="bcp14">MAY</span> provide these tokens either to the Initial Attester/Issuer, or
+use them against the Origin<a href="#section-2-4.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-2-4.7">Initial Attester/Issuer:</dt>
@@ -1267,7 +1274,8 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
         <dd class="break"></dd>
 <dt id="section-2-4.13">Reverse Origin:</dt>
         <dd style="margin-left: 1.5em" id="section-2-4.14">
-          <p id="section-2-4.14.1">An entity that consumes the Origin PrivateToken. It can be the Origin, or the Initial Attester/Issuer<a href="#section-2-4.14.1" class="pilcrow">¶</a></p>
+          <p id="section-2-4.14.1">An entity that consumes the Origin PrivateToken. It can be the Origin, or the
+Initial Attester/Issuer<a href="#section-2-4.14.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
@@ -1278,7 +1286,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-protocol-overview">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-protocol-overview" class="section-name selfRef">Protocol overview</a>
       </h2>
-<p id="section-3-1">Along with sending their PrivateToken for authentication (as specified in RFC9576), Client
+<p id="section-3-1">Along with sending their PrivateToken for authentication (as specified in <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>), Client
 sends TokenRequest<a href="#section-3-1" class="pilcrow">¶</a></p>
 <div id="section-3-2">
         <div class="alignLeft art-svg artwork" id="section-3-2.1">
@@ -1373,7 +1381,9 @@ The Origin runs the issuance protocol based, and returns Response+TokenResponse(
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-3-7.1">
           <p id="section-3-7.1.1">The use of binary encoding avoids the definition of a new ad-hoc encoding of request, response, and
-associated errors for each Privacy Pass issuance protocols. This matches the architecture as defined in <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>.<a href="#section-3-7.1.1" class="pilcrow">¶</a></p>
+associated errors for each Privacy Pass issuance protocols. This matches the architecture as defined in <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>.
+An alternative is to use arbitrary batched tokens as defined in <span>[<a href="#BATCHED_TOKENS" class="cite xref">BATCHED_TOKENS</a>]</span>
+batched tokens have a slight overhead, but already provide a base for encoding arbitrary token requests, response, and errors<a href="#section-3-7.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="client-behaviour">
@@ -1381,11 +1391,13 @@ associated errors for each Privacy Pass issuance protocols. This matches the arc
         <h3 id="name-client-behaviour">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-client-behaviour" class="section-name selfRef">Client behaviour</a>
         </h3>
-<p id="section-3.1-1">Along with sending PrivateToken from the Initial Issuer to the Origin, the Client sends one TokenRequest as defined in <span>[<a href="#RFC9578" class="cite xref">RFC9578</a>]</span> or draft-batched-tokens.
-The Client <span class="bcp14">SHOULD</span> consider Privacy Pass Reverse Flow like the initial flow. The Client
-is responsible to coordinate between the different entities.
-Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client <span class="bcp14">SHOULD</span>
-account for possible privacy leakage.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">Along with sending PrivateToken from the Initial Issuer to the Origin, the
+Client sends one TokenRequest as defined in <span>[<a href="#RFC9578" class="cite xref">RFC9578</a>]</span> or
+<span>[<a href="#BATCHED_TOKENS" class="cite xref">BATCHED_TOKENS</a>]</span>
+The Client <span class="bcp14">SHOULD</span> consider Privacy Pass Reverse Flow like the initial flow.
+The Client is responsible to coordinate between the different entities.
+Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client
+<span class="bcp14">SHOULD</span> account for possible privacy leakage.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="originissuerattester-deployment">
@@ -1703,21 +1715,44 @@ to the Origin, as it would break unlinkability.<a href="#section-3.3-6" class="p
 <p id="section-4-1">Privacy Pass RFC 9576 states<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-4-2.1">
-          <p id="section-4-2.1.1">In general, limiting the amount of metadata permitted helps limit the extent to which metadata can uniquely identify individual Clients. Failure to bound the number of possible metadata values can therefore lead to a reduction in Client privacy. Most token types do not admit any metadata, so this bound is implicitly enforced.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.1.1">In general, limiting the amount of metadata permitted helps limit the extent
+to which metadata can uniquely identify individual Clients. Failure to bound the
+number of possible metadata values can therefore lead to a reduction in Client
+privacy. Most token types do not admit any metadata, so this bound is implicitly
+enforced.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-4-3">In privacy pass with a reverse flow, users are provided with new PrivateTokens depending on their request. They can spend these tokens to continue making further requests.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4">While the token are still unlinkable, the token_key_id associated to them represent metadata. It leaks some information about the Client. The following subsections discuss the issues that influence the anonymity set, and possible mitigation/safeguards to protect against this underlying problem.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-3">In Privacy Pass with a reverse flow, Clients are provided with new PrivateTokens
+depending on their request. They can spend these tokens to continue making further
+requests.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">While the token are still unlinkable, the token_key_id associated to them
+represent metadata. It leaks some information about the Client. The following
+subsections discuss the issues that influence the anonymity set, and possible
+mitigations/safeguards to protect against this underlying problem.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <div id="issuer-face-values">
 <section id="section-4.1">
         <h3 id="name-issuer-face-values">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-issuer-face-values" class="section-name selfRef">Issuer face values</a>
         </h3>
-<p id="section-4.1-1">When setting up a reverse flow deployment, an Origin <span class="bcp14">MAY</span> setup up multiple Issuers, and assign them some metadata to them. The amount of possible metadata grows as 2^(origin_issuers).<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">We RECOMMEND that:
-1. Origin defines their anonimity sets, and deploy no more than log2(#anonimity_sets). This bounds the possible anonimity sets by design.
-2. Client to only send 1 PrivateToken per request. This is inline with RFC9577 and RFC (Web Authentication) which only allows one challenge response to be provided as part of Authorization HTTP header.
-3. Issuers metadata to be publicly disclosed via an origin endpoint, and externally monitored<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">When setting up a reverse flow deployment, an Origin <span class="bcp14">MAY</span> operate multiple
+Issuers, and assign them some metadata to them. The amount of possible metadata
+grows as 2^(origin_issuers).<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">We RECOMMEND that:<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.1-3">
+<li id="section-4.1-3.1">
+            <p id="section-4.1-3.1.1">Origin defines their anonimity sets, and deploy no more than
+log2(#anonimity_sets). This bounds the possible anonimity sets by design.<a href="#section-4.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-4.1-3.2">
+            <p id="section-4.1-3.2.1">Client to only send 1 PrivateToken per request. This is inline with RFC9577
+and RFC (Web Authentication) which only allows one challenge response to be
+provided as part of Authorization HTTP header.<a href="#section-4.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-4.1-3.3">
+            <p id="section-4.1-3.3.1">Issuers metadata to be publicly disclosed via an origin endpoint, and
+externally monitored<a href="#section-4.1-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
 </section>
 </div>
 <div id="token-for-specific-clients">
@@ -1725,13 +1760,25 @@ to the Origin, as it would break unlinkability.<a href="#section-3.3-6" class="p
         <h3 id="name-token-for-specific-clients">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-token-for-specific-clients" class="section-name selfRef">Token for specific Clients</a>
         </h3>
-<p id="section-4.2-1">In Privacy Pass with a reverse flow, the Origin <span class="bcp14">MAY</span> operate multiple Issuers, with arbitrary metadata associated to them. A malicious Origin <span class="bcp14">MAY</span> uses this opportunity to associate certain token values to a specific set of Clients.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">Let's consider the following deployment: the Origin operates two issuers A and B. The Client sends Token_A, and (TokenRequest_A, TokenRequest_B). Issuer B is associated to a croissant aficionados.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.2-3">If a Client requests croissant, or sends Token_B, the origin will provide TokenResponse_B. If not, it provides TokenResponse_A.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">In Privacy Pass with a reverse flow, an Origin <span class="bcp14">MAY</span> operate multiple Issuers,
+with arbitrary metadata associated to them. A malicious Origin <span class="bcp14">MAY</span> uses this
+opportunity to associate certain token values to a specific set of Clients.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">Let's consider the following deployment: the Origin operates two issuers A and
+B. The Client sends Token_A, and (TokenRequest_A, TokenRequest_B). Issuer B is
+associated to croissant aficionados.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">If a Client requests croissant, or sends Token_B, the origin provides
+TokenResponse_B. If not, it provides TokenResponse_A.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
 <p id="section-4.2-4">Over time, this means the Origin is able to track croissants aficionados.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
-<p id="section-4.2-5">To mitigate this, we RECOMMEND:
-1. The initial PrivateToken to be provided by an Issuer not in control of the Origin. The joint Origin/Attester/Issuer model <span class="bcp14">SHOULD NOT</span> be used.
-2. Clients to reset their state regularly with the initial Issuer.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.2-5">To mitigate this, we RECOMMEND:<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2-6">
+<li id="section-4.2-6.1">
+            <p id="section-4.2-6.1.1">The initial PrivateToken to be provided by an Issuer not in control of the
+Origin. The joint Origin/Attester/Issuer model <span class="bcp14">SHOULD NOT</span> be used.<a href="#section-4.2-6.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-4.2-6.2">
+            <p id="section-4.2-6.2.1">Clients to reset their state regularly with the initial Issuer.<a href="#section-4.2-6.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
 </section>
 </div>
 <div id="sending-multiple-tokens">
@@ -1739,9 +1786,15 @@ to the Origin, as it would break unlinkability.<a href="#section-3.3-6" class="p
         <h3 id="name-sending-multiple-tokens">
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-sending-multiple-tokens" class="section-name selfRef">Sending multiple tokens</a>
         </h3>
-<p id="section-4.3-1">While that's not part of Privacy Pass with a reverse flow, some deployment might consider allowing Clients to send multiple PrivateToken, similar to how normal Privacy Pass deployment could allow two distinct PrivateToken to be sent.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">In Privacy Pass with a reverse flow deployment, there are as many bits as Issuers; each token is one bit. We RECOMMEND to have a maximum of 6 Origin operated Issuers, bounding Client information to 2^6 = 64. Accounting for the initial Issuer, this means a total of log2(64)+1=7 issuers.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.3-3">Origin should have sufficient traffic to not single-out particular Client based on timings of requests.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-1">While that's not part of Privacy Pass with a reverse flow, some deployment might
+consider allowing Clients to send multiple PrivateToken, similar to how normal
+Privacy Pass deployment allow two distinct PrivateToken to be sent.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">In Privacy Pass with a reverse flow deployment, there are as many bits as
+Issuers; each token is one bit. We RECOMMEND to have a maximum of 6 Origin
+operated Issuers, bounding Client information to 2^6 = 64. Accounting for the
+initial Issuer, this means a total of log2(64)+1=7 issuers.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">Origin should have sufficient traffic to not single-out particular Client based
+on timings of requests.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="swap-endpoint-and-its-privacy-implication">
@@ -1749,8 +1802,11 @@ to the Origin, as it would break unlinkability.<a href="#section-3.3-6" class="p
         <h3 id="name-swap-endpoint-and-its-priva">
 <a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-swap-endpoint-and-its-priva" class="section-name selfRef">Swap endpoint and its privacy implication</a>
         </h3>
-<p id="section-4.4-1">With multiple Issuers, a Client <span class="bcp14">MAY</span> end up with a bunch of tokens, for various Issuers. Origins MIGHT propose a swap endpoint at which a Client can use to exchange one or more Origin tokens against one or more Origin token.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
-<p id="section-4.4-2">The Origin <span class="bcp14">SHOULD</span> ensure the traffic is important enough on this endpoint to not reduce the anonymity sets.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<p id="section-4.4-1">With multiple Issuers, a Client <span class="bcp14">MAY</span> end up with a bunch of tokens, for various
+Issuers. Origins <span class="bcp14">MAY</span> propose a swap endpoint at which a Client can exchange one
+or more Origin tokens against one or more new Origin tokens.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">The Origin <span class="bcp14">SHOULD</span> ensure this endpoint receives enough traffic to not reduce the
+anonymity sets.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1769,6 +1825,10 @@ to the Origin, as it would break unlinkability.<a href="#section-3.3-6" class="p
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
+<dt id="BATCHED_TOKENS">[BATCHED_TOKENS]</dt>
+      <dd>
+<span class="refTitle">"*** BROKEN REFERENCE ***"</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
       <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
