@@ -1229,7 +1229,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <p id="section-2-2">We reuse terminology from <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <p id="section-2-3">The following terms are used throughout this document:<a href="#section-2-3" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-2-4">
-        <dt id="section-2-4.1">Flow:</dt>
+        <dt id="section-2-4.1"><strong>Flow:</strong></dt>
         <dd style="margin-left: 1.5em" id="section-2-4.2">
           <p id="section-2-4.2.1">Direction from PrivateToken issuance to its redemption. The entity starting
 the flow acts as an Issuer, while the end of the flow acts as an Origin. The
@@ -1237,13 +1237,13 @@ Client is always included, as it finalises the TokenResponse, and coordinate
 interactions.<a href="#section-2-4.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-4.3">Initial Flow:</dt>
+<dt id="section-2-4.3"><strong>Initial Flow:</strong></dt>
         <dd style="margin-left: 1.5em" id="section-2-4.4">
           <p id="section-2-4.4.1">Issuer -&gt; Attester -&gt; Client -&gt; Origin. This flow produces a PrivateToken that
 is used by the Origin to kickstart a Reverse Flow.<a href="#section-2-4.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-4.5">Reverse Flow:</dt>
+<dt id="section-2-4.5"><strong>Reverse Flow:</strong></dt>
         <dd style="margin-left: 1.5em" id="section-2-4.6">
           <p id="section-2-4.6.1">Issuer &lt;- Attester &lt;- Client &lt;- Origin. This flow allows Origin to issues
 PrivateToken. In the reverse flow, the Origin operates one or more Issuer, and
@@ -1251,22 +1251,22 @@ the Client <span class="bcp14">MAY</span> provide these tokens either to the Ini
 use them against the Origin<a href="#section-2-4.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-4.7">Initial Attester/Issuer:</dt>
+<dt id="section-2-4.7"><strong>Initial Attester/Issuer:</strong></dt>
         <dd style="margin-left: 1.5em" id="section-2-4.8">
           <p id="section-2-4.8.1">Attester/Issuer part of the Initial Flow<a href="#section-2-4.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-4.9">Origin Issuer:</dt>
+<dt id="section-2-4.9"><strong>Origin Issuer:</strong></dt>
         <dd style="margin-left: 1.5em" id="section-2-4.10">
           <p id="section-2-4.10.1">Issuer operated by the Origin<a href="#section-2-4.10.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-4.11">Origin PrivateToken:</dt>
+<dt id="section-2-4.11"><strong>Origin PrivateToken:</strong></dt>
         <dd style="margin-left: 1.5em" id="section-2-4.12">
           <p id="section-2-4.12.1">PrivateToken issued by the Origin<a href="#section-2-4.12.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-4.13">Reverse Origin:</dt>
+<dt id="section-2-4.13"><strong>Reverse Origin:</strong></dt>
         <dd style="margin-left: 1.5em" id="section-2-4.14">
           <p id="section-2-4.14.1">An entity that consumes the Origin PrivateToken. It can be the Origin, or the
 Initial Attester/Issuer<a href="#section-2-4.14.1" class="pilcrow">¶</a></p>
