@@ -59,32 +59,32 @@ We reuse terminology from {{RFC9576}}.
 
 The following terms are used throughout this document:
 
-Flow:
+**Flow:**
 : Direction from PrivateToken issuance to its redemption. The entity starting
   the flow acts as an Issuer, while the end of the flow acts as an Origin. The
   Client is always included, as it finalises the TokenResponse, and coordinate
   interactions.
 
-Initial Flow:
+**Initial Flow:**
 : Issuer -> Attester -> Client -> Origin. This flow produces a PrivateToken that
   is used by the Origin to kickstart a Reverse Flow.
 
-Reverse Flow:
+**Reverse Flow:**
 : Issuer <- Attester <- Client <- Origin. This flow allows Origin to issues
   PrivateToken. In the reverse flow, the Origin operates one or more Issuer, and
   the Client MAY provide these tokens either to the Initial Attester/Issuer, or
   use them against the Origin
 
-Initial Attester/Issuer:
+**Initial Attester/Issuer:**
 : Attester/Issuer part of the Initial Flow
 
-Origin Issuer:
+**Origin Issuer:**
 : Issuer operated by the Origin
 
-Origin PrivateToken:
+**Origin PrivateToken:**
 : PrivateToken issued by the Origin
 
-Reverse Origin:
+**Reverse Origin:**
 : An entity that consumes the Origin PrivateToken. It can be the Origin, or the
   Initial Attester/Issuer
 
