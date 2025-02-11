@@ -4,22 +4,19 @@
 
 Privacy Pass                                                  T. Meunier
 Internet-Draft                                           Cloudflare Inc.
-Intended status: Informational                           5 February 2025
-Expires: 9 August 2025
+Intended status: Informational                          11 February 2025
+Expires: 15 August 2025
 
 
-                       Privacy Pass Reverse Flow
+            Privacy Pass Issuance Protocol via HTTP Headers
       draft-meunier-privacypass-reverse-flow-informational-latest
 
 Abstract
 
    This document specifies an instantiation of Privacy Pass Architecture
    [RFC9576] that allows for a reverse flow from the Origin to the
-   Client/Attester/Issuer.  It describes the conceptual model of Privacy
-   Pass reverse flow and its protocols, its security and privacy goals,
-   practical deployment models, and recommendations for each deployment
-   model, to help ensure that the desired security and privacy goals are
-   fulfilled.
+   Client/Attester/Issuer.  It describes a way for redeeming Origins to
+   perform new issuances in the same request.
 
 About This Document
 
@@ -56,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 August 2025.
+   This Internet-Draft will expire on 15 August 2025.
 
 Copyright Notice
 
@@ -83,7 +80,7 @@ Table of Contents
    4.  Privacy Considerations
      4.1.  Issuer face values
      4.2.  Token for specific Clients
-     4.3.  Sending multiple tokens
+     4.3.  Sending more than one token
      4.4.  Swap endpoint and its privacy implication
    5.  IANA Considerations
    6.  Normative References
@@ -96,13 +93,13 @@ Table of Contents
    [RFC9576] that allows for a reverse flow from the Origin to the
    Client/Attester/Issuer.  In other words, it specifies a way for the
    Origin to act as a joint Attester/Issuer.  A Client that has already
-   been authorised to access an Origin can maintain that access, without
-   losing the unlinkable property provided by Privacy Pass.  In
+   been authorised by an Origin can maintain that authorization, without
+   losing the unlinkability property provided by Privacy Pass.  In
    addition, it allows an Origin to define its own issuance policy based
    on an initial bootstraping attestation method.  For instance, an
-   Origin that wants to grant 30 access for users that solved a CAPTCHA
-   might consume a type 0x0002 public veriable token, and use it to
-   issue 30 type 0x0001 private tokens.
+   Origin that wants to grant 30 access for Clients that solved a
+   CAPTCHA might consume a type 0x0002 public veriable token, and use it
+   to issue 30 type 0x0001 private tokens.
 
 2.  Terminology
 
@@ -175,26 +172,24 @@ Table of Contents
 
    TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen
    through a new HTTP Header PrivacyPass-Reverse.  PrivacyPass-Reverse
-   is a base64url encoded binary encoded HTTP message, respectively per
-   [RFC4648] and [RFC9292].
+   is a base64url ([RFC4648]) encoded BatchedTokenRequest as defined in
+   [BATCHED_TOKENS], Section 6.
 
-      The use of binary encoding avoids the definition of a new ad-hoc
-      encoding of request, response, and associated errors for each
-      Privacy Pass issuance protocols.  This matches the architecture as
-      defined in [RFC9576].  An alternative is to use arbitrary batched
-      tokens as defined in [BATCHED_TOKENS] batched tokens have a slight
-      overhead, but already provide a base for encoding arbitrary token
-      requests, response, and errors
+      The use of arbitrary batched tokens as defined in Section 6 of
+      [BATCHED_TOKENS] is because this already provides encoding for
+      request and response, error wrapping, and a concise format.  One
+      could use binary http or a new format
 
 3.1.  Client behaviour
 
    Along with sending PrivateToken from the Initial Issuer to the
-   Origin, the Client sends one TokenRequest as defined in [RFC9578] or
-   [BATCHED_TOKENS] The Client SHOULD consider Privacy Pass Reverse Flow
-   like the initial flow.  The Client is responsible to coordinate
-   between the different entities.  Specifically, if the Reverse Origin
-   is the Initial Attester/Issuer, the Client SHOULD account for
-   possible privacy leakage.
+   Origin, the Client sends a TokenRequest as defined in [RFC9578] or
+   [BATCHED_TOKENS], and wraps them as an arbitrary batched token
+   request.  The Client SHOULD consider Privacy Pass Reverse Flow like
+   the initial flow.  The Client is responsible to coordinate between
+   the different entities.  Specifically, if the Reverse Origin is the
+   Initial Attester/Issuer, the Client SHOULD account for possible
+   privacy leakage.
 
 3.2.  Origin/Issuer/Attester deployment
 
@@ -286,7 +281,7 @@ Table of Contents
 
 4.  Privacy Considerations
 
-   Privacy Pass RFC 9576 states
+   Privacy Pass [RFC9576] states
 
       In general, limiting the amount of metadata permitted helps limit
       the extent to which metadata can uniquely identify individual
@@ -350,7 +345,7 @@ Table of Contents
 
    2.  Clients to reset their state regularly with the initial Issuer.
 
-4.3.  Sending multiple tokens
+4.3.  Sending more than one token
 
    While that's not part of Privacy Pass with a reverse flow, some
    deployment might consider allowing Clients to send multiple
@@ -402,10 +397,6 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-   [RFC9292]  Thomson, M. and C. A. Wood, "Binary Representation of HTTP
-              Messages", RFC 9292, DOI 10.17487/RFC9292, August 2022,
-              <https://www.rfc-editor.org/rfc/rfc9292>.
-
    [RFC9576]  Davidson, A., Iyengar, J., and C. A. Wood, "The Privacy
               Pass Architecture", Work in Progress, Internet-Draft,
               draft-ietf-privacypass-architecture-16, 25 September 2023,
@@ -419,7 +410,9 @@ Table of Contents
 
 Acknowledgments
 
-   TODO acknowledge.
+   The author would like to thank Tommy Pauly, Chris Wood, Raphael
+   Robert, and Armando Faz Hernandez for helpful discussion on Privacy
+   Pass architecture and its considerations.
 
 Author's Address
 
