@@ -1,6 +1,6 @@
 ---
-title: "Privacy Pass Issuance Protocol via HTTP Headers"
-abbrev: "Privacy Pass Issuance Protocol via HTTP Headers"
+title: "Privacy Pass Reverse Flow"
+abbrev: "Privacy Pass Reverse Flow"
 category: info
 
 docname: draft-meunier-privacypass-reverse-flow-informational-latest
