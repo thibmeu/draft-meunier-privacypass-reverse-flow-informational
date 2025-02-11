@@ -1,0 +1,421 @@
+
+
+
+
+Privacy Pass                                                  T. Meunier
+Internet-Draft                                           Cloudflare Inc.
+Intended status: Informational                          11 February 2025
+Expires: 15 August 2025
+
+
+                       Privacy Pass Reverse Flow
+             draft-meunier-privacypass-reverse-flow-latest
+
+Abstract
+
+   This document specifies an instantiation of Privacy Pass Architecture
+   [RFC9576] that allows for a reverse flow from the Origin to the
+   Client/Attester/Issuer.  It describes a way for redeeming Origins to
+   perform new issuances in the same request.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-
+   informational/draft-meunier-privacypass-reverse-flow.html.  Status
+   information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-meunier-privacypass-reverse-
+   flow/.
+
+   Discussion of this document takes place on the Privacy Pass Working
+   Group mailing list (mailto:privacy-pass@ietf.org), which is archived
+   at https://mailarchive.ietf.org/arch/browse/privacy-pass/.  Subscribe
+   at https://www.ietf.org/mailman/listinfo/privacy-pass/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-
+   informational.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 15 August 2025.
+
+Copyright Notice
+
+   Copyright (c) 2025 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Terminology
+   3.  Protocol overview
+     3.1.  Client behaviour
+     3.2.  Origin/Issuer/Attester deployment
+     3.3.  Split Origin-Attester deployment
+   4.  Privacy Considerations
+     4.1.  Issuer face values
+     4.2.  Token for specific Clients
+     4.3.  Sending more than one token
+     4.4.  Swap endpoint and its privacy implication
+   5.  IANA Considerations
+   6.  Normative References
+   Acknowledgments
+   Author's Address
+
+1.  Introduction
+
+   This document specifies an instantiation of Privacy Pass Architecture
+   [RFC9576] that allows for a reverse flow from the Origin to the
+   Client/Attester/Issuer.  In other words, it specifies a way for the
+   Origin to act as a joint Attester/Issuer.  A Client that has already
+   been authorised by an Origin can maintain that authorization, without
+   losing the unlinkability property provided by Privacy Pass.  In
+   addition, it allows an Origin to define its own issuance policy based
+   on an initial bootstraping attestation method.  For instance, an
+   Origin that wants to grant 30 access for Clients that solved a
+   CAPTCHA might consume a type 0x0002 public veriable token, and use it
+   to issue 30 type 0x0001 private tokens.
+
+2.  Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   We reuse terminology from [RFC9576].
+
+   The following terms are used throughout this document:
+
+   *Flow:*  Direction from PrivateToken issuance to its redemption.  The
+      entity starting the flow acts as an Issuer, while the end of the
+      flow acts as an Origin.  The Client is always included, as it
+      finalises the TokenResponse, and coordinate interactions.
+
+   *Initial Flow:*  Issuer -> Attester -> Client -> Origin.  This flow
+      produces a PrivateToken that is used by the Origin to kickstart a
+      Reverse Flow.
+
+   *Reverse Flow:*  Issuer <- Attester <- Client <- Origin.  This flow
+      allows Origin to issues PrivateToken.  In the reverse flow, the
+      Origin operates one or more Issuer, and the Client MAY provide
+      these tokens either to the Initial Attester/Issuer, or use them
+      against the Origin
+
+   *Initial Attester/Issuer:*  Attester/Issuer part of the Initial Flow
+
+   *Origin Issuer:*  Issuer operated by the Origin
+
+   *Origin PrivateToken:*  PrivateToken issued by the Origin
+
+   *Reverse Origin:*  An entity that consumes the Origin PrivateToken.
+      It can be the Origin, or the Initial Attester/Issuer
+
+3.  Protocol overview
+
+   Along with sending their PrivateToken for authentication (as
+   specified in [RFC9576]), Client sends TokenRequest
+
++---------------+    +--------+                                       +--------+         +----------+ +--------+
+| Origin Issuer |    | Origin |                                       | Client |         | Attester | | Issuer |
++---+-----------+    +---+----+                                       +---+----+         +----+-----+ +---+----+
+    |                    |                                                |                   |           |
+    |                    |<----- Request ---------------------------------+                   |           |
+    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
+    |                    |                                                |<== Attestation ==>|           |
+    |                    |                                                |                   |           |
+    |                    |                                                +--------- TokenRequest ------->|
+    |                    |                                                |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
+    |<-- TokenRequest ---+                                                |                   |           |
+    +-- TokenResponse -->|                                                |                   |           |
+    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
+    |                    |                                                |                   |           |
+
+   The initial flow matches the one defined by [RFC9576].  A Client gets
+   challenged when accessing a resource on an Origin.  The Client goes
+   to the Attester to get issue a Token.
+
+   Through configuration mechanism not defined in this document, the
+   Client is aware the Origin acts as a Reverse Flow issuer.
+
+   This is an extension of [RFC9576].  The Client sends
+   Request+Token+TokenRequest(Origin Issuer).  The Origin runs the
+   issuance protocol based, and returns Response+TokenResponse(Origin
+   Issuer).
+
+   TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen
+   through a new HTTP Header PrivacyPass-Reverse.  PrivacyPass-Reverse
+   is a base64url ([RFC4648]) encoded BatchedTokenRequest as defined in
+   [BATCHED_TOKENS], Section 6.
+
+      The use of arbitrary batched tokens as defined in Section 6 of
+      [BATCHED_TOKENS] is because this already provides encoding for
+      request and response, error wrapping, and a concise format.  One
+      could use binary http or a new format
+
+3.1.  Client behaviour
+
+   Along with sending PrivateToken from the Initial Issuer to the
+   Origin, the Client sends a TokenRequest as defined in [RFC9578] or
+   [BATCHED_TOKENS], and wraps them as an arbitrary batched token
+   request.  The Client SHOULD consider Privacy Pass Reverse Flow like
+   the initial flow.  The Client is responsible to coordinate between
+   the different entities.  Specifically, if the Reverse Origin is the
+   Initial Attester/Issuer, the Client SHOULD account for possible
+   privacy leakage.
+
+3.2.  Origin/Issuer/Attester deployment
+
+   In this model, the Origin, Attester, and Issuer are all operated by
+   the same entity, as shown in Figure 1.  The Reverse Flow is the same
+   as the Initial Flow, except for the request/response encapsulation.
+   The Origin is the Reverse Origin.
+
+                    +---------------------------------------------.
+   +--------+       |  +----------+     +--------+     +--------+  |
+   | Client |       |  | Attester |     | Issuer |     | Origin |  |
+   +---+----+       |  +-----+----+     +----+---+     +---+----+  |
+       |             `-------|---------------|-------------|------'
+       |<----------------------- TokenChallenge (Issuer) --+
+       |                     |               |             |
+       |<=== Attestation ===>|               |             |
+       |                     |               |             |
+       +----------- TokenRequest ----------->|             |
+       |<---------- TokenResponse -----------+             |
+       |                                                   |
+       +------- Token+TokenRequest(Origin Issuer) -------->+
+       |<--------- TokenResponse(Origin Issuer) -----------|
+       |                                                   |
+
+                     Figure 1: Shared Deployment Model
+
+   Similar to the original Shared Deployment Model, the Attester,
+   Issuer, and Origin share the attestation, issuance, and redemption
+   contexts.  Even if this context changes between the Initial and
+   Reverse Flow, attestation mechanism that can uniquely identify a
+   Client are not appropriate as they could lead to unlinkability
+   violations.
+
+3.3.  Split Origin-Attester deployment
+
+   In this model, the Attester and Issuer are operated by the same
+   entity that is separate from the Origin.  The Origin trusts the joint
+   Attester and Issuer to perform attestation and issue Tokens.  Origin
+   Tokens can then be sent by Client on new requests, as long as the
+   Reverse Origin trusts the Origin to perform attestation and issue
+   Tokens.
+
+                                                                                     +--------------------------.
++---------------+    +--------+                                       +--------+     |  +----------+ +--------+  |
+| Origin Issuer |    | Origin |                                       | Client |     |  | Attester | | Issuer |  |
++---+-----------+    +---+----+                                       +---+----+     |  +-----+----+ +----+---+  |
+    |                    |                                                |           `-------|-----------|-----'
+    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
+    |                    |                                                |<== Attestation ==>|           |
+    |                    |                                                |                   |           |
+    |                    |                                                +--------- TokenRequest ------->|
+    |                    |                                                |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
+    |<-- TokenRequest ---+                                                |                   |           |
+    +-- TokenResponse -->|                                                |                   |           |
+    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
+    |                    |                                                |                   |           |
+
+         Figure 2: Joint Attester and Issuer Deployment Model
+
+   The Origin Issuer MUST not issue privately verifiable tokens, as this
+   would lead to secret material being shared between the Origin and the
+   Reverse Origin.
+
+   A particular deployment model is when the Reverse Origin is the
+   Attester/Issuer.  This model is described in Figure 3
+
+                                                                                     +--------------------------.
++---------------+    +--------+                                       +--------+     |  +----------+ +--------+  |
+| Origin Issuer |    | Origin |                                       | Client |     |  | Attester | | Issuer |  |
++---+-----------+    +---+----+                                       +---+----+     |  +-----+----+ +----+---+  |
+    |                    |                                                |           `-------|-----------|-----'
+    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
+    |                    |                                                |<== Attestation ==>|           |
+    |                    |                                                |                   |           |
+    |                    |                                                +--------- TokenRequest ------->|
+    |                    |                                                |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
+    |<-- TokenRequest ---+                                                |                   |           |
+    +-- TokenResponse -->|                                                |                   |           |
+    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
+    |                    |                                                +------------ Token ----------->|
+    |                    |                                                |                   |           |
+
+  Figure 3: Joint Attester and Issuer Deployment Model with reverse
+
+   This deployment SHOULD not allow the Reverse Origin to infer the
+   request made to the Origin, as it would break unlinkability.
+
+4.  Privacy Considerations
+
+   Privacy Pass [RFC9576] states
+
+      In general, limiting the amount of metadata permitted helps limit
+      the extent to which metadata can uniquely identify individual
+      Clients.  Failure to bound the number of possible metadata values
+      can therefore lead to a reduction in Client privacy.  Most token
+      types do not admit any metadata, so this bound is implicitly
+      enforced.
+
+   In Privacy Pass with a reverse flow, Clients are provided with new
+   PrivateTokens depending on their request.  They can spend these
+   tokens to continue making further requests.
+
+   While the token are still unlinkable, the token_key_id associated to
+   them represent metadata.  It leaks some information about the Client.
+   The following subsections discuss the issues that influence the
+   anonymity set, and possible mitigations/safeguards to protect against
+   this underlying problem.
+
+4.1.  Issuer face values
+
+   When setting up a reverse flow deployment, an Origin MAY operate
+   multiple Issuers, and assign them some metadata to them.  The amount
+   of possible metadata grows as 2^(origin_issuers).
+
+   We RECOMMEND that:
+
+   1.  Origin defines their anonimity sets, and deploy no more than
+       log2(#anonimity_sets).  This bounds the possible anonimity sets
+       by design.
+
+   2.  Client to only send 1 PrivateToken per request.  This is inline
+       with RFC9577 and RFC (Web Authentication) which only allows one
+       challenge response to be provided as part of Authorization HTTP
+       header.
+
+   3.  Issuers metadata to be publicly disclosed via an origin endpoint,
+       and externally monitored
+
+4.2.  Token for specific Clients
+
+   In Privacy Pass with a reverse flow, an Origin MAY operate multiple
+   Issuers, with arbitrary metadata associated to them.  A malicious
+   Origin MAY uses this opportunity to associate certain token values to
+   a specific set of Clients.
+
+   Let's consider the following deployment: the Origin operates two
+   issuers A and B.  The Client sends Token_A, and (TokenRequest_A,
+   TokenRequest_B).  Issuer B is associated to croissant aficionados.
+
+   If a Client requests croissant, or sends Token_B, the origin provides
+   TokenResponse_B.  If not, it provides TokenResponse_A.
+
+   Over time, this means the Origin is able to track croissants
+   aficionados.
+
+   To mitigate this, we RECOMMEND:
+
+   1.  The initial PrivateToken to be provided by an Issuer not in
+       control of the Origin.  The joint Origin/Attester/Issuer model
+       SHOULD NOT be used.
+
+   2.  Clients to reset their state regularly with the initial Issuer.
+
+4.3.  Sending more than one token
+
+   While that's not part of Privacy Pass with a reverse flow, some
+   deployment might consider allowing Clients to send multiple
+   PrivateToken, similar to how normal Privacy Pass deployment allow two
+   distinct PrivateToken to be sent.
+
+   In Privacy Pass with a reverse flow deployment, there are as many
+   bits as Issuers; each token is one bit.  We RECOMMEND to have a
+   maximum of 6 Origin operated Issuers, bounding Client information to
+   2^6 = 64.  Accounting for the initial Issuer, this means a total of
+   log2(64)+1=7 issuers.
+
+   Origin should have sufficient traffic to not single-out particular
+   Client based on timings of requests.
+
+4.4.  Swap endpoint and its privacy implication
+
+   With multiple Issuers, a Client MAY end up with a bunch of tokens,
+   for various Issuers.  Origins MAY propose a swap endpoint at which a
+   Client can exchange one or more Origin tokens against one or more new
+   Origin tokens.
+
+   The Origin SHOULD ensure this endpoint receives enough traffic to not
+   reduce the anonymity sets.
+
+5.  IANA Considerations
+
+   This document has no IANA actions.
+
+6.  Normative References
+
+   [BATCHED_TOKENS]
+              Robert, R., Wood, C. A., and T. Meunier, "Batched Token
+              Issuance Protocol", Work in Progress, Internet-Draft,
+              draft-ietf-privacypass-batched-tokens-04, 2 February 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-
+              privacypass-batched-tokens-04>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
+              Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
+              <https://www.rfc-editor.org/rfc/rfc4648>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC9576]  Davidson, A., Iyengar, J., and C. A. Wood, "The Privacy
+              Pass Architecture", Work in Progress, Internet-Draft,
+              draft-ietf-privacypass-architecture-16, 25 September 2023,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-
+              privacypass-architecture-16>.
+
+   [RFC9578]  Celi, S., Davidson, A., Valdez, S., and C. A. Wood,
+              "Privacy Pass Issuance Protocols", RFC 9578,
+              DOI 10.17487/RFC9578, June 2024,
+              <https://www.rfc-editor.org/rfc/rfc9578>.
+
+Acknowledgments
+
+   The author would like to thank Tommy Pauly, Chris Wood, Raphael
+   Robert, and Armando Faz Hernandez for helpful discussion on Privacy
+   Pass architecture and its considerations.
+
+Author's Address
+
+   Thibault Meunier
+   Cloudflare Inc.
+   Email: ot-ietf@thibault.uk
