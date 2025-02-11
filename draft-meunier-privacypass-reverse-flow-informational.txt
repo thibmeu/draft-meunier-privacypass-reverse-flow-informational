@@ -8,7 +8,7 @@ Intended status: Informational                          11 February 2025
 Expires: 15 August 2025
 
 
-            Privacy Pass Issuance Protocol via HTTP Headers
+                       Privacy Pass Reverse Flow
       draft-meunier-privacypass-reverse-flow-informational-latest
 
 Abstract
