@@ -1,6 +1,6 @@
 ---
-title: "Privacy Pass Reverse Flow"
-abbrev: "Privacy Pass Reverse Flow"
+title: "Privacy Pass Issuance Protocol via HTTP Headers"
+abbrev: "Privacy Pass Issuance Protocol via HTTP Headers"
 category: info
 
 docname: draft-meunier-privacypass-reverse-flow-informational-latest
@@ -34,10 +34,7 @@ informative:
 
 This document specifies an instantiation of Privacy Pass Architecture {{!RFC9576=I-D.ietf-privacypass-architecture}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
-It describes the conceptual model of Privacy Pass reverse flow and its protocols,
-its security and privacy goals, practical deployment models, and recommendations
-for each deployment model, to help ensure that the desired security and privacy
-goals are fulfilled.
+It describes a way for redeeming Origins to perform new issuances in the same request.
 
 --- middle
 
@@ -46,10 +43,10 @@ goals are fulfilled.
 This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
 In other words, it specifies a way for the Origin to act as a joint Attester/Issuer.
-A Client that has already been authorised to access an Origin can maintain that access,
-without losing the unlinkable property provided by Privacy Pass. In addition, it allows
+A Client that has already been authorised by an Origin can maintain that authorization,
+without losing the unlinkability property provided by Privacy Pass. In addition, it allows
 an Origin to define its own issuance policy based on an initial bootstraping attestation
-method. For instance, an Origin that wants to grant 30 access for users that solved a
+method. For instance, an Origin that wants to grant 30 access for Clients that solved a
 CAPTCHA might consume a type 0x0002 public veriable token, and use it to issue 30 type
 0x0001 private tokens.
 
@@ -114,28 +111,27 @@ sends TokenRequest
     |                    |                                                |                   |           |
 ~~~
 
-The initial flow matches the one defined by {{ RFC9576 }}. A Client gets challenged when
+The initial flow matches the one defined by {{RFC9576}}. A Client gets challenged when
 accessing a resource on an Origin. The Client goes to the Attester to get issue a Token.
 
 Through configuration mechanism not defined in this document, the Client is aware the Origin
 acts as a Reverse Flow issuer.
 
-This is an extension of {{ RFC9576 }}. The Client sends Request+Token+TokenRequest(Origin Issuer).
+This is an extension of {{RFC9576}}. The Client sends Request+Token+TokenRequest(Origin Issuer).
 The Origin runs the issuance protocol based, and returns Response+TokenResponse(Origin Issuer).
 
 TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen through a new HTTP Header `PrivacyPass-Reverse`.
-`PrivacyPass-Reverse` is a base64url encoded binary encoded HTTP message, respectively per {{!RFC4648}} and {{!RFC9292}}.
+`PrivacyPass-Reverse` is a base64url ({{!RFC4648}}) encoded BatchedTokenRequest as defined in {{!BATCHED_TOKENS=I-D.draft-ietf-privacypass-batched-tokens-04, Section 6}}.
 
-> The use of binary encoding avoids the definition of a new ad-hoc encoding of request, response, and
-> associated errors for each Privacy Pass issuance protocols. This matches the architecture as defined in {{!RFC9576}}.
-> An alternative is to use arbitrary batched tokens as defined in {{!BATCHED_TOKENS=I-D.draft-ietf-privacypass-batched-tokens-04}}
-> batched tokens have a slight overhead, but already provide a base for encoding arbitrary token requests, response, and errors
+> The use of arbitrary batched tokens as defined in {{Section 6 of BATCHED_TOKENS}} is
+> because this already provides encoding for request and response, error wrapping, and
+> a concise format. One could use binary http or a new format
 
 ## Client behaviour
 
 Along with sending PrivateToken from the Initial Issuer to the Origin, the
-Client sends one TokenRequest as defined in {{!RFC9578}} or
-{{!BATCHED_TOKENS}}
+Client sends a TokenRequest as defined in {{!RFC9578}} or
+{{!BATCHED_TOKENS}}, and wraps them as an arbitrary batched token request.
 The Client SHOULD consider Privacy Pass Reverse Flow like the initial flow.
 The Client is responsible to coordinate between the different entities.
 Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client
@@ -232,7 +228,7 @@ to the Origin, as it would break unlinkability.
 
 # Privacy Considerations
 
-Privacy Pass RFC 9576 states
+Privacy Pass {{RFC9576}} states
 
 > In general, limiting the amount of metadata permitted helps limit the extent
 to which metadata can uniquely identify individual Clients. Failure to bound the
@@ -286,7 +282,7 @@ To mitigate this, we RECOMMEND:
    Origin. The joint Origin/Attester/Issuer model SHOULD NOT be used.
 2. Clients to reset their state regularly with the initial Issuer.
 
-## Sending multiple tokens
+## Sending more than one token
 
 While that's not part of Privacy Pass with a reverse flow, some deployment might
 consider allowing Clients to send multiple PrivateToken, similar to how normal
@@ -319,4 +315,5 @@ This document has no IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+The author would like to thank Tommy Pauly, Chris Wood, Raphael Robert, and Armando Faz Hernandez
+for helpful discussion on Privacy Pass architecture and its considerations.
