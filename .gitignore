@@ -1,11 +1,11 @@
 *~
 /*-[0-9][0-9].xml
 archive.json
-draft-meunier-privacypass-reverse-flow-informational.xml
 draft-meunier-privacypass-reverse-flow.xml
 Gemfile.lock
 /.gems/
 *.html
+/.idea/
 /lib
 /.*.mk
 /node_modules/
