@@ -34,7 +34,7 @@ informative:
 
 This document specifies an instantiation of Privacy Pass Architecture {{!RFC9576=I-D.ietf-privacypass-architecture}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
-It describes a way for redeeming Origins to perform new issuances in the same request.
+It describes a method for an Origin to perform new issuances on requests for which a token is redeemed.
 
 --- middle
 
@@ -42,13 +42,51 @@ It describes a way for redeeming Origins to perform new issuances in the same re
 
 This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
-In other words, it specifies a way for the Origin to act as a joint Attester/Issuer.
-A Client that has already been authorised by an Origin can maintain that authorization,
-without losing the unlinkability property provided by Privacy Pass. In addition, it allows
-an Origin to define its own issuance policy based on an initial bootstraping attestation
-method. For instance, an Origin that wants to grant 30 access for Clients that solved a
-CAPTCHA might consume a type 0x0002 public veriable token, and use it to issue 30 type
-0x0001 private tokens.
+
+In other words, it specifies a way for an Origin to act as an Attester.
+
+# Motivation
+
+With Privacy Pass issuance as described in {{RFC9576}}, once a token is sent by a Client,
+it is considered spent and must be discarded. This guarantees unlinkability. If a token
+was to be spent twice, the request would be linkable by the Origin.
+
+Not being able to send a token twice has shortcomings.
+This draft provides a mechanism for an Origin to provide tokens, allowing reuse without
+reaching out to the initial Issuer.
+
+## Reimbursment token
+
+Certain Origin use privacy pass to limit the rate of request they receive over a certain
+time window because of resource constraints. If a Client sends a request that can
+be served without utilising that resource, the Origin would like to authorise them
+to do a second request. This is the case for request requiring compute and the compute is low,
+or when the request leads to a redirection instead of content generation for instance.
+
+With a reverse flow,
+a Client that has already been authorised by an Origin can maintain that authorization,
+without losing the unlinkability property provided by Privacy Pass.
+
+## Bootstraping issuer
+
+An Origin wants to grant 30 access for Clients that solved a
+CAPTCHA. To do so, it consumes a type 0x0002 public veriable token from an initial issuer that guarantees
+a CAPTCHA has been solved,
+and use it to issue 30 type 0x0001 private tokens.
+Without a reverse flow, the Origin would have to require 30 0x0002 issuer tokens, which
+has a lower performance and higher number of requests going to the issuer.
+
+## Attester feedback loop
+
+In {{RFC9576}}, a Client gets a token from an Issuer and redeems it at an Origin.
+However, if the Client request is deemed unwanted by the Origin at redemption
+time, there are no mechanism that prevents the Client from going back to
+the initial Issuer to get a new token and be authorised again.
+
+With a reverse flow, the initial Issuer may require Clients to present an
+Origin issued token before providing them a second token.
+This allows for a feedback loop between the Origin and the initial Issuer,
+without breaking Client unlinkability.
 
 
 # Terminology
