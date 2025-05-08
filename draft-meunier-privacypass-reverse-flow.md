@@ -74,17 +74,17 @@ CAPTCHA. To do so, it consumes a type 0x0002 public veriable token from an initi
 a CAPTCHA has been solved,
 and use it to issue 30 type 0x0001 private tokens.
 Without a reverse flow, the Origin would have to require 30 0x0002 issuer tokens, which
-has a lower performance and higher number of requests going to the issuer.
+have lower performance and a higher number of requests going to the issuer.
 
 ## Attester feedback loop
 
 In {{RFC9576}}, a Client gets a token from an Issuer and redeems it at an Origin.
-However, if the Client request is deemed unwanted by the Origin at redemption
-time, there are no mechanism that prevents the Client from going back to
-the initial Issuer to get a new token and be authorised again.
+However, if the Client's request is deemed unwanted by the Origin at redemption
+time, there is no mechanism that prevents the Client from going back to
+the initial Issuer to get a new token and be authorized again.
 
 With a reverse flow, the initial Issuer may require Clients to present an
-Origin issued token before providing them a second token.
+Origin-issued token before providing them with a second token.
 This allows for a feedback loop between the Origin and the initial Issuer,
 without breaking Client unlinkability.
 
