@@ -1,11 +1,13 @@
+<!-- regenerate: on (set to off if you edit this file) -->
+
 # Privacy Pass Reverse Flow
 
 This is the working area for the individual Internet-Draft, "Privacy Pass Reverse Flow".
 
-* [Editor's Copy](https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-informational/#go.draft-meunier-privacypass-reverse-flow-informational.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-meunier-privacypass-reverse-flow-informational)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-meunier-privacypass-reverse-flow-informational)
-* [Compare Editor's Copy to Individual Draft](https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-informational/#go.draft-meunier-privacypass-reverse-flow-informational.diff)
+* [Editor's Copy](https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-informational/#go.draft-meunier-privacypass-reverse-flow.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-meunier-privacypass-reverse-flow)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-meunier-privacypass-reverse-flow)
+* [Compare Editor's Copy to Individual Draft](https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-informational/#go.draft-meunier-privacypass-reverse-flow.diff)
 
 
 ## Contributing
