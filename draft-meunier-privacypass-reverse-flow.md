@@ -55,7 +55,7 @@ Not being able to send a token twice has shortcomings.
 This draft provides a mechanism for an Origin to provide tokens, allowing reuse without
 reaching out to the initial Issuer.
 
-## Reimbursment token
+## Refund token
 
 Certain Origin use privacy pass to limit the rate of request they receive over a certain
 time window because of resource constraints. If a Client sends a request that can
