@@ -73,7 +73,7 @@ Table of Contents
 
    1.  Introduction
    2.  Motivation
-     2.1.  Reimbursment token
+     2.1.  Refund token
      2.2.  Bootstraping issuer
      2.3.  Attester feedback loop
    3.  Terminology
@@ -111,7 +111,7 @@ Table of Contents
    provides a mechanism for an Origin to provide tokens, allowing reuse
    without reaching out to the initial Issuer.
 
-2.1.  Reimbursment token
+2.1.  Refund token
 
    Certain Origin use privacy pass to limit the rate of request they
    receive over a certain time window because of resource constraints.

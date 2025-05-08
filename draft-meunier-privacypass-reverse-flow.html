@@ -1155,7 +1155,7 @@ It describes a method for an Origin to perform new issuances on requests for whi
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-motivation" class="internal xref">Motivation</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-reimbursment-token" class="internal xref">Reimbursment token</a></p>
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-refund-token" class="internal xref">Refund token</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
                 <p id="section-toc.1-1.2.2.2.1" class="keepWithNext"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-bootstraping-issuer" class="internal xref">Bootstraping issuer</a></p>
@@ -1236,10 +1236,10 @@ was to be spent twice, the request would be linkable by the Origin.<a href="#sec
 <p id="section-2-2">Not being able to send a token twice has shortcomings.
 This draft provides a mechanism for an Origin to provide tokens, allowing reuse without
 reaching out to the initial Issuer.<a href="#section-2-2" class="pilcrow">¶</a></p>
-<div id="reimbursment-token">
+<div id="refund-token">
 <section id="section-2.1">
-        <h3 id="name-reimbursment-token">
-<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-reimbursment-token" class="section-name selfRef">Reimbursment token</a>
+        <h3 id="name-refund-token">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-refund-token" class="section-name selfRef">Refund token</a>
         </h3>
 <p id="section-2.1-1">Certain Origin use privacy pass to limit the rate of request they receive over a certain
 time window because of resource constraints. If a Client sends a request that can
