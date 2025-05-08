@@ -4,8 +4,8 @@
 
 Privacy Pass                                                  T. Meunier
 Internet-Draft                                           Cloudflare Inc.
-Intended status: Informational                          11 February 2025
-Expires: 15 August 2025
+Intended status: Informational                                8 May 2025
+Expires: 9 November 2025
 
 
                        Privacy Pass Reverse Flow
@@ -15,8 +15,8 @@ Abstract
 
    This document specifies an instantiation of Privacy Pass Architecture
    [RFC9576] that allows for a reverse flow from the Origin to the
-   Client/Attester/Issuer.  It describes a way for redeeming Origins to
-   perform new issuances in the same request.
+   Client/Attester/Issuer.  It describes a method for an Origin to
+   perform new issuances on requests for which a token is redeemed.
 
 About This Document
 
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 August 2025.
+   This Internet-Draft will expire on 9 November 2025.
 
 Copyright Notice
 
@@ -72,18 +72,22 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-   2.  Terminology
-   3.  Protocol overview
-     3.1.  Client behaviour
-     3.2.  Origin/Issuer/Attester deployment
-     3.3.  Split Origin-Attester deployment
-   4.  Privacy Considerations
-     4.1.  Issuer face values
-     4.2.  Token for specific Clients
-     4.3.  Sending more than one token
-     4.4.  Swap endpoint and its privacy implication
-   5.  IANA Considerations
-   6.  Normative References
+   2.  Motivation
+     2.1.  Reimbursment token
+     2.2.  Bootstraping issuer
+     2.3.  Attester feedback loop
+   3.  Terminology
+   4.  Protocol overview
+     4.1.  Client behaviour
+     4.2.  Origin/Issuer/Attester deployment
+     4.3.  Split Origin-Attester deployment
+   5.  Privacy Considerations
+     5.1.  Issuer face values
+     5.2.  Token for specific Clients
+     5.3.  Sending more than one token
+     5.4.  Swap endpoint and its privacy implication
+   6.  IANA Considerations
+   7.  Normative References
    Acknowledgments
    Author's Address
 
@@ -91,17 +95,59 @@ Table of Contents
 
    This document specifies an instantiation of Privacy Pass Architecture
    [RFC9576] that allows for a reverse flow from the Origin to the
-   Client/Attester/Issuer.  In other words, it specifies a way for the
-   Origin to act as a joint Attester/Issuer.  A Client that has already
-   been authorised by an Origin can maintain that authorization, without
-   losing the unlinkability property provided by Privacy Pass.  In
-   addition, it allows an Origin to define its own issuance policy based
-   on an initial bootstraping attestation method.  For instance, an
-   Origin that wants to grant 30 access for Clients that solved a
-   CAPTCHA might consume a type 0x0002 public veriable token, and use it
-   to issue 30 type 0x0001 private tokens.
+   Client/Attester/Issuer.
 
-2.  Terminology
+   In other words, it specifies a way for an Origin to act as an
+   Attester.
+
+2.  Motivation
+
+   With Privacy Pass issuance as described in [RFC9576], once a token is
+   sent by a Client, it is considered spent and must be discarded.  This
+   guarantees unlinkability.  If a token was to be spent twice, the
+   request would be linkable by the Origin.
+
+   Not being able to send a token twice has shortcomings.  This draft
+   provides a mechanism for an Origin to provide tokens, allowing reuse
+   without reaching out to the initial Issuer.
+
+2.1.  Reimbursment token
+
+   Certain Origin use privacy pass to limit the rate of request they
+   receive over a certain time window because of resource constraints.
+   If a Client sends a request that can be served without utilising that
+   resource, the Origin would like to authorise them to do a second
+   request.  This is the case for request requiring compute and the
+   compute is low, or when the request leads to a redirection instead of
+   content generation for instance.
+
+   With a reverse flow, a Client that has already been authorised by an
+   Origin can maintain that authorization, without losing the
+   unlinkability property provided by Privacy Pass.
+
+2.2.  Bootstraping issuer
+
+   An Origin wants to grant 30 access for Clients that solved a CAPTCHA.
+   To do so, it consumes a type 0x0002 public veriable token from an
+   initial issuer that guarantees a CAPTCHA has been solved, and use it
+   to issue 30 type 0x0001 private tokens.  Without a reverse flow, the
+   Origin would have to require 30 0x0002 issuer tokens, which has a
+   lower performance and higher number of requests going to the issuer.
+
+2.3.  Attester feedback loop
+
+   In [RFC9576], a Client gets a token from an Issuer and redeems it at
+   an Origin.  However, if the Client request is deemed unwanted by the
+   Origin at redemption time, there are no mechanism that prevents the
+   Client from going back to the initial Issuer to get a new token and
+   be authorised again.
+
+   With a reverse flow, the initial Issuer may require Clients to
+   present an Origin issued token before providing them a second token.
+   This allows for a feedback loop between the Origin and the initial
+   Issuer, without breaking Client unlinkability.
+
+3.  Terminology
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -137,7 +183,7 @@ Table of Contents
    *Reverse Origin:*  An entity that consumes the Origin PrivateToken.
       It can be the Origin, or the Initial Attester/Issuer
 
-3.  Protocol overview
+4.  Protocol overview
 
    Along with sending their PrivateToken for authentication (as
    specified in [RFC9576]), Client sends TokenRequest
@@ -180,7 +226,7 @@ Table of Contents
       request and response, error wrapping, and a concise format.  One
       could use binary http or a new format
 
-3.1.  Client behaviour
+4.1.  Client behaviour
 
    Along with sending PrivateToken from the Initial Issuer to the
    Origin, the Client sends a TokenRequest as defined in [RFC9578] or
@@ -191,7 +237,7 @@ Table of Contents
    Initial Attester/Issuer, the Client SHOULD account for possible
    privacy leakage.
 
-3.2.  Origin/Issuer/Attester deployment
+4.2.  Origin/Issuer/Attester deployment
 
    In this model, the Origin, Attester, and Issuer are all operated by
    the same entity, as shown in Figure 1.  The Reverse Flow is the same
@@ -223,7 +269,7 @@ Table of Contents
    Client are not appropriate as they could lead to unlinkability
    violations.
 
-3.3.  Split Origin-Attester deployment
+4.3.  Split Origin-Attester deployment
 
    In this model, the Attester and Issuer are operated by the same
    entity that is separate from the Origin.  The Origin trusts the joint
@@ -279,7 +325,7 @@ Table of Contents
    This deployment SHOULD not allow the Reverse Origin to infer the
    request made to the Origin, as it would break unlinkability.
 
-4.  Privacy Considerations
+5.  Privacy Considerations
 
    Privacy Pass [RFC9576] states
 
@@ -300,7 +346,7 @@ Table of Contents
    anonymity set, and possible mitigations/safeguards to protect against
    this underlying problem.
 
-4.1.  Issuer face values
+5.1.  Issuer face values
 
    When setting up a reverse flow deployment, an Origin MAY operate
    multiple Issuers, and assign them some metadata to them.  The amount
@@ -320,7 +366,7 @@ Table of Contents
    3.  Issuers metadata to be publicly disclosed via an origin endpoint,
        and externally monitored
 
-4.2.  Token for specific Clients
+5.2.  Token for specific Clients
 
    In Privacy Pass with a reverse flow, an Origin MAY operate multiple
    Issuers, with arbitrary metadata associated to them.  A malicious
@@ -345,7 +391,7 @@ Table of Contents
 
    2.  Clients to reset their state regularly with the initial Issuer.
 
-4.3.  Sending more than one token
+5.3.  Sending more than one token
 
    While that's not part of Privacy Pass with a reverse flow, some
    deployment might consider allowing Clients to send multiple
@@ -361,7 +407,7 @@ Table of Contents
    Origin should have sufficient traffic to not single-out particular
    Client based on timings of requests.
 
-4.4.  Swap endpoint and its privacy implication
+5.4.  Swap endpoint and its privacy implication
 
    With multiple Issuers, a Client MAY end up with a bunch of tokens,
    for various Issuers.  Origins MAY propose a swap endpoint at which a
@@ -371,11 +417,11 @@ Table of Contents
    The Origin SHOULD ensure this endpoint receives enough traffic to not
    reduce the anonymity sets.
 
-5.  IANA Considerations
+6.  IANA Considerations
 
    This document has no IANA actions.
 
-6.  Normative References
+7.  Normative References
 
    [BATCHED_TOKENS]
               Robert, R., Wood, C. A., and T. Meunier, "Batched Token
