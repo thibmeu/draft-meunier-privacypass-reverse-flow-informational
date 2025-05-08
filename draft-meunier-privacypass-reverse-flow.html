@@ -1261,7 +1261,7 @@ CAPTCHA. To do so, it consumes a type 0x0002 public veriable token from an initi
 a CAPTCHA has been solved,
 and use it to issue 30 type 0x0001 private tokens.
 Without a reverse flow, the Origin would have to require 30 0x0002 issuer tokens, which
-has a lower performance and higher number of requests going to the issuer.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+have lower performance and a higher number of requests going to the issuer.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="attester-feedback-loop">
@@ -1270,11 +1270,11 @@ has a lower performance and higher number of requests going to the issuer.<a hre
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-attester-feedback-loop" class="section-name selfRef">Attester feedback loop</a>
         </h3>
 <p id="section-2.3-1">In <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>, a Client gets a token from an Issuer and redeems it at an Origin.
-However, if the Client request is deemed unwanted by the Origin at redemption
-time, there are no mechanism that prevents the Client from going back to
-the initial Issuer to get a new token and be authorised again.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+However, if the Client's request is deemed unwanted by the Origin at redemption
+time, there is no mechanism that prevents the Client from going back to
+the initial Issuer to get a new token and be authorized again.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.3-2">With a reverse flow, the initial Issuer may require Clients to present an
-Origin issued token before providing them a second token.
+Origin-issued token before providing them with a second token.
 This allows for a feedback loop between the Origin and the initial Issuer,
 without breaking Client unlinkability.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
 </section>
