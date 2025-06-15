@@ -26,13 +26,23 @@ author:
     email: ot-ietf@thibault.uk
 
 normative:
+  BATCHED_TOKENS: I-D.draft-ietf-privacypass-batched-tokens-04
+  RFC4648:
+  RFC9576:
+  RFC9578:
 
 informative:
+  ANONYMOUS-CREDIT-TOKENS:
+    title: Anonymous Credit Tokens
+    target: https://samuelschlesinger.github.io/ietf-anonymous-credit-tokens/draft-schlesinger-cfrg-act.html
+  PRIVACYPASS-ADC: I-D.draft-yun-privacypass-arc-00
+  PRIVACYPASS-BBS: I-D.draft-ladd-privacypass-bbs-01
+  RFC9110:
 
 
 --- abstract
 
-This document specifies an instantiation of Privacy Pass Architecture {{!RFC9576=I-D.ietf-privacypass-architecture}}
+This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
 that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
 It describes a method for an Origin to perform new issuances on requests for which a token is redeemed.
 
@@ -126,7 +136,7 @@ The following terms are used throughout this document:
 : An entity that consumes the Origin PrivateToken. It can be the Origin, or the
   Initial Attester/Issuer
 
-# Protocol overview
+# Architecture overview {#architecture}
 
 Along with sending their PrivateToken for authentication (as specified in {{RFC9576}}), Client
 sends TokenRequest
@@ -155,21 +165,31 @@ accessing a resource on an Origin. The Client goes to the Attester to get issue 
 Through configuration mechanism not defined in this document, the Client is aware the Origin
 acts as a Reverse Flow issuer.
 
-This is an extension of {{RFC9576}}. The Client sends Request+Token+TokenRequest(Origin Issuer).
-The Origin runs the issuance protocol based, and returns Response+TokenResponse(Origin Issuer).
+This is an extension of {{RFC9576}}. The redemption flow of a Privacy Pass token is defined in
+{{Section 3.6.4 of RFC9576}}. Reverse flow extends this so that redemption flow is interleaved with
+the issuance flow described in {{Section 3.6.3 of RFC9576}}.
+This is denoted in the diagram above by the Client sending `Request`+`Token`+`TokenRequest(Origin Issuer)`.
+The Origin runs the issuance protocol, and returns `Response`+`TokenResponse(Origin Issuer)`.
 
-TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen through a new HTTP Header `PrivacyPass-Reverse`.
-`PrivacyPass-Reverse` is a base64url ({{!RFC4648}}) encoded BatchedTokenRequest as defined in {{!BATCHED_TOKENS=I-D.draft-ietf-privacypass-batched-tokens-04, Section 6}}.
+Such flow can be performed through various means. This document introduces one to serve as example and
+first basis.
 
-> The use of arbitrary batched tokens as defined in {{Section 6 of BATCHED_TOKENS}} is
+# Reverse flow with an HTTP header
+
+This section defines a Reverse Flow, as presented in {{architecture}}, leveraging a new HTTP headers.
+
+`TokenRequest(Origin Issuer)` and `TokenResponse(Origin Issuer)` happen through a new HTTP Header `PrivacyPass-Reverse`.
+`PrivacyPass-Reverse` is a base64url ({{RFC4648}}) encoded `GenericBatchTokenRequest` as defined in {{Section 6 of BATCHED-TOKENS}}.
+
+> The use of generic batch tokens as defined in {{Section 6 of BATCHED-TOKENS}} is
 > because this already provides encoding for request and response, error wrapping, and
 > a concise format. One could use binary http or a new format
 
 ## Client behaviour
 
 Along with sending PrivateToken from the Initial Issuer to the Origin, the
-Client sends a TokenRequest as defined in {{!RFC9578}} or
-{{!BATCHED_TOKENS}}, and wraps them as an arbitrary batched token request.
+Client sends a TokenRequest as defined in {{RFC9578}} or
+{{BATCHED_TOKENS}}, and wraps them as a generic batch token request.
 The Client SHOULD consider Privacy Pass Reverse Flow like the initial flow.
 The Client is responsible to coordinate between the different entities.
 Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client
@@ -207,6 +227,18 @@ contexts. Even if this context changes between the Initial and
 Reverse Flow, attestation mechanism that can uniquely identify
 a Client are not appropriate as they could lead to unlinkability violations.
 
+> These models allow for fully private verifiability. Even though no optimised
+> scheme is available at the time of writting, the author recommends to follow
+> advances of anonymous credential within the Privacy Pass group.
+>
+> Specifically
+>
+> 1. {{PRIVACYPASS-ARC}}
+> 2. {{PRIVACYPASS-BBS}}
+> 3. {{ANONYMOUS-CREDIT-TOKENS}}
+>
+> These scheme allow to mimic a reverse flow to some extent.
+
 ## Split Origin-Attester deployment
 
 In this model, the Attester and Issuer are operated by the same entity
@@ -234,7 +266,7 @@ Reverse Origin trusts the Origin to perform attestation and issue Tokens.
 ~~~
 {: #fig-deploy-joint-issuer title="Joint Attester and Issuer Deployment Model"}
 
-The Origin Issuer MUST not issue privately verifiable tokens, as this would
+The Origin Issuer MUST NOT issue privately verifiable tokens, as this would
 lead to secret material being shared between the Origin and the Reverse Origin.
 
 A particular deployment model is when the Reverse Origin is the Attester/Issuer.
