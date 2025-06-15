@@ -26,7 +26,7 @@ author:
     email: ot-ietf@thibault.uk
 
 normative:
-  BATCHED_TOKENS: I-D.draft-ietf-privacypass-batched-tokens-04
+  BATCHED-TOKENS: I-D.draft-ietf-privacypass-batched-tokens-04
   RFC4648:
   RFC9576:
   RFC9578:
@@ -35,7 +35,7 @@ informative:
   ANONYMOUS-CREDIT-TOKENS:
     title: Anonymous Credit Tokens
     target: https://samuelschlesinger.github.io/ietf-anonymous-credit-tokens/draft-schlesinger-cfrg-act.html
-  PRIVACYPASS-ADC: I-D.draft-yun-privacypass-arc-00
+  PRIVACYPASS-ARC: I-D.draft-yun-privacypass-arc-00
   PRIVACYPASS-BBS: I-D.draft-ladd-privacypass-bbs-01
   RFC9110:
 
@@ -189,7 +189,7 @@ This section defines a Reverse Flow, as presented in {{architecture}}, leveragin
 
 Along with sending PrivateToken from the Initial Issuer to the Origin, the
 Client sends a TokenRequest as defined in {{RFC9578}} or
-{{BATCHED_TOKENS}}, and wraps them as a generic batch token request.
+{{BATCHED-TOKENS}}, and wraps them as a generic batch token request.
 The Client SHOULD consider Privacy Pass Reverse Flow like the initial flow.
 The Client is responsible to coordinate between the different entities.
 Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client
