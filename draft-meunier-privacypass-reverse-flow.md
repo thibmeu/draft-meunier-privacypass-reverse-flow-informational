@@ -43,31 +43,35 @@ informative:
 --- abstract
 
 This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
-that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
-It describes a method for an Origin to perform new issuances on requests for which a token is redeemed.
+that allows for a "reverse" flow from the Origin to the Client.
+It describes a method for an Origin to issue new tokens in response to a request in
+which requests for which a token is redeemed.
 
 --- middle
 
 # Introduction
 
 This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
-that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
+that allows for a reverse flow from the Origin to the Client.
 
-In other words, it specifies a way for an Origin to act as an Attester.
+In other words, it specifies a way for an Origin to act as an Attester + Issuer.
 
 # Motivation
 
 With Privacy Pass issuance as described in {{RFC9576}}, once a token is sent by a Client,
-it is considered spent and must be discarded. This guarantees unlinkability. If a token
-was to be spent twice, the request would be linkable by the Origin.
+it is considered spent and cannot be reused in order to guarantee unlinkability. If a token
+were to be spent twice, the two requests would be linkable by the Origin.
 
-Not being able to send a token twice has shortcomings.
+However, requiring that all tokens are spent only once means that Clients might need
+to request more tokens for new requests, even if the request that included the original
+token doesn't need to "spend" that token from the Origin's perspective (due to the
+request ending up being insignificant to the Origin).
 This draft provides a mechanism for an Origin to provide tokens, allowing reuse without
-reaching out to the initial Issuer.
+reaching out to the initial Attester and Issuer.
 
-## Refund token
+## Refunding tokens
 
-Certain Origin use privacy pass to limit the rate of request they receive over a certain
+Certain Origin use Privacy Pass tokens to rate-limit requests they receive over a certain
 time window because of resource constraints. If a Client sends a request that can
 be served without utilising that resource, the Origin would like to authorise them
 to do a second request. This is the case for request requiring compute and the compute is low,
