@@ -6,16 +6,17 @@
 <meta content="initial-scale=1.0" name="viewport">
 <title>Privacy Pass Reverse Flow</title>
 <meta content="Thibault Meunier" name="author">
-<meta content="
+<meta content='
        This document specifies an instantiation of Privacy Pass Architecture  
-that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
-It describes a method for an Origin to perform new issuances on requests for which a token is redeemed. 
-    " name="description">
+that allows for a "reverse" flow from the Origin to the Client.
+It describes a method for an Origin to issue new tokens in response to a request in
+which a token is redeemed. 
+    ' name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="draft-meunier-privacypass-reverse-flow-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.28.1
-    Python 3.12.10
+    Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
@@ -24,7 +25,7 @@ It describes a method for an Origin to perform new issuances on requests for whi
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
+    requests 2.32.4
     setuptools 80.9.0
     wcwidth 0.2.13
 -->
@@ -1049,7 +1050,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Meunier</td>
-<td class="center">Expires 17 December 2025</td>
+<td class="center">Expires 19 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1063,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-meunier-privacypass-reverse-flow-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-15" class="published">15 June 2025</time>
+<time datetime="2025-06-17" class="published">17 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-17">17 December 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-19">19 December 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1081,8 +1082,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document specifies an instantiation of Privacy Pass Architecture <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>
-that allows for a reverse flow from the Origin to the Client/Attester/Issuer.
-It describes a method for an Origin to perform new issuances on requests for which a token is redeemed.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+that allows for a "reverse" flow from the Origin to the Client.
+It describes a method for an Origin to issue new tokens in response to a request in
+which a token is redeemed.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1119,7 +1121,7 @@ It describes a method for an Origin to perform new issuances on requests for whi
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 19 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1155,7 +1157,7 @@ It describes a method for an Origin to perform new issuances on requests for whi
             <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-motivation" class="internal xref">Motivation</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.1">
-                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-refund-token" class="internal xref">Refund token</a></p>
+                <p id="section-toc.1-1.2.2.1.1" class="keepWithNext"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-refunding-tokens" class="internal xref">Refunding tokens</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
                 <p id="section-toc.1-1.2.2.2.1" class="keepWithNext"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-bootstraping-issuer" class="internal xref">Bootstraping issuer</a></p>
@@ -1232,8 +1234,8 @@ It describes a method for an Origin to perform new issuances on requests for whi
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">This document specifies an instantiation of Privacy Pass Architecture <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>
-that allows for a reverse flow from the Origin to the Client/Attester/Issuer.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">In other words, it specifies a way for an Origin to act as an Attester.<a href="#section-1-2" class="pilcrow">¶</a></p>
+that allows for a reverse flow from the Origin to the Client.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">In other words, it specifies a way for an Origin to act as an Attester + Issuer.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="motivation">
@@ -1242,17 +1244,20 @@ that allows for a reverse flow from the Origin to the Client/Attester/Issuer.<a 
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-motivation" class="section-name selfRef">Motivation</a>
       </h2>
 <p id="section-2-1">With Privacy Pass issuance as described in <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>, once a token is sent by a Client,
-it is considered spent and must be discarded. This guarantees unlinkability. If a token
-was to be spent twice, the request would be linkable by the Origin.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">Not being able to send a token twice has shortcomings.
+it is considered spent and cannot be reused in order to guarantee unlinkability. If a token
+were to be spent twice, the two requests would be linkable by the Origin.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">However, requiring that all tokens are spent only once means that Clients might need
+to request more tokens for new requests, even if the request that included the original
+token doesn't need to "spend" that token from the Origin's perspective (due to the
+request ending up being insignificant to the Origin).
 This draft provides a mechanism for an Origin to provide tokens, allowing reuse without
-reaching out to the initial Issuer.<a href="#section-2-2" class="pilcrow">¶</a></p>
-<div id="refund-token">
+reaching out to the initial Attester and Issuer.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<div id="refunding-tokens">
 <section id="section-2.1">
-        <h3 id="name-refund-token">
-<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-refund-token" class="section-name selfRef">Refund token</a>
+        <h3 id="name-refunding-tokens">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-refunding-tokens" class="section-name selfRef">Refunding tokens</a>
         </h3>
-<p id="section-2.1-1">Certain Origin use privacy pass to limit the rate of request they receive over a certain
+<p id="section-2.1-1">Certain Origin use Privacy Pass tokens to rate-limit requests they receive over a certain
 time window because of resource constraints. If a Client sends a request that can
 be served without utilising that resource, the Origin would like to authorise them
 to do a second request. This is the case for request requiring compute and the compute is low,
