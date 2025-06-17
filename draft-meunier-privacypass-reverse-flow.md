@@ -45,7 +45,7 @@ informative:
 This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
 that allows for a "reverse" flow from the Origin to the Client.
 It describes a method for an Origin to issue new tokens in response to a request in
-which requests for which a token is redeemed.
+which a token is redeemed.
 
 --- middle
 
