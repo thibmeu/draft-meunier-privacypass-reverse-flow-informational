@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-17T02:03:44.948609+00:00",
+  "timestamp": "2025-06-19T02:03:35.764284+00:00",
   "repo": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
   "labels": [
     {
@@ -50,5 +50,55 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOMu4RQM6a47IZ",
+      "title": "Editorial suggestions",
+      "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/pull/1",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-17T12:07:14Z",
+      "updatedAt": "2025-06-17T12:50:53Z",
+      "baseRepository": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
+      "baseRefName": "main",
+      "baseRefOid": "b50f44e7f4e5aee035d0029b3065fd5502362f3a",
+      "headRepository": "tfpauly/draft-meunier-privacypass-reverse-flow-informational",
+      "headRefName": "patch-1",
+      "headRefOid": "b5e817fb305e380795975396afe516fa40a1146a",
+      "closedAt": "2025-06-17T12:50:53Z",
+      "mergedAt": "2025-06-17T12:50:53Z",
+      "mergedBy": "thibmeu",
+      "mergeCommit": {
+        "oid": "68d2fa2d5376ebbcffd0f7e47171a024ebc9ff86"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMu4RQM6u-Cou",
+          "commit": {
+            "abbreviatedOid": "3a8131a"
+          },
+          "author": "thibmeu",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "one minor correction. Thanks for the pass.",
+          "createdAt": "2025-06-17T12:42:21Z",
+          "updatedAt": "2025-06-17T12:50:37Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Wording seems to have been slightly messed up\r\n\r\n```suggestion\r\nwhich a token is redeemed.\r\n```",
+              "createdAt": "2025-06-17T12:42:21Z",
+              "updatedAt": "2025-06-17T12:50:37Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
