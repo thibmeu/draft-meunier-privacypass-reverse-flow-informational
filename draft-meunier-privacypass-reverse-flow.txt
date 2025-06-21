@@ -4,8 +4,8 @@
 
 Privacy Pass                                                  T. Meunier
 Internet-Draft                                           Cloudflare Inc.
-Intended status: Informational                              17 June 2025
-Expires: 19 December 2025
+Intended status: Informational                              21 June 2025
+Expires: 23 December 2025
 
 
                        Privacy Pass Reverse Flow
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 December 2025.
+   This Internet-Draft will expire on 23 December 2025.
 
 Copyright Notice
 
@@ -92,6 +92,7 @@ Table of Contents
      8.1.  Normative References
      8.2.  Informative References
    Acknowledgments
+   Changelog
    Author's Address
 
 1.  Introduction
@@ -518,6 +519,28 @@ Acknowledgments
    The author would like to thank Tommy Pauly, Chris Wood, Raphael
    Robert, and Armando Faz Hernandez for helpful discussion on Privacy
    Pass architecture and its considerations.
+
+Changelog
+
+   v01
+
+   *  Editorial pass on the introduction
+
+   *  Add a motivation section: refunding tokens, bootstraping issuer,
+      attester feeback loop
+
+   *  Split protocol overview via HTTP headers in its own section
+
+   *  Add consideration about anonymous credentials in joint origin/
+      issuer deployment
+
+   v00
+
+   *  Initial draft
+
+   *  Possibility of a new HTTP request for inlining request
+
+   *  Privacy considerations about additional metadata
 
 Author's Address
 
