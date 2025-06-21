@@ -391,3 +391,19 @@ This document has no IANA actions.
 
 The author would like to thank Tommy Pauly, Chris Wood, Raphael Robert, and Armando Faz Hernandez
 for helpful discussion on Privacy Pass architecture and its considerations.
+
+# Changelog
+{:numbered="false"}
+
+v01
+
+- Editorial pass on the introduction
+- Add a motivation section: refunding tokens, bootstraping issuer, attester feeback loop
+- Split protocol overview via HTTP headers in its own section
+- Add consideration about anonymous credentials in joint origin/issuer deployment
+
+v00
+
+- Initial draft
+- Possibility of a new HTTP request for inlining request
+- Privacy considerations about additional metadata
