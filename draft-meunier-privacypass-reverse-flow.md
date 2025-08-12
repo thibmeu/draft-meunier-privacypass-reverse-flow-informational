@@ -192,8 +192,9 @@ This section defines a Reverse Flow, as presented in {{architecture}}, leveragin
 ## Client behaviour
 
 Along with sending PrivateToken from the Initial Issuer to the Origin, the
-Client sends a TokenRequest as defined in {{RFC9578}} or
-{{BATCHED-TOKENS}}, and wraps them as a generic batch token request.
+Client sends a TokenRequest as defined in {{RFC9578}},
+{{BATCHED-TOKENS}}, or {{PRIVACYPASS-ARC}}. In all these definitions, TokenRequest MUST
+prepended by a `uint16_t` representing the token type.
 The Client SHOULD consider Privacy Pass Reverse Flow like the initial flow.
 The Client is responsible to coordinate between the different entities.
 Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client
@@ -231,7 +232,7 @@ contexts. Even if this context changes between the Initial and
 Reverse Flow, attestation mechanism that can uniquely identify
 a Client are not appropriate as they could lead to unlinkability violations.
 
-> These models allow for fully private verifiability. Even though no optimised
+> This model allows for private verifiability. Even though no optimised
 > scheme is available at the time of writting, the author recommends to follow
 > advances of anonymous credential within the Privacy Pass group.
 >
@@ -241,7 +242,9 @@ a Client are not appropriate as they could lead to unlinkability violations.
 > 2. {{PRIVACYPASS-BBS}}
 > 3. {{ANONYMOUS-CREDIT-TOKENS}}
 >
-> These scheme allow to mimic a reverse flow to some extent.
+> These scheme allow for optimisation of Token finalisation by the Client.
+> In {{ANONYMOUS-CREDIT-TOKENS}}, the TokenResponse can be assimilated to
+> the refund construction.
 
 ## Split Origin-Attester deployment
 
