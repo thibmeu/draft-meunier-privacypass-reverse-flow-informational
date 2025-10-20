@@ -208,16 +208,12 @@ Table of Contents
     |                    |                                          |                   |           |
     |                    |                                          +--------- TokenRequest ------->|
     |                    |                                          |<-------- TokenResponse -------+
-    |                    |                                  .--------------.            |           |
-    |                    |                                  | Finalisation |            |           |
-    |                    |                                  `--------------'            |           |
-    |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
+    |                    |                                    Finalisation              |           |
+    |                    |<-- Request+Token+TokenRequest(Origin) ---+                   |           |
     |<-- TokenRequest ---+                                          |                   |           |
     +--- TokenResponse ->|                                          |                   |           |
-    |                    |---- Response+TokenResponse(Origin) ---->|                   |           |
-    |                    |                                  .--------------.            |           |
-    |                    |                                  | Finalisation |            |           |
-    |                    |                                  `--------------'            |           |
+    |                    |---- Response+TokenResponse(Origin) ----->|                   |           |
+    |                    |                                    Finalisation              |           |
     |                    |                                          |                   |           |
 
      Figure 1: Architec ture of Privacy Pass with a Reverse Flow
