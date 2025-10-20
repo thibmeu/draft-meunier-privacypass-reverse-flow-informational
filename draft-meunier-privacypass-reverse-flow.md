@@ -156,11 +156,14 @@ sends TokenRequest
     |                    |                                          |                   |           |
     |                    |                                          +--------- TokenRequest ------->|
     |                    |                                          |<-------- TokenResponse -------+
+    |                    |                                          |                   |           |
     |                    |                                    Finalisation              |           |
+    |                    |                                          |                   |           |
     |                    |<-- Request+Token+TokenRequest(Origin) ---+                   |           |
     |<-- TokenRequest ---+                                          |                   |           |
     +--- TokenResponse ->|                                          |                   |           |
     |                    |---- Response+TokenResponse(Origin) ----->|                   |           |
+    |                    |                                          |                   |           |
     |                    |                                    Finalisation              |           |
     |                    |                                          |                   |           |
 ~~~
