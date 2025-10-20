@@ -154,18 +154,14 @@ sends TokenRequest
     |                    +-------- TokenChallenge (Issuer) -------->|                   |           |
     |                    |                                          |<== Attestation ==>|           |
     |                    |                                          |                   |           |
-    |                    |                                          +-------- IssuerRequest ------->|
-    |                    |                                          |<------- IssuerResponse -------+
-    |                    |                                  .--------------.            |           |
-    |                    |                                  | Finalisation |            |           |
-    |                    |                                  `--------------'            |           |
-    |                    |<-- Request+Token+IssuerRequest(Origin) --+                   |           |
-    |<-- IssuerRequest --+                                          |                   |           |
-    +-- IssuerResponse ->|                                          |                   |           |
-    |                    |---- Response+IssuerResponse(Origin) ---->|                   |           |
-    |                    |                                  .--------------.            |           |
-    |                    |                                  | Finalisation |            |           |
-    |                    |                                  `--------------'            |           |
+    |                    |                                          +--------- TokenRequest ------->|
+    |                    |                                          |<-------- TokenResponse -------+
+    |                    |                                    Finalisation              |           |
+    |                    |<-- Request+Token+TokenRequest(Origin) ---+                   |           |
+    |<-- TokenRequest ---+                                          |                   |           |
+    +--- TokenResponse ->|                                          |                   |           |
+    |                    |---- Response+TokenResponse(Origin) ----->|                   |           |
+    |                    |                                    Finalisation              |           |
     |                    |                                          |                   |           |
 ~~~
 {: #fig-reverse-flow-architecture title="Architec ture of Privacy Pass with a Reverse Flow"}
@@ -185,9 +181,9 @@ The Origin runs the issuance protocol, and returns `Response`+`TokenResponse(Ori
 Such flow can be performed through various means. This document introduces one to serve as example and
 first basis.
 
-# IssuerRequest, IssuerResponse, and Finalisation
+# TokenRequest, TokenResponse, and Finalisation
 
-In {{fig-reverse-flow-architecture}}, the Client sends an `IssuerRequest` and receives an `IssuerResponse`.
+In {{fig-reverse-flow-architecture}}, the Client sends an `TokenRequest` and receives an `TokenResponse`.
 These are meant to abstract request from different protocol to the Issuer.
 
 As specified in {{Section 3.5 of RFC9576}},
@@ -195,9 +191,9 @@ As specified in {{Section 3.5 of RFC9576}},
 > The structure and semantics of the TokenRequest and TokenResponse messages depend on the issuance protocol and token type being used.
 
 The introducion of Privacy Pass issuance protocol based on Anonymous credential, such as {{PRIVACYPASS-ARC}} or {{PRIVACYPASS-ACT}},
-modifies `TokenRequest` to use `CredentialRequest` instead. `IssuerRequest` abstract this away.
+modifies `TokenRequest` to use `CredentialRequest` instead.
 
-Upon receiving an `IssuerResponse`, the Client has to finalise the `Token` so it can be presented to an origin.
+Upon receiving an `TokenResponse`, the Client has to finalise the `Token` so it can be presented to an origin.
 This may be a `Finalisation` for type 0x0002 as defined in {{Section 7 of RFC9578}},
 a presentation for {{Section 7 of PRIVACYPASS-ARC}},
 or even a refund for {{PRIVACYPASS-ACT}}.
@@ -206,7 +202,7 @@ or even a refund for {{PRIVACYPASS-ACT}}.
 
 This section defines a Reverse Flow, as presented in {{architecture}}, leveraging a new HTTP headers.
 
-`IssuerRequest(Origin)` and `IssuerResponse(Origin)` happen through a new HTTP Header `PrivacyPass-Reverse`.
+`TokenRequest(Origin)` and `TokenResponse(Origin)` happen through a new HTTP Header `PrivacyPass-Reverse`.
 `PrivacyPass-Reverse` is a base64url ({{RFC4648}}) encoded `GenericBatchTokenRequest` as defined in {{Section 6 of BATCHED-TOKENS}}.
 
 > The use of generic batch tokens as defined in {{Section 6 of BATCHED-TOKENS}} is
@@ -241,11 +237,11 @@ The Origin is the Reverse Origin.
     |                     |           |         |
     |<=== Attestation ===>|           |         |
     |                     |           |         |
-    +----------- IssuerRequest -------|         |
-    |<---------- IssuerResponse ------+         |
+    +----------- TokenRequest --------|         |
+    |<---------- TokenResponse -------+         |
     |                                           |
-    +------- Token+IssuerRequest(Origin) ------>|
-    |<--------- IssuerResponse(Origin) ---------+
+    +------- Token+TokenRequest(Origin) ------->|
+    |<--------- TokenResponse(Origin) ----------+
     |                                           |
 ~~~
 {: #fig-deploy-shared title="Shared Deployment Model"}
@@ -264,11 +260,9 @@ a Client are not appropriate as they could lead to unlinkability violations.
 >
 > 1. {{PRIVACYPASS-ARC}}
 > 2. {{PRIVACYPASS-BBS}}
-> 3. {{ANONYMOUS-CREDIT-TOKENS}}
+> 3. {{PRIVACYPASS-ACT}}
 >
 > These scheme allow for optimisation of Token finalisation by the Client.
-> In {{ANONYMOUS-CREDIT-TOKENS}}, the TokenResponse can be assimilated to
-> the refund construction.
 
 ## Split Origin-Attester deployment
 
@@ -287,12 +281,12 @@ Reverse Origin trusts the Origin to perform attestation and issue Tokens.
     |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
     |                    |                                         |<== Attestation ==>|           |
     |                    |                                         |                   |           |
-    |                    |                                         +--------- IssuerRequest ------>|
-    |                    |                                         |<-------- IssuerResponse ------+
-    |                    |<-- Request+Token+IssuerRequest(Origin) -+                   |           |
-    |<-- IssuerRequest --+                                         |                   |           |
-    +-- IssuerResponse ->|                                         |                   |           |
-    |                    |--- Response+IssuerResponse(Origin) ---->|                   |           |
+    |                    |                                         +--------- TokenRequest ------->|
+    |                    |                                         |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
+    |<-- TokenRequest ---+                                         |                   |           |
+    +-- TokenResponse -->|                                         |                   |           |
+    |                    +--- Response+TokenResponse(Origin) ----->|                   |           |
     |                    |                                         |                   |           |
 ~~~
 {: #fig-deploy-joint-issuer title="Joint Attester and Issuer Deployment Model"}
@@ -312,12 +306,12 @@ This model is described in {{fig-deploy-joint-issuer-reserve}}
     |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
     |                    |                                         |<== Attestation ==>|           |
     |                    |                                         |                   |           |
-    |                    |                                         +--------- IssuerRequest ------>|
-    |                    |                                         |<-------- IssuerResponse ------+
-    |                    |<-- Request+Token+IssuerRequest(Origin) -+                   |           |
-    |<-- IssuerRequest --+                                         |                   |           |
-    +-- IssuerResponse ->|                                         |                   |           |
-    |                    |--- Response+IssuerResponse(Origin) ---->|                   |           |
+    |                    |                                         +--------- TokenRequest ------->|
+    |                    |                                         |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
+    |<-- TokenRequest ---+                                         |                   |           |
+    +--- TokenResponse ->|                                         |                   |           |
+    |                    +--- Response+TokenResponse(Origin) ----->|                   |           |
     |                    |                                         +------------ Token ----------->|
     |                    |                                         |                   |           |
 ~~~
