@@ -306,6 +306,7 @@ Table of Contents
        |                     |           |         |
        +----------- TokenRequest --------|         |
        |<---------- TokenResponse -------+         |
+       |                     |           |         |
        |                                           |
        +------- Token+TokenRequest(Origin) ------->|
        |<--------- TokenResponse(Origin) ----------+
