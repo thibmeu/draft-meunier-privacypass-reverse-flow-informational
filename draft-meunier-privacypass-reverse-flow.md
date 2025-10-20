@@ -242,6 +242,7 @@ The Origin is the Reverse Origin.
     |                     |           |         |
     +----------- TokenRequest --------|         |
     |<---------- TokenResponse -------+         |
+    |                     |           |         |
     |                                           |
     +------- Token+TokenRequest(Origin) ------->|
     |<--------- TokenResponse(Origin) ----------+
