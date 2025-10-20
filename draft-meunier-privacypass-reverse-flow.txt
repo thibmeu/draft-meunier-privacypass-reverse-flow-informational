@@ -4,8 +4,8 @@
 
 Privacy Pass                                                  T. Meunier
 Internet-Draft                                           Cloudflare Inc.
-Intended status: Informational                            12 August 2025
-Expires: 13 February 2026
+Intended status: Informational                           20 October 2025
+Expires: 23 April 2026
 
 
                        Privacy Pass Reverse Flow
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 February 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -78,19 +78,20 @@ Table of Contents
      2.3.  Attester feedback loop
    3.  Terminology
    4.  Architecture overview
-   5.  Reverse flow with an HTTP header
-     5.1.  Client behaviour
-     5.2.  Origin/Issuer/Attester deployment
-     5.3.  Split Origin-Attester deployment
-   6.  Privacy Considerations
-     6.1.  Issuer face values
-     6.2.  Token for specific Clients
-     6.3.  Sending more than one token
-     6.4.  Swap endpoint and its privacy implication
-   7.  IANA Considerations
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+   5.  TokenRequest, TokenResponse, and Finalisation
+   6.  Reverse flow with an HTTP header
+     6.1.  Client behaviour
+     6.2.  Origin/Issuer/Attester deployment
+     6.3.  Split Origin-Attester deployment
+   7.  Privacy Considerations
+     7.1.  Issuer face values
+     7.2.  Token for specific Clients
+     7.3.  Sending more than one token
+     7.4.  Swap endpoint and its privacy implication
+   8.  IANA Considerations
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Acknowledgments
    Changelog
    Author's Address
@@ -197,21 +198,29 @@ Table of Contents
    Along with sending their PrivateToken for authentication (as
    specified in [RFC9576]), Client sends TokenRequest
 
-+---------------+    +--------+                                       +--------+         +----------+ +--------+
-| Origin Issuer |    | Origin |                                       | Client |         | Attester | | Issuer |
-+---+-----------+    +---+----+                                       +---+----+         +----+-----+ +---+----+
-    |                    |                                                |                   |           |
-    |                    |<----- Request ---------------------------------+                   |           |
-    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
-    |                    |                                                |<== Attestation ==>|           |
-    |                    |                                                |                   |           |
-    |                    |                                                +--------- TokenRequest ------->|
-    |                    |                                                |<-------- TokenResponse -------+
-    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
-    |<-- TokenRequest ---+                                                |                   |           |
-    +-- TokenResponse -->|                                                |                   |           |
-    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
-    |                    |                                                |                   |           |
++---------------+    +--------+                                 +--------+         +----------+ +--------+
+| Origin Issuer |    | Origin |                                 | Client |         | Attester | | Issuer |
++---+-----------+    +---+----+                                 +---+----+         +----+-----+ +---+----+
+    |                    |                                          |                   |           |
+    |                    |<---------------- Request ----------------+                   |           |
+    |                    +-------- TokenChallenge (Issuer) -------->|                   |           |
+    |                    |                                          |<== Attestation ==>|           |
+    |                    |                                          |                   |           |
+    |                    |                                          +--------- TokenRequest ------->|
+    |                    |                                          |<-------- TokenResponse -------+
+    |                    |                                  .--------------.            |           |
+    |                    |                                  | Finalisation |            |           |
+    |                    |                                  `--------------'            |           |
+    |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
+    |<-- TokenRequest ---+                                          |                   |           |
+    +--- TokenResponse ->|                                          |                   |           |
+    |                    |---- Response+TokenResponse(Origin) ---->|                   |           |
+    |                    |                                  .--------------.            |           |
+    |                    |                                  | Finalisation |            |           |
+    |                    |                                  `--------------'            |           |
+    |                    |                                          |                   |           |
+
+     Figure 1: Architec ture of Privacy Pass with a Reverse Flow
 
    The initial flow matches the one defined by [RFC9576].  A Client gets
    challenged when accessing a resource on an Origin.  The Client goes
@@ -231,22 +240,44 @@ Table of Contents
    Such flow can be performed through various means.  This document
    introduces one to serve as example and first basis.
 
-5.  Reverse flow with an HTTP header
+5.  TokenRequest, TokenResponse, and Finalisation
+
+   In Figure 1, the Client sends an TokenRequest and receives an
+   TokenResponse.  These are meant to abstract request from different
+   protocol to the Issuer.
+
+   As specified in Section 3.5 of [RFC9576],
+
+      The structure and semantics of the TokenRequest and TokenResponse
+      messages depend on the issuance protocol and token type being
+      used.
+
+   The introducion of Privacy Pass issuance protocol based on Anonymous
+   credential, such as [PRIVACYPASS-ARC] or [PRIVACYPASS-ACT], modifies
+   TokenRequest to use CredentialRequest instead.
+
+   Upon receiving an TokenResponse, the Client has to finalise the Token
+   so it can be presented to an origin.  This may be a Finalisation for
+   type 0x0002 as defined in Section 7 of [RFC9578], a presentation for
+   Section 7 of [PRIVACYPASS-ARC], or even a refund for
+   [PRIVACYPASS-ACT].
+
+6.  Reverse flow with an HTTP header
 
    This section defines a Reverse Flow, as presented in Section 4,
    leveraging a new HTTP headers.
 
-   TokenRequest(Origin Issuer) and TokenResponse(Origin Issuer) happen
-   through a new HTTP Header PrivacyPass-Reverse.  PrivacyPass-Reverse
-   is a base64url ([RFC4648]) encoded GenericBatchTokenRequest as
-   defined in Section 6 of [BATCHED-TOKENS].
+   TokenRequest(Origin) and TokenResponse(Origin) happen through a new
+   HTTP Header PrivacyPass-Reverse.  PrivacyPass-Reverse is a base64url
+   ([RFC4648]) encoded GenericBatchTokenRequest as defined in Section 6
+   of [BATCHED-TOKENS].
 
       The use of generic batch tokens as defined in Section 6 of
       [BATCHED-TOKENS] is because this already provides encoding for
       request and response, error wrapping, and a concise format.  One
       could use binary http or a new format
 
-5.1.  Client behaviour
+6.1.  Client behaviour
 
    Along with sending PrivateToken from the Initial Issuer to the
    Origin, the Client sends a TokenRequest as defined in [RFC9578],
@@ -258,30 +289,30 @@ Table of Contents
    Initial Attester/Issuer, the Client SHOULD account for possible
    privacy leakage.
 
-5.2.  Origin/Issuer/Attester deployment
+6.2.  Origin/Issuer/Attester deployment
 
    In this model, the Origin, Attester, and Issuer are all operated by
-   the same entity, as shown in Figure 1.  The Reverse Flow is the same
+   the same entity, as shown in Figure 2.  The Reverse Flow is the same
    as the Initial Flow, except for the request/response encapsulation.
    The Origin is the Reverse Origin.
 
-                    +---------------------------------------------.
-   +--------+       |  +----------+     +--------+     +--------+  |
-   | Client |       |  | Attester |     | Issuer |     | Origin |  |
-   +---+----+       |  +-----+----+     +----+---+     +---+----+  |
-       |             `-------|---------------|-------------|------'
-       |<----------------------- TokenChallenge (Issuer) --+
-       |                     |               |             |
-       |<=== Attestation ===>|               |             |
-       |                     |               |             |
-       +----------- TokenRequest ----------->|             |
-       |<---------- TokenResponse -----------+             |
-       |                                                   |
-       +------- Token+TokenRequest(Origin Issuer) -------->+
-       |<--------- TokenResponse(Origin Issuer) -----------|
-       |                                                   |
+                    +-------------------------------------.
+   +--------+       |  +----------+ +--------+ +--------+  |
+   | Client |       |  | Attester | | Issuer | | Origin |  |
+   +---+----+       |  +-----+----+ +----+---+ +---+----+  |
+       |             `-------|-----------|---------|------'
+       |<--------------- TokenChallenge (Issuer) --+
+       |                     |           |         |
+       |<=== Attestation ===>|           |         |
+       |                     |           |         |
+       +----------- TokenRequest --------|         |
+       |<---------- TokenResponse -------+         |
+       |                                           |
+       +------- Token+TokenRequest(Origin) ------->|
+       |<--------- TokenResponse(Origin) ----------+
+       |                                           |
 
-                     Figure 1: Shared Deployment Model
+                     Figure 2: Shared Deployment Model
 
    Similar to the original Shared Deployment Model, the Attester,
    Issuer, and Origin share the attestation, issuance, and redemption
@@ -301,13 +332,12 @@ Table of Contents
 
       2.  [PRIVACYPASS-BBS]
 
-      3.  [ANONYMOUS-CREDIT-TOKENS]
+      3.  [PRIVACYPASS-ACT]
 
       These scheme allow for optimisation of Token finalisation by the
-      Client.  In [ANONYMOUS-CREDIT-TOKENS], the TokenResponse can be
-      assimilated to the refund construction.
+      Client.
 
-5.3.  Split Origin-Attester deployment
+6.3.  Split Origin-Attester deployment
 
    In this model, the Attester and Issuer are operated by the same
    entity that is separate from the Origin.  The Origin trusts the joint
@@ -316,54 +346,54 @@ Table of Contents
    Reverse Origin trusts the Origin to perform attestation and issue
    Tokens.
 
-                                                                                     +--------------------------.
-+---------------+    +--------+                                       +--------+     |  +----------+ +--------+  |
-| Origin Issuer |    | Origin |                                       | Client |     |  | Attester | | Issuer |  |
-+---+-----------+    +---+----+                                       +---+----+     |  +-----+----+ +----+---+  |
-    |                    |                                                |           `-------|-----------|-----'
-    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
-    |                    |                                                |<== Attestation ==>|           |
-    |                    |                                                |                   |           |
-    |                    |                                                +--------- TokenRequest ------->|
-    |                    |                                                |<-------- TokenResponse -------+
-    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
-    |<-- TokenRequest ---+                                                |                   |           |
-    +-- TokenResponse -->|                                                |                   |           |
-    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
-    |                    |                                                |                   |           |
+                                                                              +--------------------------.
++---------------+    +--------+                                +--------+     |  +----------+ +--------+  |
+| Origin Issuer |    | Origin |                                | Client |     |  | Attester | | Issuer |  |
++---+-----------+    +---+----+                                +---+----+     |  +-----+----+ +----+---+  |
+    |                    |                                         |           `-------|-----------|-----'
+    |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
+    |                    |                                         |<== Attestation ==>|           |
+    |                    |                                         |                   |           |
+    |                    |                                         +--------- TokenRequest ------->|
+    |                    |                                         |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
+    |<-- TokenRequest ---+                                         |                   |           |
+    +-- TokenResponse -->|                                         |                   |           |
+    |                    +--- Response+TokenResponse(Origin) ----->|                   |           |
+    |                    |                                         |                   |           |
 
-         Figure 2: Joint Attester and Issuer Deployment Model
+         Figure 3: Joint Attester and Issuer Deployment Model
 
    The Origin Issuer MUST NOT issue privately verifiable tokens, as this
    would lead to secret material being shared between the Origin and the
    Reverse Origin.
 
    A particular deployment model is when the Reverse Origin is the
-   Attester/Issuer.  This model is described in Figure 3
+   Attester/Issuer.  This model is described in Figure 4
 
-                                                                                     +--------------------------.
-+---------------+    +--------+                                       +--------+     |  +----------+ +--------+  |
-| Origin Issuer |    | Origin |                                       | Client |     |  | Attester | | Issuer |  |
-+---+-----------+    +---+----+                                       +---+----+     |  +-----+----+ +----+---+  |
-    |                    |                                                |           `-------|-----------|-----'
-    |                    +-- TokenChallenge (Issuer) -------------------->|                   |           |
-    |                    |                                                |<== Attestation ==>|           |
-    |                    |                                                |                   |           |
-    |                    |                                                +--------- TokenRequest ------->|
-    |                    |                                                |<-------- TokenResponse -------+
-    |                    |<-- Request+Token+TokenRequest(Origin Issuer) --+                   |           |
-    |<-- TokenRequest ---+                                                |                   |           |
-    +-- TokenResponse -->|                                                |                   |           |
-    |                    |--- Response+TokenResponse(Origin Issuer) ----->|                   |           |
-    |                    |                                                +------------ Token ----------->|
-    |                    |                                                |                   |           |
+                                                                              +--------------------------.
++---------------+    +--------+                                +--------+     |  +----------+ +--------+  |
+| Origin Issuer |    | Origin |                                | Client |     |  | Attester | | Issuer |  |
++---+-----------+    +---+----+                                +---+----+     |  +-----+----+ +----+---+  |
+    |                    |                                         |           `-------|-----------|-----'
+    |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
+    |                    |                                         |<== Attestation ==>|           |
+    |                    |                                         |                   |           |
+    |                    |                                         +--------- TokenRequest ------->|
+    |                    |                                         |<-------- TokenResponse -------+
+    |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
+    |<-- TokenRequest ---+                                         |                   |           |
+    +--- TokenResponse ->|                                         |                   |           |
+    |                    +--- Response+TokenResponse(Origin) ----->|                   |           |
+    |                    |                                         +------------ Token ----------->|
+    |                    |                                         |                   |           |
 
-  Figure 3: Joint Attester and Issuer Deployment Model with reverse
+  Figure 4: Joint Attester and Issuer Deployment Model with reverse
 
    This deployment SHOULD not allow the Reverse Origin to infer the
    request made to the Origin, as it would break unlinkability.
 
-6.  Privacy Considerations
+7.  Privacy Considerations
 
    Privacy Pass [RFC9576] states
 
@@ -384,7 +414,7 @@ Table of Contents
    anonymity set, and possible mitigations/safeguards to protect against
    this underlying problem.
 
-6.1.  Issuer face values
+7.1.  Issuer face values
 
    When setting up a reverse flow deployment, an Origin MAY operate
    multiple Issuers, and assign them some metadata to them.  The amount
@@ -404,7 +434,7 @@ Table of Contents
    3.  Issuers metadata to be publicly disclosed via an origin endpoint,
        and externally monitored
 
-6.2.  Token for specific Clients
+7.2.  Token for specific Clients
 
    In Privacy Pass with a reverse flow, an Origin MAY operate multiple
    Issuers, with arbitrary metadata associated to them.  A malicious
@@ -429,7 +459,7 @@ Table of Contents
 
    2.  Clients to reset their state regularly with the initial Issuer.
 
-6.3.  Sending more than one token
+7.3.  Sending more than one token
 
    While that's not part of Privacy Pass with a reverse flow, some
    deployment might consider allowing Clients to send multiple
@@ -445,7 +475,7 @@ Table of Contents
    Origin should have sufficient traffic to not single-out particular
    Client based on timings of requests.
 
-6.4.  Swap endpoint and its privacy implication
+7.4.  Swap endpoint and its privacy implication
 
    With multiple Issuers, a Client MAY end up with a bunch of tokens,
    for various Issuers.  Origins MAY propose a swap endpoint at which a
@@ -455,20 +485,20 @@ Table of Contents
    The Origin SHOULD ensure this endpoint receives enough traffic to not
    reduce the anonymity sets.
 
-7.  IANA Considerations
+8.  IANA Considerations
 
    This document has no IANA actions.
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [BATCHED-TOKENS]
               Robert, R., Wood, C. A., and T. Meunier, "Batched Token
               Issuance Protocol", Work in Progress, Internet-Draft,
-              draft-ietf-privacypass-batched-tokens-04, 2 February 2025,
+              draft-ietf-privacypass-batched-tokens-05, 3 July 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-
-              privacypass-batched-tokens-04>.
+              privacypass-batched-tokens-05>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -492,19 +522,19 @@ Table of Contents
               DOI 10.17487/RFC9578, June 2024,
               <https://www.rfc-editor.org/rfc/rfc9578>.
 
-8.2.  Informative References
+9.2.  Informative References
 
-   [ANONYMOUS-CREDIT-TOKENS]
+   [PRIVACYPASS-ACT]
               "Anonymous Credit Tokens", n.d.,
-              <https://samuelschlesinger.github.io/ietf-anonymous-
-              credit-tokens/draft-schlesinger-cfrg-act.html>.
+              <https://samuelschlesinger.github.io/draft-act/draft-
+              schlesinger-privacypass-act.html>.
 
    [PRIVACYPASS-ARC]
               Yun, C. and C. A. Wood, "Privacy Pass Issuance Protocol
               for Anonymous Rate-Limited Credentials", Work in Progress,
-              Internet-Draft, draft-yun-privacypass-arc-00, 5 February
+              Internet-Draft, draft-yun-privacypass-arc-01, 6 August
               2025, <https://datatracker.ietf.org/doc/html/draft-yun-
-              privacypass-arc-00>.
+              privacypass-arc-01>.
 
    [PRIVACYPASS-BBS]
               Ladd, W., "BBS for PrivacyPass", Work in Progress,
