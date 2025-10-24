@@ -71,7 +71,7 @@ reaching out to the initial Attester and Issuer.
 
 ## Refunding tokens
 
-Certain Origin use Privacy Pass tokens to rate-limit requests they receive over a certain
+Certain Origins use Privacy Pass tokens to rate-limit requests they receive over a certain
 time window because of resource constraints. If a Client sends a request that can
 be served without utilising that resource, the Origin would like to authorise them
 to do a second request. This is the case for request requiring compute and the compute is low,
@@ -81,14 +81,14 @@ With a reverse flow,
 a Client that has already been authorised by an Origin can maintain that authorization,
 without losing the unlinkability property provided by Privacy Pass.
 
-## Bootstraping issuer
+## Bootstrapping Issuer
 
 An Origin wants to grant 30 access for Clients that solved a
-CAPTCHA. To do so, it consumes a type 0x0002 public veriable token from an initial issuer that guarantees
+CAPTCHA. To do so, it consumes a type 0x0002 public verifiable token from an initial Issuer that guarantees
 a CAPTCHA has been solved,
 and use it to issue 30 type 0x0001 private tokens.
-Without a reverse flow, the Origin would have to require 30 0x0002 issuer tokens, which
-have lower performance and a higher number of requests going to the issuer.
+Without a reverse flow, the Origin would have to require 30 0x0002 Issuer tokens, which
+have lower performance and a higher number of requests going to the Issuer.
 
 ## Attester feedback loop
 
@@ -122,8 +122,8 @@ The following terms are used throughout this document:
   is used by the Origin to kickstart a Reverse Flow.
 
 **Reverse Flow:**
-: Issuer <- Attester <- Client <- Origin. This flow allows Origin to issues
-  PrivateToken. In the reverse flow, the Origin operates one or more Issuer, and
+: Issuer <- Attester <- Client <- Origin. This flow allows the Origin to issue
+  a PrivateToken. In the reverse flow, the Origin operates one or more Issuer, and
   the Client MAY provide these tokens either to the Initial Attester/Issuer, or
   use them against the Origin
 
@@ -167,13 +167,13 @@ sends TokenRequest
     |                    |                                    Finalisation              |           |
     |                    |                                          |                   |           |
 ~~~
-{: #fig-reverse-flow-architecture title="Architec ture of Privacy Pass with a Reverse Flow"}
+{: #fig-reverse-flow-architecture title="Architecture of Privacy Pass with a Reverse Flow"}
 
 The initial flow matches the one defined by {{RFC9576}}. A Client gets challenged when
-accessing a resource on an Origin. The Client goes to the Attester to get issue a Token.
+accessing a resource on an Origin. The Client goes to the Attester to get issued a Token.
 
 Through configuration mechanism not defined in this document, the Client is aware the Origin
-acts as a Reverse Flow issuer.
+acts as a Reverse Flow Issuer.
 
 This is an extension of {{RFC9576}}. The redemption flow of a Privacy Pass token is defined in
 {{Section 3.6.4 of RFC9576}}. Reverse flow extends this so that redemption flow is interleaved with
@@ -193,17 +193,18 @@ As specified in {{Section 3.5 of RFC9576}},
 
 > The structure and semantics of the TokenRequest and TokenResponse messages depend on the issuance protocol and token type being used.
 
-The introducion of Privacy Pass issuance protocol based on Anonymous credential, such as {{PRIVACYPASS-ARC}} or {{PRIVACYPASS-ACT}},
+The introduction of Privacy Pass issuance protocol based on Anonymous credential, such as {{PRIVACYPASS-ARC}} or {{PRIVACYPASS-ACT}},
 modifies `TokenRequest` to use `CredentialRequest` instead.
 
-Upon receiving an `TokenResponse`, the Client has to finalise the `Token` so it can be presented to an origin.
+Upon receiving an `TokenResponse`, the Client has to finalise the `Token` so it can be
+presented to an Origin.
 This may be a `Finalisation` for type 0x0002 as defined in {{Section 7 of RFC9578}},
 a presentation for {{Section 7 of PRIVACYPASS-ARC}},
 or even a refund for {{PRIVACYPASS-ACT}}.
 
 # Reverse flow with an HTTP header
 
-This section defines a Reverse Flow, as presented in {{architecture}}, leveraging a new HTTP headers.
+This section defines a Reverse Flow, as presented in {{architecture}}, leveraging a new HTTP header.
 
 `TokenRequest(Origin)` and `TokenResponse(Origin)` happen through a new HTTP Header `PrivacyPass-Reverse`.
 `PrivacyPass-Reverse` is a base64url ({{RFC4648}}) encoded `GenericBatchTokenRequest` as defined in {{Section 6 of BATCHED-TOKENS}}.
@@ -257,7 +258,7 @@ Reverse Flow, attestation mechanism that can uniquely identify
 a Client are not appropriate as they could lead to unlinkability violations.
 
 > This model allows for private verifiability. Even though no optimised
-> scheme is available at the time of writting, the author recommends to follow
+> scheme is available at the time of writing, the author recommends to follow
 > advances of anonymous credential within the Privacy Pass group.
 >
 > Specifically
@@ -352,13 +353,13 @@ grows as 2^(origin_issuers).
 
 We RECOMMEND that:
 
-1. Origin defines their anonimity sets, and deploy no more than
-   log2(#anonimity_sets). This bounds the possible anonimity sets by design.
-2. Client to only send 1 PrivateToken per request. This is inline with RFC9577
+1. Origins define their anonymity sets, and deploy no more than
+   log2(#anonymity_sets). This bounds the possible anonymity sets by design.
+2. Clients to only send 1 PrivateToken per request. This is inline with RFC9577
    and RFC (Web Authentication) which only allows one challenge response to be
    provided as part of Authorization HTTP header.
-3. Issuers metadata to be publicly disclosed via an origin endpoint, and
-   externally monitored
+3. Issuers metadata to be publicly disclosed via an Origin endpoint, and
+   externally monitored.
 
 ## Token for specific Clients
 
@@ -366,11 +367,11 @@ In Privacy Pass with a reverse flow, an Origin MAY operate multiple Issuers,
 with arbitrary metadata associated to them. A malicious Origin MAY uses this
 opportunity to associate certain token values to a specific set of Clients.
 
-Let's consider the following deployment: the Origin operates two issuers A and
+Let's consider the following deployment: the Origin operates two Issuers A and
 B. The Client sends Token_A, and (TokenRequest_A, TokenRequest_B). Issuer B is
 associated to croissant aficionados.
 
-If a Client requests croissant, or sends Token_B, the origin provides
+If a Client requests croissant, or sends Token_B, the Origin provides
 TokenResponse_B. If not, it provides TokenResponse_A.
 
 Over time, this means the Origin is able to track croissants aficionados.
@@ -388,11 +389,11 @@ consider allowing Clients to send multiple PrivateToken, similar to how normal
 Privacy Pass deployment allow two distinct PrivateToken to be sent.
 
 In Privacy Pass with a reverse flow deployment, there are as many bits as
-Issuers; each token is one bit. We RECOMMEND to have a maximum of 6 Origin
+Issuers; each token is one bit. We RECOMMEND to have a maximum of 6 Origins
 operated Issuers, bounding Client information to 2^6 = 64. Accounting for the
-initial Issuer, this means a total of log2(64)+1=7 issuers.
+initial Issuer, this means a total of log2(64)+1=7 Issuers.
 
-Origin should have sufficient traffic to not single-out particular Client based
+Origins should have sufficient traffic to not single-out particular Client based
 on timings of requests.
 
 ## Swap endpoint and its privacy implication
@@ -423,7 +424,7 @@ for helpful discussion on Privacy Pass architecture and its considerations.
 v01
 
 - Editorial pass on the introduction
-- Add a motivation section: refunding tokens, bootstraping issuer, attester feeback loop
+- Add a motivation section: refunding tokens, bootstraping issuer, attester feedback loop
 - Split protocol overview via HTTP headers in its own section
 - Add consideration about anonymous credentials in joint origin/issuer deployment
 
