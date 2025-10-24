@@ -4,8 +4,8 @@
 
 Privacy Pass                                                  T. Meunier
 Internet-Draft                                           Cloudflare Inc.
-Intended status: Informational                           20 October 2025
-Expires: 23 April 2026
+Intended status: Informational                           24 October 2025
+Expires: 27 April 2026
 
 
                        Privacy Pass Reverse Flow
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2026.
+   This Internet-Draft will expire on 27 April 2026.
 
 Copyright Notice
 
@@ -74,7 +74,7 @@ Table of Contents
    1.  Introduction
    2.  Motivation
      2.1.  Refunding tokens
-     2.2.  Bootstraping issuer
+     2.2.  Bootstrapping Issuer
      2.3.  Attester feedback loop
    3.  Terminology
    4.  Architecture overview
@@ -122,7 +122,7 @@ Table of Contents
 
 2.1.  Refunding tokens
 
-   Certain Origin use Privacy Pass tokens to rate-limit requests they
+   Certain Origins use Privacy Pass tokens to rate-limit requests they
    receive over a certain time window because of resource constraints.
    If a Client sends a request that can be served without utilising that
    resource, the Origin would like to authorise them to do a second
@@ -134,15 +134,15 @@ Table of Contents
    Origin can maintain that authorization, without losing the
    unlinkability property provided by Privacy Pass.
 
-2.2.  Bootstraping issuer
+2.2.  Bootstrapping Issuer
 
    An Origin wants to grant 30 access for Clients that solved a CAPTCHA.
-   To do so, it consumes a type 0x0002 public veriable token from an
-   initial issuer that guarantees a CAPTCHA has been solved, and use it
+   To do so, it consumes a type 0x0002 public verifiable token from an
+   initial Issuer that guarantees a CAPTCHA has been solved, and use it
    to issue 30 type 0x0001 private tokens.  Without a reverse flow, the
-   Origin would have to require 30 0x0002 issuer tokens, which have
+   Origin would have to require 30 0x0002 Issuer tokens, which have
    lower performance and a higher number of requests going to the
-   issuer.
+   Issuer.
 
 2.3.  Attester feedback loop
 
@@ -179,8 +179,8 @@ Table of Contents
       Reverse Flow.
 
    *Reverse Flow:*  Issuer <- Attester <- Client <- Origin.  This flow
-      allows Origin to issues PrivateToken.  In the reverse flow, the
-      Origin operates one or more Issuer, and the Client MAY provide
+      allows the Origin to issue a PrivateToken.  In the reverse flow,
+      the Origin operates one or more Issuer, and the Client MAY provide
       these tokens either to the Initial Attester/Issuer, or use them
       against the Origin
 
@@ -219,14 +219,14 @@ Table of Contents
     |                    |                                    Finalisation              |           |
     |                    |                                          |                   |           |
 
-     Figure 1: Architec ture of Privacy Pass with a Reverse Flow
+      Figure 1: Architecture of Privacy Pass with a Reverse Flow
 
    The initial flow matches the one defined by [RFC9576].  A Client gets
    challenged when accessing a resource on an Origin.  The Client goes
-   to the Attester to get issue a Token.
+   to the Attester to get issued a Token.
 
    Through configuration mechanism not defined in this document, the
-   Client is aware the Origin acts as a Reverse Flow issuer.
+   Client is aware the Origin acts as a Reverse Flow Issuer.
 
    This is an extension of [RFC9576].  The redemption flow of a Privacy
    Pass token is defined in Section 3.6.4 of [RFC9576].  Reverse flow
@@ -251,12 +251,12 @@ Table of Contents
       messages depend on the issuance protocol and token type being
       used.
 
-   The introducion of Privacy Pass issuance protocol based on Anonymous
+   The introduction of Privacy Pass issuance protocol based on Anonymous
    credential, such as [PRIVACYPASS-ARC] or [PRIVACYPASS-ACT], modifies
    TokenRequest to use CredentialRequest instead.
 
    Upon receiving an TokenResponse, the Client has to finalise the Token
-   so it can be presented to an origin.  This may be a Finalisation for
+   so it can be presented to an Origin.  This may be a Finalisation for
    type 0x0002 as defined in Section 7 of [RFC9578], a presentation for
    Section 7 of [PRIVACYPASS-ARC], or even a refund for
    [PRIVACYPASS-ACT].
@@ -264,7 +264,7 @@ Table of Contents
 6.  Reverse flow with an HTTP header
 
    This section defines a Reverse Flow, as presented in Section 4,
-   leveraging a new HTTP headers.
+   leveraging a new HTTP header.
 
    TokenRequest(Origin) and TokenResponse(Origin) happen through a new
    HTTP Header PrivacyPass-Reverse.  PrivacyPass-Reverse is a base64url
@@ -322,7 +322,7 @@ Table of Contents
    violations.
 
       This model allows for private verifiability.  Even though no
-      optimised scheme is available at the time of writting, the author
+      optimised scheme is available at the time of writing, the author
       recommends to follow advances of anonymous credential within the
       Privacy Pass group.
 
@@ -422,17 +422,17 @@ Table of Contents
 
    We RECOMMEND that:
 
-   1.  Origin defines their anonimity sets, and deploy no more than
-       log2(#anonimity_sets).  This bounds the possible anonimity sets
+   1.  Origins define their anonymity sets, and deploy no more than
+       log2(#anonymity_sets).  This bounds the possible anonymity sets
        by design.
 
-   2.  Client to only send 1 PrivateToken per request.  This is inline
+   2.  Clients to only send 1 PrivateToken per request.  This is inline
        with RFC9577 and RFC (Web Authentication) which only allows one
        challenge response to be provided as part of Authorization HTTP
        header.
 
-   3.  Issuers metadata to be publicly disclosed via an origin endpoint,
-       and externally monitored
+   3.  Issuers metadata to be publicly disclosed via an Origin endpoint,
+       and externally monitored.
 
 7.2.  Token for specific Clients
 
@@ -442,10 +442,10 @@ Table of Contents
    a specific set of Clients.
 
    Let's consider the following deployment: the Origin operates two
-   issuers A and B.  The Client sends Token_A, and (TokenRequest_A,
+   Issuers A and B.  The Client sends Token_A, and (TokenRequest_A,
    TokenRequest_B).  Issuer B is associated to croissant aficionados.
 
-   If a Client requests croissant, or sends Token_B, the origin provides
+   If a Client requests croissant, or sends Token_B, the Origin provides
    TokenResponse_B.  If not, it provides TokenResponse_A.
 
    Over time, this means the Origin is able to track croissants
@@ -468,11 +468,11 @@ Table of Contents
 
    In Privacy Pass with a reverse flow deployment, there are as many
    bits as Issuers; each token is one bit.  We RECOMMEND to have a
-   maximum of 6 Origin operated Issuers, bounding Client information to
+   maximum of 6 Origins operated Issuers, bounding Client information to
    2^6 = 64.  Accounting for the initial Issuer, this means a total of
-   log2(64)+1=7 issuers.
+   log2(64)+1=7 Issuers.
 
-   Origin should have sufficient traffic to not single-out particular
+   Origins should have sufficient traffic to not single-out particular
    Client based on timings of requests.
 
 7.4.  Swap endpoint and its privacy implication
@@ -496,9 +496,9 @@ Table of Contents
    [BATCHED-TOKENS]
               Robert, R., Wood, C. A., and T. Meunier, "Batched Token
               Issuance Protocol", Work in Progress, Internet-Draft,
-              draft-ietf-privacypass-batched-tokens-05, 3 July 2025,
+              draft-ietf-privacypass-batched-tokens-06, 20 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-
-              privacypass-batched-tokens-05>.
+              privacypass-batched-tokens-06>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -532,9 +532,9 @@ Table of Contents
    [PRIVACYPASS-ARC]
               Yun, C. and C. A. Wood, "Privacy Pass Issuance Protocol
               for Anonymous Rate-Limited Credentials", Work in Progress,
-              Internet-Draft, draft-yun-privacypass-arc-01, 6 August
+              Internet-Draft, draft-yun-privacypass-arc-02, 20 October
               2025, <https://datatracker.ietf.org/doc/html/draft-yun-
-              privacypass-arc-01>.
+              privacypass-arc-02>.
 
    [PRIVACYPASS-BBS]
               Ladd, W., "BBS for PrivacyPass", Work in Progress,
@@ -560,7 +560,7 @@ Changelog
    *  Editorial pass on the introduction
 
    *  Add a motivation section: refunding tokens, bootstraping issuer,
-      attester feeback loop
+      attester feedback loop
 
    *  Split protocol overview via HTTP headers in its own section
 
