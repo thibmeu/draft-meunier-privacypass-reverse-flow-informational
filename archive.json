@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-23T00:31:24.859274+00:00",
+  "timestamp": "2025-10-26T00:33:59.911725+00:00",
   "repo": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
   "labels": [
     {
@@ -97,6 +97,52 @@
               "updatedAt": "2025-06-17T12:50:37Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOMu4RQM6vg_0R",
+      "title": "chore: correct several minor spelling issues",
+      "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/pull/2",
+      "state": "MERGED",
+      "author": "meyira",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "thibmeu"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "This PR cleans up several minor editorial issues (typos, minor grammatical issues, inconsistent spelling) to improve readability. ",
+      "createdAt": "2025-10-24T13:11:14Z",
+      "updatedAt": "2025-10-24T14:30:25Z",
+      "baseRepository": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
+      "baseRefName": "main",
+      "baseRefOid": "c95f327fa986f6c184b623913ec6c1591070167c",
+      "headRepository": "meyira/draft-meunier-privacypass-reverse-flow-informational",
+      "headRefName": "main",
+      "headRefOid": "6b0390ac9ed041d62ee8c0248f84f1f3d8da0caa",
+      "closedAt": "2025-10-24T14:30:25Z",
+      "mergedAt": "2025-10-24T14:30:25Z",
+      "mergedBy": "thibmeu",
+      "mergeCommit": {
+        "oid": "000b0092c06ef57cc7d8dd7f5099544aac5b3ffc"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMu4RQM7JS501",
+          "commit": {
+            "abbreviatedOid": "6b0390a"
+          },
+          "author": "thibmeu",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "thanks for the pass!",
+          "createdAt": "2025-10-24T14:29:35Z",
+          "updatedAt": "2025-10-24T14:29:35Z",
+          "comments": []
         }
       ]
     }
