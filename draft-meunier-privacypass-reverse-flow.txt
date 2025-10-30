@@ -4,8 +4,8 @@
 
 Privacy Pass                                                  T. Meunier
 Internet-Draft                                           Cloudflare Inc.
-Intended status: Informational                           24 October 2025
-Expires: 27 April 2026
+Intended status: Informational                           30 October 2025
+Expires: 3 May 2026
 
 
                        Privacy Pass Reverse Flow
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 April 2026.
+   This Internet-Draft will expire on 3 May 2026.
 
 Copyright Notice
 
@@ -204,19 +204,17 @@ Table of Contents
     |                    |                                          |                   |           |
     |                    |<---------------- Request ----------------+                   |           |
     |                    +-------- TokenChallenge (Issuer) -------->|                   |           |
-    |                    |                                          |<== Attestation ==>|           |
     |                    |                                          |                   |           |
+    |                    |                                          |<== Attestation ==>|           |
     |                    |                                          +--------- TokenRequest ------->|
     |                    |                                          |<-------- TokenResponse -------+
-    |                    |                                          |                   |           |
-    |                    |                                    Finalisation              |           |
+    |                    |                                  TokenFinalisation           |           |
     |                    |                                          |                   |           |
     |                    |<-- Request+Token+TokenRequest(Origin) ---+                   |           |
     |<-- TokenRequest ---+                                          |                   |           |
     +--- TokenResponse ->|                                          |                   |           |
     |                    |---- Response+TokenResponse(Origin) ----->|                   |           |
-    |                    |                                          |                   |           |
-    |                    |                                    Finalisation              |           |
+    |                    |                                  TokenFinalisation           |           |
     |                    |                                          |                   |           |
 
       Figure 1: Architecture of Privacy Pass with a Reverse Flow
@@ -295,22 +293,22 @@ Table of Contents
    as the Initial Flow, except for the request/response encapsulation.
    The Origin is the Reverse Origin.
 
-                    +-------------------------------------.
-   +--------+       |  +----------+ +--------+ +--------+  |
-   | Client |       |  | Attester | | Issuer | | Origin |  |
-   +---+----+       |  +-----+----+ +----+---+ +---+----+  |
-       |             `-------|-----------|---------|------'
-       |<--------------- TokenChallenge (Issuer) --+
-       |                     |           |         |
-       |<=== Attestation ===>|           |         |
-       |                     |           |         |
-       +----------- TokenRequest --------|         |
-       |<---------- TokenResponse -------+         |
-       |                     |           |         |
-       |                                           |
-       +------- Token+TokenRequest(Origin) ------->|
-       |<--------- TokenResponse(Origin) ----------+
-       |                                           |
+                        +-------------------------------------.
+       +--------+       |  +----------+ +--------+ +--------+  |
+       | Client |       |  | Attester | | Issuer | | Origin |  |
+       +---+----+       |  +-----+----+ +----+---+ +---+----+  |
+           |             `-------|-----------|---------|------'
+           +----------------- Request ---------------->|
+           |<--------------- TokenChallenge -----------+
+           |                     |           |         |
+           |<=== Attestation ===>|           |         |
+           +----------- TokenRequest ------->|         |
+           |<---------- TokenResponse -------+         |
+   TokenFinalization             |           |         |
+           |                                           |
+           +--- Request+Token+TokenRequest(Origin) --->|
+           |<----- Response+TokenResponse(Origin) -----+
+           |                                           |
 
                      Figure 2: Shared Deployment Model
 
@@ -352,10 +350,12 @@ Table of Contents
 +---+-----------+    +---+----+                                +---+----+     |  +-----+----+ +----+---+  |
     |                    |                                         |           `-------|-----------|-----'
     |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
-    |                    |                                         |<== Attestation ==>|           |
     |                    |                                         |                   |           |
+    |                    |                                         |<== Attestation ==>|           |
     |                    |                                         +--------- TokenRequest ------->|
     |                    |                                         |<-------- TokenResponse -------+
+    |                    |                                 TokenFinalization           |           |
+    |                    |                                         |                   |           |
     |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
     |<-- TokenRequest ---+                                         |                   |           |
     +-- TokenResponse -->|                                         |                   |           |
@@ -377,10 +377,12 @@ Table of Contents
 +---+-----------+    +---+----+                                +---+----+     |  +-----+----+ +----+---+  |
     |                    |                                         |           `-------|-----------|-----'
     |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
-    |                    |                                         |<== Attestation ==>|           |
     |                    |                                         |                   |           |
+    |                    |                                         |<== Attestation ==>|           |
     |                    |                                         +--------- TokenRequest ------->|
     |                    |                                         |<-------- TokenResponse -------+
+    |                    |                                 TokenFinalization           |           |
+    |                    |                                         |                   |           |
     |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
     |<-- TokenRequest ---+                                         |                   |           |
     +--- TokenResponse ->|                                         |                   |           |
