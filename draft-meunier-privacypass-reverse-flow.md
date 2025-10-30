@@ -152,19 +152,17 @@ sends TokenRequest
     |                    |                                          |                   |           |
     |                    |<---------------- Request ----------------+                   |           |
     |                    +-------- TokenChallenge (Issuer) -------->|                   |           |
-    |                    |                                          |<== Attestation ==>|           |
     |                    |                                          |                   |           |
+    |                    |                                          |<== Attestation ==>|           |
     |                    |                                          +--------- TokenRequest ------->|
     |                    |                                          |<-------- TokenResponse -------+
-    |                    |                                          |                   |           |
-    |                    |                                    Finalisation              |           |
+    |                    |                                  TokenFinalisation           |           |
     |                    |                                          |                   |           |
     |                    |<-- Request+Token+TokenRequest(Origin) ---+                   |           |
     |<-- TokenRequest ---+                                          |                   |           |
     +--- TokenResponse ->|                                          |                   |           |
     |                    |---- Response+TokenResponse(Origin) ----->|                   |           |
-    |                    |                                          |                   |           |
-    |                    |                                    Finalisation              |           |
+    |                    |                                  TokenFinalisation           |           |
     |                    |                                          |                   |           |
 ~~~
 {: #fig-reverse-flow-architecture title="Architecture of Privacy Pass with a Reverse Flow"}
@@ -232,22 +230,22 @@ the Initial Flow, except for the request/response encapsulation.
 The Origin is the Reverse Origin.
 
 ~~~ aasvg
-                 +-------------------------------------.
-+--------+       |  +----------+ +--------+ +--------+  |
-| Client |       |  | Attester | | Issuer | | Origin |  |
-+---+----+       |  +-----+----+ +----+---+ +---+----+  |
-    |             `-------|-----------|---------|------'
-    |<--------------- TokenChallenge (Issuer) --+
-    |                     |           |         |
-    |<=== Attestation ===>|           |         |
-    |                     |           |         |
-    +----------- TokenRequest --------|         |
-    |<---------- TokenResponse -------+         |
-    |                     |           |         |
-    |                                           |
-    +------- Token+TokenRequest(Origin) ------->|
-    |<--------- TokenResponse(Origin) ----------+
-    |                                           |
+                     +-------------------------------------.
+    +--------+       |  +----------+ +--------+ +--------+  |
+    | Client |       |  | Attester | | Issuer | | Origin |  |
+    +---+----+       |  +-----+----+ +----+---+ +---+----+  |
+        |             `-------|-----------|---------|------'
+        +----------------- Request ---------------->|
+        |<--------------- TokenChallenge -----------+
+        |                     |           |         |
+        |<=== Attestation ===>|           |         |
+        +----------- TokenRequest ------->|         |
+        |<---------- TokenResponse -------+         |
+TokenFinalization             |           |         |
+        |                                           |
+        +--- Request+Token+TokenRequest(Origin) --->|
+        |<----- Response+TokenResponse(Origin) -----+
+        |                                           |
 ~~~
 {: #fig-deploy-shared title="Shared Deployment Model"}
 
@@ -284,10 +282,12 @@ Reverse Origin trusts the Origin to perform attestation and issue Tokens.
 +---+-----------+    +---+----+                                +---+----+     |  +-----+----+ +----+---+  |
     |                    |                                         |           `-------|-----------|-----'
     |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
-    |                    |                                         |<== Attestation ==>|           |
     |                    |                                         |                   |           |
+    |                    |                                         |<== Attestation ==>|           |
     |                    |                                         +--------- TokenRequest ------->|
     |                    |                                         |<-------- TokenResponse -------+
+    |                    |                                 TokenFinalization           |           |
+    |                    |                                         |                   |           |
     |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
     |<-- TokenRequest ---+                                         |                   |           |
     +-- TokenResponse -->|                                         |                   |           |
@@ -309,10 +309,12 @@ This model is described in {{fig-deploy-joint-issuer-reserve}}
 +---+-----------+    +---+----+                                +---+----+     |  +-----+----+ +----+---+  |
     |                    |                                         |           `-------|-----------|-----'
     |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
-    |                    |                                         |<== Attestation ==>|           |
     |                    |                                         |                   |           |
+    |                    |                                         |<== Attestation ==>|           |
     |                    |                                         +--------- TokenRequest ------->|
     |                    |                                         |<-------- TokenResponse -------+
+    |                    |                                 TokenFinalization           |           |
+    |                    |                                         |                   |           |
     |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
     |<-- TokenRequest ---+                                         |                   |           |
     +--- TokenResponse ->|                                         |                   |           |
