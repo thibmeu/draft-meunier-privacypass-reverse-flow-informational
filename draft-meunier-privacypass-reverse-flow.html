@@ -1045,11 +1045,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Privacy Pass Reverse Flow</td>
-<td class="right">October 2025</td>
+<td class="right">November 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Meunier</td>
-<td class="center">Expires 3 May 2026</td>
+<td class="center">Expires 10 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-meunier-privacypass-reverse-flow-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-30" class="published">30 October 2025</time>
+<time datetime="2025-11-06" class="published">6 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-03">3 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-10">10 May 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1120,7 +1120,7 @@ which a token is redeemed.<a href="#section-abstract-1" class="pilcrow">¶</a></
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 10 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1163,6 +1163,9 @@ which a token is redeemed.<a href="#section-abstract-1" class="pilcrow">¶</a></
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3">
                 <p id="section-toc.1-1.2.2.3.1"><a href="#section-2.3" class="auto internal xref">2.3</a>.  <a href="#name-attester-feedback-loop" class="internal xref">Attester feedback loop</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4">
+                <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="auto internal xref">2.4</a>.  <a href="#name-anonymous-credential-compos" class="internal xref">Anonymous credential composition</a></p>
 </li>
             </ul>
 </li>
@@ -1298,6 +1301,23 @@ the initial Issuer to get a new token and be authorized again.<a href="#section-
 Origin-issued token before providing them with a second token.
 This allows for a feedback loop between the Origin and the initial Issuer,
 without breaking Client unlinkability.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="anonymous-credential-composition">
+<section id="section-2.4">
+        <h3 id="name-anonymous-credential-compos">
+<a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-anonymous-credential-compos" class="section-name selfRef">Anonymous credential composition</a>
+        </h3>
+<p id="section-2.4-1">Privacy Pass Architecture as defined by <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span> centers around tokens,
+which issuance flows are defined in <span>[<a href="#RFC9578" class="cite xref">RFC9578</a>]</span>.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-2">More recent explorations (<span>[<a href="#PRIVACYPASS-ARC" class="cite xref">PRIVACYPASS-ARC</a>]</span>, <span>[<a href="#PRIVACYPASS-BBS" class="cite xref">PRIVACYPASS-BBS</a>]</span>, <span>[<a href="#PRIVACYPASS-ACT" class="cite xref">PRIVACYPASS-ACT</a>]</span>)
+are providing credentials to clients, which presentation result in a scoped token.
+These schemes are more costly, and usage specific.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.4-3">With a reverse flow, the initial Issuer and the Origin issuer may use
+different credentials, which are suited to their use case.
+One use case is rate limiting and blocking. <span>[<a href="#PRIVACYPASS-ARC" class="cite xref">PRIVACYPASS-ARC</a>]</span> provides
+rate-limit per origin with a unique credentials, while <span>[<a href="#PRIVACYPASS-ACT" class="cite xref">PRIVACYPASS-ACT</a>]</span>
+allows to rate-limit a specific session once it's been established.<a href="#section-2.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1496,8 +1516,8 @@ or even a refund for <span>[<a href="#PRIVACYPASS-ACT" class="cite xref">PRIVACY
       <h2 id="name-reverse-flow-with-an-http-h">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-reverse-flow-with-an-http-h" class="section-name selfRef">Reverse flow with an HTTP header</a>
       </h2>
-<p id="section-6-1">This section defines a Reverse Flow, as presented in <a href="#architecture" class="auto internal xref">Section 4</a>, leveraging a new HTTP header.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2"><code>TokenRequest(Origin)</code> and <code>TokenResponse(Origin)</code> happen through a new HTTP Header <code>PrivacyPass-Reverse</code>.
+<p id="section-6-1">This section defines a Reverse Flow, as presented in <a href="#architecture" class="auto internal xref">Section 4</a>, leveraging <code>PrivacyPass-Reverse</code> HTTP header.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2"><code>TokenRequest(Origin)</code> and <code>TokenResponse(Origin)</code> happen through HTTP Header <code>PrivacyPass-Reverse</code>.
 <code>PrivacyPass-Reverse</code> is a base64url (<span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>) encoded <code>GenericBatchTokenRequest</code> as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-06#section-6" class="relref">Section 6</a> of [<a href="#BATCHED-TOKENS" class="cite xref">BATCHED-TOKENS</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
 <li class="normal ulEmpty" id="section-6-3.1">
@@ -1619,26 +1639,6 @@ Issuer, and Origin share the attestation, issuance, and redemption
 contexts. Even if this context changes between the Initial and
 Reverse Flow, attestation mechanism that can uniquely identify
 a Client are not appropriate as they could lead to unlinkability violations.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-6.2-4.1">
-            <p id="section-6.2-4.1.1">This model allows for private verifiability. Even though no optimised
-scheme is available at the time of writing, the author recommends to follow
-advances of anonymous credential within the Privacy Pass group.<a href="#section-6.2-4.1.1" class="pilcrow">¶</a></p>
-<p id="section-6.2-4.1.2">Specifically<a href="#section-6.2-4.1.2" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6.2-4.1.3">
-<li id="section-6.2-4.1.3.1">
-                <p id="section-6.2-4.1.3.1.1"><span>[<a href="#PRIVACYPASS-ARC" class="cite xref">PRIVACYPASS-ARC</a>]</span><a href="#section-6.2-4.1.3.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-6.2-4.1.3.2">
-                <p id="section-6.2-4.1.3.2.1"><span>[<a href="#PRIVACYPASS-BBS" class="cite xref">PRIVACYPASS-BBS</a>]</span><a href="#section-6.2-4.1.3.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li id="section-6.2-4.1.3.3">
-                <p id="section-6.2-4.1.3.3.1"><span>[<a href="#PRIVACYPASS-ACT" class="cite xref">PRIVACYPASS-ACT</a>]</span><a href="#section-6.2-4.1.3.3.1" class="pilcrow">¶</a></p>
-</li>
-            </ol>
-<p id="section-6.2-4.1.4">These scheme allow for optimisation of Token finalisation by the Client.<a href="#section-6.2-4.1.4" class="pilcrow">¶</a></p>
-</li>
-        </ul>
 </section>
 </div>
 <div id="split-origin-attester-deployment">
@@ -2009,7 +2009,7 @@ anonymity sets.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <dl class="references">
 <dt id="PRIVACYPASS-ACT">[PRIVACYPASS-ACT]</dt>
         <dd>
-<span class="refTitle">"Anonymous Credit Tokens"</span>, <span>n.d.</span>, <span>&lt;<a href="https://samuelschlesinger.github.io/draft-act/draft-schlesinger-privacypass-act.html">https://samuelschlesinger.github.io/draft-act/draft-schlesinger-privacypass-act.html</a>&gt;</span>. </dd>
+<span class="refAuthor">Schlesinger, S.</span> and <span class="refAuthor">T. Meunier</span>, <span class="refTitle">"Privacy Pass Issuance Protocol for Anonymous Credit Tokens"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-schlesinger-privacypass-act-00</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-schlesinger-privacypass-act-00">https://datatracker.ietf.org/doc/html/draft-schlesinger-privacypass-act-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="PRIVACYPASS-ARC">[PRIVACYPASS-ARC]</dt>
         <dd>

@@ -4,8 +4,8 @@
 
 Privacy Pass                                                  T. Meunier
 Internet-Draft                                           Cloudflare Inc.
-Intended status: Informational                           30 October 2025
-Expires: 3 May 2026
+Intended status: Informational                           6 November 2025
+Expires: 10 May 2026
 
 
                        Privacy Pass Reverse Flow
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 May 2026.
+   This Internet-Draft will expire on 10 May 2026.
 
 Copyright Notice
 
@@ -76,6 +76,7 @@ Table of Contents
      2.1.  Refunding tokens
      2.2.  Bootstrapping Issuer
      2.3.  Attester feedback loop
+     2.4.  Anonymous credential composition
    3.  Terminology
    4.  Architecture overview
    5.  TokenRequest, TokenResponse, and Finalisation
@@ -156,6 +157,22 @@ Table of Contents
    present an Origin-issued token before providing them with a second
    token.  This allows for a feedback loop between the Origin and the
    initial Issuer, without breaking Client unlinkability.
+
+2.4.  Anonymous credential composition
+
+   Privacy Pass Architecture as defined by [RFC9576] centers around
+   tokens, which issuance flows are defined in [RFC9578].
+
+   More recent explorations ([PRIVACYPASS-ARC], [PRIVACYPASS-BBS],
+   [PRIVACYPASS-ACT]) are providing credentials to clients, which
+   presentation result in a scoped token.  These schemes are more
+   costly, and usage specific.
+
+   With a reverse flow, the initial Issuer and the Origin issuer may use
+   different credentials, which are suited to their use case.  One use
+   case is rate limiting and blocking.  [PRIVACYPASS-ARC] provides rate-
+   limit per origin with a unique credentials, while [PRIVACYPASS-ACT]
+   allows to rate-limit a specific session once it's been established.
 
 3.  Terminology
 
@@ -262,10 +279,10 @@ Table of Contents
 6.  Reverse flow with an HTTP header
 
    This section defines a Reverse Flow, as presented in Section 4,
-   leveraging a new HTTP header.
+   leveraging PrivacyPass-Reverse HTTP header.
 
-   TokenRequest(Origin) and TokenResponse(Origin) happen through a new
-   HTTP Header PrivacyPass-Reverse.  PrivacyPass-Reverse is a base64url
+   TokenRequest(Origin) and TokenResponse(Origin) happen through HTTP
+   Header PrivacyPass-Reverse.  PrivacyPass-Reverse is a base64url
    ([RFC4648]) encoded GenericBatchTokenRequest as defined in Section 6
    of [BATCHED-TOKENS].
 
@@ -318,22 +335,6 @@ Table of Contents
    Reverse Flow, attestation mechanism that can uniquely identify a
    Client are not appropriate as they could lead to unlinkability
    violations.
-
-      This model allows for private verifiability.  Even though no
-      optimised scheme is available at the time of writing, the author
-      recommends to follow advances of anonymous credential within the
-      Privacy Pass group.
-
-      Specifically
-
-      1.  [PRIVACYPASS-ARC]
-
-      2.  [PRIVACYPASS-BBS]
-
-      3.  [PRIVACYPASS-ACT]
-
-      These scheme allow for optimisation of Token finalisation by the
-      Client.
 
 6.3.  Split Origin-Attester deployment
 
@@ -527,9 +528,11 @@ Table of Contents
 9.2.  Informative References
 
    [PRIVACYPASS-ACT]
-              "Anonymous Credit Tokens", n.d.,
-              <https://samuelschlesinger.github.io/draft-act/draft-
-              schlesinger-privacypass-act.html>.
+              Schlesinger, S. and T. Meunier, "Privacy Pass Issuance
+              Protocol for Anonymous Credit Tokens", Work in Progress,
+              Internet-Draft, draft-schlesinger-privacypass-act-00, 20
+              October 2025, <https://datatracker.ietf.org/doc/html/
+              draft-schlesinger-privacypass-act-00>.
 
    [PRIVACYPASS-ARC]
               Yun, C. and C. A. Wood, "Privacy Pass Issuance Protocol
