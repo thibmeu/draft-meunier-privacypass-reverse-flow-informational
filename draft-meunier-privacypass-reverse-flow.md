@@ -32,9 +32,7 @@ normative:
   RFC9578:
 
 informative:
-  PRIVACYPASS-ACT:
-    title: Anonymous Credit Tokens
-    target: https://samuelschlesinger.github.io/draft-act/draft-schlesinger-privacypass-act.html
+  PRIVACYPASS-ACT: I-D.draft-schlesinger-privacypass-act
   PRIVACYPASS-ARC: I-D.draft-yun-privacypass-arc
   PRIVACYPASS-BBS: I-D.draft-ladd-privacypass-bbs
   RFC9110:
@@ -102,6 +100,20 @@ Origin-issued token before providing them with a second token.
 This allows for a feedback loop between the Origin and the initial Issuer,
 without breaking Client unlinkability.
 
+## Anonymous credential composition
+
+Privacy Pass Architecture as defined by {{RFC9576}} centers around tokens,
+which issuance flows are defined in {{RFC9578}}.
+
+More recent explorations ({{PRIVACYPASS-ARC}}, {{PRIVACYPASS-BBS}}, {{PRIVACYPASS-ACT}})
+are providing credentials to clients, which presentation result in a scoped token.
+These schemes are more costly, and usage specific.
+
+With a reverse flow, the initial Issuer and the Origin issuer may use
+different credentials, which are suited to their use case.
+One use case is rate limiting and blocking. {{PRIVACYPASS-ARC}} provides
+rate-limit per origin with a unique credentials, while {{PRIVACYPASS-ACT}}
+allows to rate-limit a specific session once it's been established.
 
 # Terminology
 
@@ -202,9 +214,9 @@ or even a refund for {{PRIVACYPASS-ACT}}.
 
 # Reverse flow with an HTTP header
 
-This section defines a Reverse Flow, as presented in {{architecture}}, leveraging a new HTTP header.
+This section defines a Reverse Flow, as presented in {{architecture}}, leveraging `PrivacyPass-Reverse` HTTP header.
 
-`TokenRequest(Origin)` and `TokenResponse(Origin)` happen through a new HTTP Header `PrivacyPass-Reverse`.
+`TokenRequest(Origin)` and `TokenResponse(Origin)` happen through HTTP Header `PrivacyPass-Reverse`.
 `PrivacyPass-Reverse` is a base64url ({{RFC4648}}) encoded `GenericBatchTokenRequest` as defined in {{Section 6 of BATCHED-TOKENS}}.
 
 > The use of generic batch tokens as defined in {{Section 6 of BATCHED-TOKENS}} is
@@ -254,18 +266,6 @@ Issuer, and Origin share the attestation, issuance, and redemption
 contexts. Even if this context changes between the Initial and
 Reverse Flow, attestation mechanism that can uniquely identify
 a Client are not appropriate as they could lead to unlinkability violations.
-
-> This model allows for private verifiability. Even though no optimised
-> scheme is available at the time of writing, the author recommends to follow
-> advances of anonymous credential within the Privacy Pass group.
->
-> Specifically
->
-> 1. {{PRIVACYPASS-ARC}}
-> 2. {{PRIVACYPASS-BBS}}
-> 3. {{PRIVACYPASS-ACT}}
->
-> These scheme allow for optimisation of Token finalisation by the Client.
 
 ## Split Origin-Attester deployment
 
