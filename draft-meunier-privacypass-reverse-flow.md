@@ -196,7 +196,7 @@ acts as a Reverse Flow Issuer.
 This is an extension of {{RFC9576}}. The redemption flow of a Privacy Pass token is defined in
 {{Section 3.6.4 of RFC9576}}. Reverse flow extends this so that redemption flow is interleaved with
 the issuance flow described in {{Section 3.6.3 of RFC9576}}.
-This is denoted in the diagram above by the Client sending `Request`+`Token`+`CredengialRequest(Origin)`.
+This is denoted in the diagram above by the Client sending `Request`+`Token`+`CredentialRequest(Origin)`.
 The Origin runs the issuance protocol, and returns `Response`+`CredentialResponse(Origin)`.
 
 Such flow can be performed through various means. This document introduces one to serve as example and
