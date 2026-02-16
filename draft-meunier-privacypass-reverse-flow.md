@@ -33,16 +33,17 @@ normative:
 
 informative:
   PRIVACYPASS-ACT: I-D.draft-schlesinger-privacypass-act
-  PRIVACYPASS-ARC: I-D.draft-yun-privacypass-arc
+  PRIVACYPASS-ARC: I-D.draft-ietf-privacypass-arc-protocol
   PRIVACYPASS-BBS: I-D.draft-ladd-privacypass-bbs
   RFC9110:
+  RFC9577:
 
 
 --- abstract
 
 This document specifies an instantiation of Privacy Pass Architecture {{RFC9576}}
 that allows for a "reverse" flow from the Origin to the Client.
-It describes a method for an Origin to issue new tokens in response to a request in
+It describes a method for an Origin to issue a state update to the Client in response to a request in
 which a token is redeemed.
 
 --- middle
@@ -56,16 +57,19 @@ In other words, it specifies a way for an Origin to act as an Attester + Issuer.
 
 # Motivation
 
-With Privacy Pass issuance as described in {{RFC9576}}, once a token is sent by a Client,
+With Privacy Pass issuance as described in {{RFC9576}}, once a token is presented by a Client,
 it is considered spent and cannot be reused in order to guarantee unlinkability. If a token
-were to be spent twice, the two requests would be linkable by the Origin.
+was to be presented twice, the two requests would be linkable by the Origin.
 
-However, requiring that all tokens are spent only once means that Clients might need
-to request more tokens for new requests, even if the request that included the original
-token doesn't need to "spend" that token from the Origin's perspective (due to the
-request ending up being insignificant to the Origin).
-This draft provides a mechanism for an Origin to provide tokens, allowing reuse without
-reaching out to the initial Attester and Issuer.
+However, requiring that all tokens are spent only once means that Clients need
+to request more tokens to perform more requests. This is true even if the initial request
+didn't need a token presentation, for instance due to a cost being insignificant to the Origin.
+
+This draft provides a mechanism for an Origin to provide a requesting Client with an updated
+state, allowing them to present new tokens on future requests. Origin act as a new Attester/Issuer
+entity.
+
+Below, we present different use cases.
 
 ## Refunding tokens
 
@@ -107,8 +111,11 @@ which issuance flows are defined in {{RFC9578}}.
 
 More recent explorations ({{PRIVACYPASS-ARC}}, {{PRIVACYPASS-BBS}}, {{PRIVACYPASS-ACT}})
 are providing credentials to clients, which presentation result in a scoped token.
-These schemes are more costly, and usage specific.
+These schemes are instantiation of a reverse flow, both because the Client holds a state
+it can use to perform multiple token presentation, as well as because the Origin can
+provides an updated state to requesting Client.
 
+In additions, these schemes are more costly, and usage specific.
 With a reverse flow, the initial Issuer and the Origin issuer may use
 different credentials, which are suited to their use case.
 One use case is rate limiting and blocking. {{PRIVACYPASS-ARC}} provides
@@ -126,7 +133,7 @@ The following terms are used throughout this document:
 **Flow:**
 : Direction from PrivateToken issuance to its redemption. The entity starting
   the flow acts as an Issuer, while the end of the flow acts as an Origin. The
-  Client is always included, as it finalises the TokenResponse, and coordinate
+  Client is always included, as it finalises the CredentialResponse, and coordinate
   interactions.
 
 **Initial Flow:**
@@ -155,27 +162,28 @@ The following terms are used throughout this document:
 # Architecture overview {#architecture}
 
 Along with sending their PrivateToken for authentication (as specified in {{RFC9576}}), Client
-sends TokenRequest
+sends CredentialRequest
 
 ~~~aasvg
-+---------------+    +--------+                                 +--------+         +----------+ +--------+
-| Origin Issuer |    | Origin |                                 | Client |         | Attester | | Issuer |
-+---+-----------+    +---+----+                                 +---+----+         +----+-----+ +---+----+
-    |                    |                                          |                   |           |
-    |                    |<---------------- Request ----------------+                   |           |
-    |                    +-------- TokenChallenge (Issuer) -------->|                   |           |
-    |                    |                                          |                   |           |
-    |                    |                                          |<== Attestation ==>|           |
-    |                    |                                          +--------- TokenRequest ------->|
-    |                    |                                          |<-------- TokenResponse -------+
-    |                    |                                  TokenFinalisation           |           |
-    |                    |                                          |                   |           |
-    |                    |<-- Request+Token+TokenRequest(Origin) ---+                   |           |
-    |<-- TokenRequest ---+                                          |                   |           |
-    +--- TokenResponse ->|                                          |                   |           |
-    |                    |---- Response+TokenResponse(Origin) ----->|                   |           |
-    |                    |                                  TokenFinalisation           |           |
-    |                    |                                          |                   |           |
++---------------+        +--------+                                 +--------+         +----------+ +--------+
+| Origin Issuer |        | Origin |                                 | Client |         | Attester | | Issuer |
++--+------------+        +---+----+                                 +---+----+         +----+-----+ +---+----+
+   |                         |                                          |                   |           |
+   |                         |<---------------- Request ----------------+                   |           |
+   |                         +-------- TokenChallenge (Issuer) -------->|                   |           |
+   |                         |                                          |                   |           |
+   |                         |                                          |<== Attestation ==>|           |
+   |                         |                                          +------ CredentialRequest ----->|
+   |                         |                                          |<----- CredentialResponse -----+
+   |                         |                                CredentialFinalization        |           |
+   |                         |                                          |                   |           |
+   |                         |                                CredentialPresentation        |           |
+   |                         |<------------ Request+Token --------------+                   |           |
+   |<-- CredentialRequest ---+        +CredentialRequest(Origin)        |                   |           |
+   +--- CredentialResponse ->|                                          |                   |           |
+   |                         |-- Response+CredentialResponse(Origin) -->|                   |           |
+   |                         |                                CredentialFinalization        |           |
+   |                         |                                          |                   |           |
 ~~~
 {: #fig-reverse-flow-architecture title="Architecture of Privacy Pass with a Reverse Flow"}
 
@@ -188,48 +196,62 @@ acts as a Reverse Flow Issuer.
 This is an extension of {{RFC9576}}. The redemption flow of a Privacy Pass token is defined in
 {{Section 3.6.4 of RFC9576}}. Reverse flow extends this so that redemption flow is interleaved with
 the issuance flow described in {{Section 3.6.3 of RFC9576}}.
-This is denoted in the diagram above by the Client sending `Request`+`Token`+`TokenRequest(Origin Issuer)`.
-The Origin runs the issuance protocol, and returns `Response`+`TokenResponse(Origin Issuer)`.
+This is denoted in the diagram above by the Client sending `Request`+`Token`+`CredengialRequest(Origin)`.
+The Origin runs the issuance protocol, and returns `Response`+`CredentialResponse(Origin)`.
 
 Such flow can be performed through various means. This document introduces one to serve as example and
 first basis.
 
-# TokenRequest, TokenResponse, and Finalisation
+# CredentialRequest, CredentialResponse, and CredentialFinalization
 
-In {{fig-reverse-flow-architecture}}, the Client sends an `TokenRequest` and receives an `TokenResponse`.
+In {{fig-reverse-flow-architecture}}, the Client sends an `CredentialRequest` and receives an `CredentialResponse`.
 These are meant to abstract request from different protocol to the Issuer.
 
 As specified in {{Section 3.5 of RFC9576}},
 
 > The structure and semantics of the TokenRequest and TokenResponse messages depend on the issuance protocol and token type being used.
 
-The introduction of Privacy Pass issuance protocol based on Anonymous credential, such as {{PRIVACYPASS-ARC}} or {{PRIVACYPASS-ACT}},
-modifies `TokenRequest` to use `CredentialRequest` instead.
+The introduction of Privacy Pass issuance protocol based on Anonymous Credentials, such as {{PRIVACYPASS-ARC}} or {{PRIVACYPASS-ACT}},
+modifies `TokenRequest` (resp. `TokenResponse`) to use `CredentialRequest` instead (resp. `CredentialResponse`).
 
-Upon receiving an `TokenResponse`, the Client has to finalise the `Token` so it can be
+Upon receiving an `CredentialResponse`, the Client has to finalise the `Token` so it can be
 presented to an Origin.
-This may be a `Finalisation` for type 0x0002 as defined in {{Section 7 of RFC9578}},
-a presentation for {{Section 7 of PRIVACYPASS-ARC}},
-or even a refund for {{PRIVACYPASS-ACT}}.
+This may be a `Finalization` for type 0x0002 as defined in {{Section 7 of RFC9578}},
+a presentation for {{Section 7.3 of PRIVACYPASS-ARC}},
+or even a `TokenRefund` for {{PRIVACYPASS-ACT}}.
+
+All three examples ensure that an Issuer provides the Client with a state update that it needs to finalize, and present.
 
 # Reverse flow with an HTTP header
 
 This section defines a Reverse Flow, as presented in {{architecture}}, leveraging `PrivacyPass-Reverse` HTTP header.
 
-`TokenRequest(Origin)` and `TokenResponse(Origin)` happen through HTTP Header `PrivacyPass-Reverse`.
-`PrivacyPass-Reverse` is a base64url ({{RFC4648}}) encoded `GenericBatchTokenRequest` as defined in {{Section 6 of BATCHED-TOKENS}}.
+`CredentialRequest(Origin)` and `CredentialResponse(Origin)` are transmitted through HTTP Header `PrivacyPass-Reverse`.
+`PrivacyPass-Reverse` is a base64url ({{RFC4648}}) encoded `GenericBatchTokenRequest` (resp. `GenericBatchTokenResponse`)
+as defined in {{Section 6.1 of BATCHED-TOKENS}} (resp. {{Section 6.1 of BATCHED-TOKENS}}).
 
-> The use of generic batch tokens as defined in {{Section 6 of BATCHED-TOKENS}} is
-> because this already provides encoding for request and response, error wrapping, and
-> a concise format. One could use binary http or a new format
+Below is an example request that uses {{RFC9577}} to pass the request Token, as well as `PrivacyPass-Request` for its reverse flow.
+
+~~~
+GET /foo HTTP/1.1
+Host: example.com
+Authorization: PrivateToken token="abc..."
+PrivacyPass-Reverse: "def..."
+
+HTTP/1.1 200 OK
+PrivacyPass-Reverse: "001..."
+
+[BODY]
+~~~
 
 ## Client behaviour
 
-Along with sending PrivateToken from the Initial Issuer to the Origin, the
-Client sends a TokenRequest as defined in {{RFC9578}},
-{{BATCHED-TOKENS}}, or {{PRIVACYPASS-ARC}}. In all these definitions, TokenRequest MUST
+Along with sending a finalised token from the Initial Issuer to the Origin that it sends through an authorization response as defined in
+{{RFC9577}}, the Client may send a `TokenRequest` as defined in {{RFC9578}},
+{{BATCHED-TOKENS}}, or {{PRIVACYPASS-ARC}}. In all these definitions, `CredentialRequest` MUST
 prepended by a `uint16_t` representing the token type.
-The Client SHOULD consider Privacy Pass Reverse Flow like the initial flow.
+
+The same security and privacy guarantees applies as to the initial issuance flow.
 The Client is responsible to coordinate between the different entities.
 Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client
 SHOULD account for possible privacy leakage.
@@ -242,26 +264,27 @@ the Initial Flow, except for the request/response encapsulation.
 The Origin is the Reverse Origin.
 
 ~~~ aasvg
-                     +-------------------------------------.
-    +--------+       |  +----------+ +--------+ +--------+  |
-    | Client |       |  | Attester | | Issuer | | Origin |  |
-    +---+----+       |  +-----+----+ +----+---+ +---+----+  |
-        |             `-------|-----------|---------|------'
-        +----------------- Request ---------------->|
-        |<--------------- TokenChallenge -----------+
-        |                     |           |         |
-        |<=== Attestation ===>|           |         |
-        +----------- TokenRequest ------->|         |
-        |<---------- TokenResponse -------+         |
-TokenFinalization             |           |         |
-        |                                           |
-        +--- Request+Token+TokenRequest(Origin) --->|
-        |<----- Response+TokenResponse(Origin) -----+
-        |                                           |
+                            +-------------------------------------.
+      +--------+            |  +----------+ +--------+ +--------+  |
+      | Client |            |  | Attester | | Issuer | | Origin |  |
+      +---+----+            |  +-----+----+ +----+---+ +---+----+  |
+          |                  `-------|-----------|---------|------'
+          +------------------- Request ------------------->|
+          |<--------------- TokenChallenge ----------------+
+          |                          |           |         |
+          |<====== Attestation =====>|           |         |
+          +--------- CredentialRequest --------->|         |
+          |<-------- CredentialResponse ---------+         |
+CredentialFinalization               |           |         |
+          |                                                |
+CredentialPresentation                                     |
+          +--- Request+Token+CredentialRequest(Origin) --->|
+          |<----- Response+CredentialResponse(Origin) -----+
+          |                                                |
 ~~~
 {: #fig-deploy-shared title="Shared Deployment Model"}
 
-Similar to the original Shared Deployment Model, the Attester,
+Similar to the original Shared Deployment Model ({{Section 4.1 of RFC9576}}), the Attester,
 Issuer, and Origin share the attestation, issuance, and redemption
 contexts. Even if this context changes between the Initial and
 Reverse Flow, attestation mechanism that can uniquely identify
@@ -276,23 +299,24 @@ Origin Tokens can then be sent by Client on new requests, as long as the
 Reverse Origin trusts the Origin to perform attestation and issue Tokens.
 
 ~~~aasvg
-                                                                              +--------------------------.
-+---------------+    +--------+                                +--------+     |  +----------+ +--------+  |
-| Origin Issuer |    | Origin |                                | Client |     |  | Attester | | Issuer |  |
-+---+-----------+    +---+----+                                +---+----+     |  +-----+----+ +----+---+  |
-    |                    |                                         |           `-------|-----------|-----'
-    |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
-    |                    |                                         |                   |           |
-    |                    |                                         |<== Attestation ==>|           |
-    |                    |                                         +--------- TokenRequest ------->|
-    |                    |                                         |<-------- TokenResponse -------+
-    |                    |                                 TokenFinalization           |           |
-    |                    |                                         |                   |           |
-    |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
-    |<-- TokenRequest ---+                                         |                   |           |
-    +-- TokenResponse -->|                                         |                   |           |
-    |                    +--- Response+TokenResponse(Origin) ----->|                   |           |
-    |                    |                                         |                   |           |
+                                                                                        +--------------------------.
++---------------+         +--------+                                     +--------+     |  +----------+ +--------+  |
+| Origin Issuer |         | Origin |                                     | Client |     |  | Attester | | Issuer |  |
++---+-----------+         +---+----+                                     +---+----+     |  +-----+----+ +----+---+  |
+    |                         |                                              |           `-------|-----------|-----'
+    |                         +-- TokenChallenge (Issuer) ------------------>|                   |           |
+    |                         |                                              |                   |           |
+    |                         |                                              |<== Attestation ==>|           |
+    |                         |                                              +------ CredentialRequest ----->|
+    |                         |                                              |<----- CredentialResponse -----+
+    |                         |                                    CredentialFinalization        |           |
+    |                         |                                              |                   |           |
+    |                         |                                    CredentialPresentation        |           |
+    |                         |<-- Request+Token+CredentialRequest(Origin) --+                   |           |
+    |<-- CredentialRequest ---+                                              |                   |           |
+    +-- CredentialResponse -->|                                              |                   |           |
+    |                         +--- Response+CredentialResponse(Origin) ----->|                   |           |
+    |                         |                                              |                   |           |
 ~~~
 {: #fig-deploy-joint-issuer title="Joint Attester and Issuer Deployment Model"}
 
@@ -303,29 +327,33 @@ A particular deployment model is when the Reverse Origin is the Attester/Issuer.
 This model is described in {{fig-deploy-joint-issuer-reserve}}
 
 ~~~aasvg
-                                                                              +--------------------------.
-+---------------+    +--------+                                +--------+     |  +----------+ +--------+  |
-| Origin Issuer |    | Origin |                                | Client |     |  | Attester | | Issuer |  |
-+---+-----------+    +---+----+                                +---+----+     |  +-----+----+ +----+---+  |
-    |                    |                                         |           `-------|-----------|-----'
-    |                    +-- TokenChallenge (Issuer) ------------->|                   |           |
-    |                    |                                         |                   |           |
-    |                    |                                         |<== Attestation ==>|           |
-    |                    |                                         +--------- TokenRequest ------->|
-    |                    |                                         |<-------- TokenResponse -------+
-    |                    |                                 TokenFinalization           |           |
-    |                    |                                         |                   |           |
-    |                    |<-- Request+Token+TokenRequest(Origin) --+                   |           |
-    |<-- TokenRequest ---+                                         |                   |           |
-    +--- TokenResponse ->|                                         |                   |           |
-    |                    +--- Response+TokenResponse(Origin) ----->|                   |           |
-    |                    |                                         +------------ Token ----------->|
-    |                    |                                         |                   |           |
+                                                                                        +--------------------------.
++---------------+         +--------+                                     +--------+     |  +----------+ +--------+  |
+| Origin Issuer |         | Origin |                                     | Client |     |  | Attester | | Issuer |  |
++---+-----------+         +---+----+                                     +---+----+     |  +-----+----+ +----+---+  |
+    |                         |                                              |           `-------|-----------|-----'
+    |                         +-- TokenChallenge (Issuer) ------------------>|                   |           |
+    |                         |                                              |                   |           |
+    |                         |                                              |<== Attestation ==>|           |
+    |                         |                                              +------ CredentialRequest ----->|
+    |                         |                                              |<----- CredentialResponse -----+
+    |                         |                                   CredentialFinalization         |           |
+    |                         |                                              |                   |           |
+    |                         |                                   CredentialPresentation         |           |
+    |                         |<-- Request+Token+CredentialRequest(Origin) --+                   |           |
+    |<-- CredentialRequest ---+                                              |                   |           |
+    +--- CredentialResponse ->|                                              |                   |           |
+    |                         +--- Response+CredentialResponse(Origin) ----->|                   |           |
+    |                         |                                   CredentialFinalization         |           |
+    |                         |                                              |                   |           |
+    |                         |                                   CredentialPresentation         |           |
+    |                         |                                              +------------ Token ----------->|
+    |                         |                                              |                   |           |
 ~~~
 {: #fig-deploy-joint-issuer-reserve title="Joint Attester and Issuer Deployment Model with reverse"}
 
-This deployment SHOULD not allow the Reverse Origin to infer the request made
-to the Origin, as it would break unlinkability.
+This deployment SHOULD not allow the Reverse Origin such as an Initial Issuer
+to infer the request made to the Origin, as it would break unlinkability.
 
 
 # Privacy Considerations
@@ -339,10 +367,10 @@ privacy. Most token types do not admit any metadata, so this bound is implicitly
 enforced.
 
 In Privacy Pass with a reverse flow, Clients are provided with new PrivateTokens
-depending on their request. They can spend these tokens to continue making further
+depending on their request. They can present these tokens to continue making further
 requests.
 
-While the token are still unlinkable, the token_key_id associated to them
+While the tokens are still unlinkable, the `token_key_id` associated to them
 represent metadata. It leaks some information about the Client. The following
 subsections discuss the issues that influence the anonymity set, and possible
 mitigations/safeguards to protect against this underlying problem.
@@ -351,14 +379,14 @@ mitigations/safeguards to protect against this underlying problem.
 
 When setting up a reverse flow deployment, an Origin MAY operate multiple
 Issuers, and assign them some metadata to them. The amount of possible metadata
-grows as 2^(origin_issuers).
+grows as `2^(origin_issuers)`.
 
 We RECOMMEND that:
 
 1. Origins define their anonymity sets, and deploy no more than
-   log2(#anonymity_sets). This bounds the possible anonymity sets by design.
-2. Clients to only send 1 PrivateToken per request. This is inline with RFC9577
-   and RFC (Web Authentication) which only allows one challenge response to be
+   `log2(#anonymity_sets)`. This bounds the possible anonymity sets by design.
+2. Clients to only send 1 PrivateToken per request. This is consistent with {{Section 3.2 of RFC9577}}
+   and {{Section 11.6.2 of RFC9110}} which only allows one challenge response to be
    provided as part of Authorization HTTP header.
 3. Issuers metadata to be publicly disclosed via an Origin endpoint, and
    externally monitored.
@@ -370,33 +398,19 @@ with arbitrary metadata associated to them. A malicious Origin MAY uses this
 opportunity to associate certain token values to a specific set of Clients.
 
 Let's consider the following deployment: the Origin operates two Issuers A and
-B. The Client sends Token_A, and (TokenRequest_A, TokenRequest_B). Issuer B is
-associated to croissant aficionados.
+B. The Client sends Token_A, and (CredentialRequest_A, CredentialRequest_B). Issuer B is
+associated to people that like croissant. Issuer A is for the rest of the clients.
 
 If a Client requests croissant, or sends Token_B, the Origin provides
-TokenResponse_B. If not, it provides TokenResponse_A.
+CredentialResponse_B. If not, it provides CredentialResponse_A.
 
-Over time, this means the Origin is able to track croissants aficionados.
+Over time, this means the Origin is able to track people that like croissants.
 
 To mitigate this, we RECOMMEND:
 
 1. The initial PrivateToken to be provided by an Issuer not in control of the
-   Origin. The joint Origin/Attester/Issuer model SHOULD NOT be used.
+   Origin.
 2. Clients to reset their state regularly with the initial Issuer.
-
-## Sending more than one token
-
-While that's not part of Privacy Pass with a reverse flow, some deployment might
-consider allowing Clients to send multiple PrivateToken, similar to how normal
-Privacy Pass deployment allow two distinct PrivateToken to be sent.
-
-In Privacy Pass with a reverse flow deployment, there are as many bits as
-Issuers; each token is one bit. We RECOMMEND to have a maximum of 6 Origins
-operated Issuers, bounding Client information to 2^6 = 64. Accounting for the
-initial Issuer, this means a total of log2(64)+1=7 Issuers.
-
-Origins should have sufficient traffic to not single-out particular Client based
-on timings of requests.
 
 ## Swap endpoint and its privacy implication
 
