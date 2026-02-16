@@ -437,6 +437,13 @@ for helpful discussion on Privacy Pass architecture and its considerations.
 # Changelog
 {:numbered="false"}
 
+v02
+
+- Diagrams now use Credential instead of Token, and use both Finalization and Presentation as keyword
+- Rework the intro to make it consistent with Anonymous credentials evolutions
+- Have Anonymous credentials use case, given it needs a new architecture
+- Editorial pass on PrivacyPass-Reverse header
+
 v01
 
 - Editorial pass on the introduction
