@@ -256,7 +256,7 @@ Table of Contents
    extends this so that redemption flow is interleaved with the issuance
    flow described in Section 3.6.3 of [RFC9576].  This is denoted in the
    diagram above by the Client sending
-   Request+Token+CredengialRequest(Origin).  The Origin runs the
+   Request+Token+CredentialRequest(Origin).  The Origin runs the
    issuance protocol, and returns Response+CredentialResponse(Origin).
 
    Such flow can be performed through various means.  This document
@@ -580,6 +580,19 @@ Acknowledgments
    Pass architecture and its considerations.
 
 Changelog
+
+   v02
+
+   *  Diagrams now use Credential instead of Token, and use both
+      Finalization and Presentation as keyword
+
+   *  Rework the intro to make it consistent with Anonymous credentials
+      evolutions
+
+   *  Have Anonymous credentials use case, given it needs a new
+      architecture
+
+   *  Editorial pass on PrivacyPass-Reverse header
 
    v01
 
