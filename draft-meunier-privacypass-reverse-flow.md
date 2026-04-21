@@ -220,7 +220,7 @@ This may be a `Finalization` for type 0x0002 as defined in {{Section 7 of RFC957
 a presentation for {{Section 7.3 of PRIVACYPASS-ARC}},
 or even a `TokenRefund` for {{PRIVACYPASS-ACT}}.
 
-All three examples ensure that an Origin provides the Client with a state update that it needs to finalize, and present.
+All three examples ensure that an Origin Issuer provides the Client with a state update that it needs to finalize, and present.
 
 # Reverse flow with an HTTP header
 
