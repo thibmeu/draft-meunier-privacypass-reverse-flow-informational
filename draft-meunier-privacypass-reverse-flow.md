@@ -214,13 +214,13 @@ As specified in {{Section 3.5 of RFC9576}},
 The introduction of Privacy Pass issuance protocol based on Anonymous Credentials, such as {{PRIVACYPASS-ARC}} or {{PRIVACYPASS-ACT}},
 modifies `TokenRequest` (resp. `TokenResponse`) to use `CredentialRequest` instead (resp. `CredentialResponse`).
 
-Upon receiving an `CredentialResponse`, the Client has to finalise the `Token` so it can be
+Upon receiving an `CredentialResponse`, the Client has to finalise the `Credential` so it can be
 presented to an Origin.
 This may be a `Finalization` for type 0x0002 as defined in {{Section 7 of RFC9578}},
 a presentation for {{Section 7.3 of PRIVACYPASS-ARC}},
 or even a `TokenRefund` for {{PRIVACYPASS-ACT}}.
 
-All three examples ensure that an Issuer provides the Client with a state update that it needs to finalize, and present.
+All three examples ensure that an Origin provides the Client with a state update that it needs to finalize, and present.
 
 # Reverse flow with an HTTP header
 
