@@ -12,21 +12,21 @@ that allows for a "reverse" flow from the Origin to the Client.
 It describes a method for an Origin to issue a state update to the Client in response to a request in
 which a token is redeemed. 
     ' name="description">
-<meta content="xml2rfc 3.31.0" name="generator">
+<meta content="xml2rfc 3.33.0" name="generator">
 <meta content="draft-meunier-privacypass-reverse-flow-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.31.0
-    Python 3.12.12
+  xml2rfc 3.33.0
+    Python 3.12.13
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.0.2
-    platformdirs 4.5.1
+    platformdirs 4.9.6
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.32.5
-    wcwidth 0.3.0
+    wcwidth 0.6.0
 -->
 <link href="draft-meunier-privacypass-reverse-flow.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1047,11 +1047,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Privacy Pass Reverse Flow</td>
-<td class="right">February 2026</td>
+<td class="right">April 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Meunier</td>
-<td class="center">Expires 20 August 2026</td>
+<td class="center">Expires 23 October 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-meunier-privacypass-reverse-flow-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-16" class="published">16 February 2026</time>
+<time datetime="2026-04-21" class="published">21 April 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-20">20 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-10-23">23 October 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1122,7 +1122,7 @@ which a token is redeemed.<a href="#section-abstract-1" class="pilcrow">¶</a></
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 October 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1510,12 +1510,12 @@ These are meant to abstract request from different protocol to the Issuer.<a hre
       </ul>
 <p id="section-5-4">The introduction of Privacy Pass issuance protocol based on Anonymous Credentials, such as <span>[<a href="#PRIVACYPASS-ARC" class="cite xref">PRIVACYPASS-ARC</a>]</span> or <span>[<a href="#PRIVACYPASS-ACT" class="cite xref">PRIVACYPASS-ACT</a>]</span>,
 modifies <code>TokenRequest</code> (resp. <code>TokenResponse</code>) to use <code>CredentialRequest</code> instead (resp. <code>CredentialResponse</code>).<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">Upon receiving an <code>CredentialResponse</code>, the Client has to finalise the <code>Token</code> so it can be
+<p id="section-5-5">Upon receiving an <code>CredentialResponse</code>, the Client has to finalise the <code>Credential</code> so it can be
 presented to an Origin.
 This may be a <code>Finalization</code> for type 0x0002 as defined in <span><a href="https://rfc-editor.org/rfc/rfc9578#section-7" class="relref">Section 7</a> of [<a href="#RFC9578" class="cite xref">RFC9578</a>]</span>,
-a presentation for <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-arc-protocol-00#section-7.3" class="relref">Section 7.3</a> of [<a href="#PRIVACYPASS-ARC" class="cite xref">PRIVACYPASS-ARC</a>]</span>,
+a presentation for <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-arc-protocol-01#section-7.3" class="relref">Section 7.3</a> of [<a href="#PRIVACYPASS-ARC" class="cite xref">PRIVACYPASS-ARC</a>]</span>,
 or even a <code>TokenRefund</code> for <span>[<a href="#PRIVACYPASS-ACT" class="cite xref">PRIVACYPASS-ACT</a>]</span>.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">All three examples ensure that an Issuer provides the Client with a state update that it needs to finalize, and present.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-6">All three examples ensure that an Origin Issuer provides the Client with a state update that it needs to finalize, and present.<a href="#section-5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="reverse-flow-with-an-http-header">
@@ -1526,7 +1526,7 @@ or even a <code>TokenRefund</code> for <span>[<a href="#PRIVACYPASS-ACT" class="
 <p id="section-6-1">This section defines a Reverse Flow, as presented in <a href="#architecture" class="auto internal xref">Section 4</a>, leveraging <code>PrivacyPass-Reverse</code> HTTP header.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2"><code>CredentialRequest(Origin)</code> and <code>CredentialResponse(Origin)</code> are transmitted through HTTP Header <code>PrivacyPass-Reverse</code>.
 <code>PrivacyPass-Reverse</code> is a base64url (<span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span>) encoded <code>GenericBatchTokenRequest</code> (resp. <code>GenericBatchTokenResponse</code>)
-as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-06#section-6.1" class="relref">Section 6.1</a> of [<a href="#BATCHED-TOKENS" class="cite xref">BATCHED-TOKENS</a>]</span> (resp. <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-06#section-6.1" class="relref">Section 6.1</a> of [<a href="#BATCHED-TOKENS" class="cite xref">BATCHED-TOKENS</a>]</span>).<a href="#section-6-2" class="pilcrow">¶</a></p>
+as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-07#section-6.1" class="relref">Section 6.1</a> of [<a href="#BATCHED-TOKENS" class="cite xref">BATCHED-TOKENS</a>]</span> (resp. <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-07#section-6.1" class="relref">Section 6.1</a> of [<a href="#BATCHED-TOKENS" class="cite xref">BATCHED-TOKENS</a>]</span>).<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">Below is an example request that uses <span>[<a href="#RFC9577" class="cite xref">RFC9577</a>]</span> to pass the request Token, as well as <code>PrivacyPass-Request</code> for its reverse flow.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6-4">
 <pre>
@@ -1985,7 +1985,7 @@ anonymity sets.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
 <dl class="references">
 <dt id="BATCHED-TOKENS">[BATCHED-TOKENS]</dt>
         <dd>
-<span class="refAuthor">Robert, R.</span>, <span class="refAuthor">Wood, C. A.</span>, and <span class="refAuthor">T. Meunier</span>, <span class="refTitle">"Batched Token Issuance Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-batched-tokens-06</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-06">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-06</a>&gt;</span>. </dd>
+<span class="refAuthor">Robert, R.</span>, <span class="refAuthor">Wood, C. A.</span>, and <span class="refAuthor">T. Meunier</span>, <span class="refTitle">"Batched Token Issuance Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-batched-tokens-07</span>, <time datetime="2026-02-25" class="refDate">25 February 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-07">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-batched-tokens-07</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -2022,7 +2022,7 @@ anonymity sets.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
 <dd class="break"></dd>
 <dt id="PRIVACYPASS-ARC">[PRIVACYPASS-ARC]</dt>
         <dd>
-<span class="refAuthor">Yun, C.</span>, <span class="refAuthor">Wood, C. A.</span>, and <span class="refAuthor">A. F. Faz-Hernandez</span>, <span class="refTitle">"Privacy Pass Issuance Protocol for Anonymous Rate-Limited Credentials"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-arc-protocol-00</span>, <time datetime="2026-02-04" class="refDate">4 February 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-arc-protocol-00">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-arc-protocol-00</a>&gt;</span>. </dd>
+<span class="refAuthor">Yun, C.</span>, <span class="refAuthor">Wood, C. A.</span>, and <span class="refAuthor">A. F. Faz-Hernandez</span>, <span class="refTitle">"Privacy Pass Issuance Protocol for Anonymous Rate-Limited Credentials"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-privacypass-arc-protocol-01</span>, <time datetime="2026-03-02" class="refDate">2 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-arc-protocol-01">https://datatracker.ietf.org/doc/html/draft-ietf-privacypass-arc-protocol-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="PRIVACYPASS-BBS">[PRIVACYPASS-BBS]</dt>
         <dd>
