@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-21T00:54:36.639440+00:00",
+  "timestamp": "2026-04-23T00:55:34.634377+00:00",
   "repo": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
   "labels": [
     {
@@ -143,6 +143,61 @@
           "createdAt": "2025-10-24T14:29:35Z",
           "updatedAt": "2025-10-24T14:29:35Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOMu4RQM7UZsG2",
+      "title": "spec: Origin receives the credential.",
+      "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/pull/3",
+      "state": "MERGED",
+      "author": "armfazh",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-04-21T18:43:20Z",
+      "updatedAt": "2026-04-21T19:23:46Z",
+      "baseRepository": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
+      "baseRefName": "main",
+      "baseRefOid": "622e243c63e7a4a7ad446037df4184ceab4e2207",
+      "headRepository": "armfazh/draft-meunier-privacypass-reverse-flow-informational",
+      "headRefName": "minor",
+      "headRefOid": "277df6f28178d6c9dd28fa33971236ff58a769ce",
+      "closedAt": "2026-04-21T19:23:46Z",
+      "mergedAt": "2026-04-21T19:23:46Z",
+      "mergedBy": "thibmeu",
+      "mergeCommit": {
+        "oid": "5a23ebe05a298003772b1746dda3a807e21c02f2"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMu4RQM73Xv1O",
+          "commit": {
+            "abbreviatedOid": "8d98af0"
+          },
+          "author": "thibmeu",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "added one suggestion which I think you might have input on.good to go otherwise",
+          "createdAt": "2026-04-21T19:07:37Z",
+          "updatedAt": "2026-04-21T19:09:49Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "good catch!",
+              "createdAt": "2026-04-21T19:07:37Z",
+              "updatedAt": "2026-04-21T19:09:49Z"
+            },
+            {
+              "originalPosition": 12,
+              "body": "I think `Origin Issuer` is more correct (terminology suggestions welcome, it's a bit confusing).\n\n\n```suggestion\nAll three examples ensure that an Origin Issuer provides the Client with a state update that it needs to finalize, and present.\n```",
+              "createdAt": "2026-04-21T19:09:25Z",
+              "updatedAt": "2026-04-21T19:09:49Z"
+            }
+          ]
         }
       ]
     }
