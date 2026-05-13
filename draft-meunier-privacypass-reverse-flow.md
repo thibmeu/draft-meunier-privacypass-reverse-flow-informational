@@ -437,6 +437,20 @@ for helpful discussion on Privacy Pass architecture and its considerations.
 # Changelog
 {:numbered="false"}
 
+v04
+
+- Fix: Client finalises a `Credential`, not a `Token`, upon receiving a `CredentialResponse`
+- Use "Origin Issuer" consistently when referring to the entity that provides the Client with a state update
+
+v03
+
+- Add "Anonymous credential composition" motivation use case
+- Rename section and update diagrams to use Credential vocabulary: `CredentialRequest`, `CredentialResponse`, `CredentialFinalization`, `CredentialPresentation` (previously `TokenRequest`, `TokenResponse`, `Finalisation`)
+- Update PRIVACYPASS-ARC reference to IETF working group draft (`draft-ietf-privacypass-arc-protocol`)
+- Update PRIVACYPASS-ACT reference to use proper I-D reference (`draft-schlesinger-privacypass-act`)
+- Add normative reference to RFC9577
+- Editorial pass and spelling fixes
+
 v02
 
 - Diagrams now use Credential instead of Token, and use both Finalization and Presentation as keyword
