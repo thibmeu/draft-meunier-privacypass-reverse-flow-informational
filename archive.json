@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-14T01:04:46.846692+00:00",
+  "timestamp": "2026-05-17T01:06:29.520439+00:00",
   "repo": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
   "labels": [
     {
@@ -49,7 +49,40 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 4,
+      "id": "I_kwDOMu4RQM8AAAABCONz3w",
+      "title": "Split HTTP header section in its own draft",
+      "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/issues/4",
+      "state": "OPEN",
+      "author": "thibmeu",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Discussed in Privacy Pass Interim 2026-01\nSuggested by @tfpauly\n\nSimilar to how Privacy Pass is structured, it would make sense to have the transport be in its own draft. This can still be in the same repository\n\nWe've seen MOQ use its own transport for instance",
+      "createdAt": "2026-05-14T07:31:57Z",
+      "updatedAt": "2026-05-14T07:31:57Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOMu4RQM8AAAABCOPRYQ",
+      "title": "Sharpen text as to why Reverse Flow cannot be satisfied solely with RFC 9576",
+      "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/issues/5",
+      "state": "OPEN",
+      "author": "thibmeu",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Discussed during Privacy Pass Interim 2026-01\nSuggested by Benjamin Schwartz (not sure about github handle)\n\nReverse flow is essentially RFC 9576 deployed twice. The novelty come around new privacy consideration that have to be taken care of, the need for a transport mechanism, and the integration of a stateful client.",
+      "createdAt": "2026-05-14T07:36:03Z",
+      "updatedAt": "2026-05-14T07:36:03Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
