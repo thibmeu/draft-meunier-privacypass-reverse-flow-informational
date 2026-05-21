@@ -27,14 +27,17 @@ author:
 
 normative:
   BATCHED-TOKENS: I-D.draft-ietf-privacypass-batched-tokens
-  RFC4648:
   RFC9576:
   RFC9578:
 
 informative:
+  MOQ-PRIVACYPASS: I-D.draft-ietf-moq-privacy-pass-auth
   PRIVACYPASS-ACT: I-D.draft-schlesinger-privacypass-act
   PRIVACYPASS-ARC: I-D.draft-ietf-privacypass-arc-protocol
   PRIVACYPASS-BBS: I-D.draft-ladd-privacypass-bbs
+  REVERSE-FLOW-HTTP-HEADER:
+    title: Privacy Pass Reverse Flow HTTP Transport
+    target: https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-informational/draft-meunier-privacypass-reverse-flow-http-transport.html
   RFC9110:
   RFC9577:
 
@@ -199,10 +202,9 @@ the issuance flow described in {{Section 3.6.3 of RFC9576}}.
 This is denoted in the diagram above by the Client sending `Request`+`Token`+`CredentialRequest(Origin)`.
 The Origin runs the issuance protocol, and returns `Response`+`CredentialResponse(Origin)`.
 
-Such flow can be performed through various means. This document introduces one to serve as example and
-first basis.
+Such flow can be performed through various means, such as HTTP headers ({{REVERSE-FLOW-HTTP-HEADER}}), MOQ Parameters ({{MOQ-PRIVACYPASS}}), or even a dedicated endpoint.
 
-# CredentialRequest, CredentialResponse, and CredentialFinalization
+## CredentialRequest, CredentialResponse, and CredentialFinalization
 
 In {{fig-reverse-flow-architecture}}, the Client sends an `CredentialRequest` and receives an `CredentialResponse`.
 These are meant to abstract request from different protocol to the Issuer.
@@ -222,28 +224,6 @@ or even a `TokenRefund` for {{PRIVACYPASS-ACT}}.
 
 All three examples ensure that an Origin Issuer provides the Client with a state update that it needs to finalize, and present.
 
-# Reverse flow with an HTTP header
-
-This section defines a Reverse Flow, as presented in {{architecture}}, leveraging `PrivacyPass-Reverse` HTTP header.
-
-`CredentialRequest(Origin)` and `CredentialResponse(Origin)` are transmitted through HTTP Header `PrivacyPass-Reverse`.
-`PrivacyPass-Reverse` is a base64url ({{RFC4648}}) encoded `GenericBatchTokenRequest` (resp. `GenericBatchTokenResponse`)
-as defined in {{Section 6.1 of BATCHED-TOKENS}} (resp. {{Section 6.1 of BATCHED-TOKENS}}).
-
-Below is an example request that uses {{RFC9577}} to pass the request Token, as well as `PrivacyPass-Request` for its reverse flow.
-
-~~~
-GET /foo HTTP/1.1
-Host: example.com
-Authorization: PrivateToken token="abc..."
-PrivacyPass-Reverse: "def..."
-
-HTTP/1.1 200 OK
-PrivacyPass-Reverse: "001..."
-
-[BODY]
-~~~
-
 ## Client behaviour
 
 Along with sending a finalised token from the Initial Issuer to the Origin that it sends through an authorization response as defined in
@@ -255,6 +235,16 @@ The same security and privacy guarantees applies as to the initial issuance flow
 The Client is responsible to coordinate between the different entities.
 Specifically, if the Reverse Origin is the Initial Attester/Issuer, the Client
 SHOULD account for possible privacy leakage.
+
+# Deployment modes {#deployment-modes}
+
+Similar to {{Section 5 of RFC9576}}, Privacy Pass with a Reverse Flow supports multiple
+deployment modes.
+
+Any deployment needs a transport to carry the CredentialRequest and CredentialResponse from
+{{architecture}} alongside the regular Client-Origin exchange. Transport and deployment model
+are independent choices. Options include MOQ Parameters ({{MOQ-PRIVACYPASS}}), an HTTP header
+({{REVERSE-FLOW-HTTP-HEADER}}), or a dedicated endpoint — each covered in its own document.
 
 ## Origin/Issuer/Attester deployment
 
