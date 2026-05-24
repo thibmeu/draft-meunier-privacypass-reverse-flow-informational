@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-17T01:06:29.520439+00:00",
+  "timestamp": "2026-05-24T01:09:05.235817+00:00",
   "repo": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
   "labels": [
     {
@@ -233,6 +233,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOMu4RQM7eSEV7",
+      "title": "Split HTTP header transport into its own draft",
+      "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/pull/6",
+      "state": "OPEN",
+      "author": "thibmeu",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #4\r\n\r\n- Remove the \"Reverse flow with an HTTP header\" section from the architecture draft and move it to a new companion draft (draft-meunier-privacypass-reverse-flow-http-transport)\r\n- Add a \"Deployment modes\" section modelled on RFC9576 section 5, making explicit that transport and deployment model are independent choices\r\n- Reference MOQ-PRIVACYPASS and REVERSE-FLOW-HTTP-HEADER as examples of transport-specific documents\r\n- Drop RFC4648 from normative references (no longer used in this draft)",
+      "createdAt": "2026-05-22T09:11:44Z",
+      "updatedAt": "2026-05-22T09:11:44Z",
+      "baseRepository": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
+      "baseRefName": "main",
+      "baseRefOid": "4f79b5bc57b362a8f5d02ee94d4be8b6f1f9fc49",
+      "headRepository": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
+      "headRefName": "split-draft",
+      "headRefOid": "20f21cc2ff1860f54f3b9403b201c6e5d9fe681b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
