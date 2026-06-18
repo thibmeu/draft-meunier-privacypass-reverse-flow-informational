@@ -3,7 +3,7 @@ title: "Privacy Pass Reverse Flow HTTP Transport"
 abbrev: "Privacy Pass Reverse Flow HTTP Transport"
 category: info
 
-docname: draft-meunier-privacypass-reverse-flow-http-transport-latest
+docname: draft-meunier-privacypass-reverse-flow-http-latest
 submissiontype: IETF
 number:
 date:
@@ -17,7 +17,7 @@ venue:
   mail: "privacy-pass@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/privacy-pass/"
   github: "thibmeu/draft-meunier-privacypass-reverse-flow-informational"
-  latest: "https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-informational/draft-meunier-privacypass-reverse-flow-http-transport.html"
+  latest: "https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-informational/draft-meunier-privacypass-reverse-flow-http.html"
 
 author:
  -
