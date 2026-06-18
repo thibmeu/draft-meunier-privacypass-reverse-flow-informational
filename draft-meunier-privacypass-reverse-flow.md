@@ -35,9 +35,7 @@ informative:
   PRIVACYPASS-ACT: I-D.draft-schlesinger-privacypass-act
   PRIVACYPASS-ARC: I-D.draft-ietf-privacypass-arc-protocol
   PRIVACYPASS-BBS: I-D.draft-ladd-privacypass-bbs
-  REVERSE-FLOW-HTTP-HEADER:
-    title: Privacy Pass Reverse Flow HTTP Transport
-    target: https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-informational/draft-meunier-privacypass-reverse-flow-http-transport.html
+  REVERSE-FLOW-HTTP-HEADER: I-D.draft-meunier-privacypass-reverse-flow-http
   RFC9110:
   RFC9577:
 
