@@ -1244,6 +1244,12 @@ which a token is redeemed.<a href="#section-abstract-1" class="pilcrow">¶</a></
 <p id="section-1-1">This document specifies an instantiation of Privacy Pass Architecture <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>
 that allows for a reverse flow from the Origin to the Client.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">In other words, it specifies a way for an Origin to act as an Attester + Issuer.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document does not replace <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>. Each issuance and redemption step
+still follows that architecture. The gap is composition: <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span> does not
+define how token redemption at an Origin causes that Origin to issue new
+Client-held state in the same exchange. Reverse Flow defines that composition,
+including Client coordination, transport binding, and the privacy effects of
+letting the Origin's redemption decision shape later tokens.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="motivation">
@@ -2047,76 +2053,94 @@ for helpful discussion on Privacy Pass architecture and its considerations.<a hr
       <h2 id="name-changelog">
 <a href="#name-changelog" class="section-name selfRef">Changelog</a>
       </h2>
-<p id="appendix-B-1">v04<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">v05<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-2.1">
-          <p id="appendix-B-2.1.1">Fix: Client finalises a <code>Credential</code>, not a <code>Token</code>, upon receiving a <code>CredentialResponse</code><a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-2.1.1">Clarify why Reverse Flow is more than applying <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span> twice<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-2.2">
-          <p id="appendix-B-2.2.1">Use "Origin Issuer" consistently when referring to the entity that provides the Client with a state update<a href="#appendix-B-2.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-2.2.1">Add transport requirement text to Deployment Modes<a href="#appendix-B-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.3">
+          <p id="appendix-B-2.3.1">Add anonymous credential composition motivation<a href="#appendix-B-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.4">
+          <p id="appendix-B-2.4.1">Update terminology and diagrams to use Credential vocabulary<a href="#appendix-B-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.5">
+          <p id="appendix-B-2.5.1">Use "Origin Issuer" consistently for the entity providing Client state updates<a href="#appendix-B-2.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-3">v03<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">v04<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-4.1">
-          <p id="appendix-B-4.1.1">Add "Anonymous credential composition" motivation use case<a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-4.1.1">Fix: Client finalises a <code>Credential</code>, not a <code>Token</code>, upon receiving a <code>CredentialResponse</code><a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-4.2">
-          <p id="appendix-B-4.2.1">Rename section and update diagrams to use Credential vocabulary: <code>CredentialRequest</code>, <code>CredentialResponse</code>, <code>CredentialFinalization</code>, <code>CredentialPresentation</code> (previously <code>TokenRequest</code>, <code>TokenResponse</code>, <code>Finalisation</code>)<a href="#appendix-B-4.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-4.3">
-          <p id="appendix-B-4.3.1">Update PRIVACYPASS-ARC reference to IETF working group draft (<code>draft-ietf-privacypass-arc-protocol</code>)<a href="#appendix-B-4.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-4.4">
-          <p id="appendix-B-4.4.1">Update PRIVACYPASS-ACT reference to use proper I-D reference (<code>draft-schlesinger-privacypass-act</code>)<a href="#appendix-B-4.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-4.5">
-          <p id="appendix-B-4.5.1">Add normative reference to RFC9577<a href="#appendix-B-4.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-B-4.6">
-          <p id="appendix-B-4.6.1">Editorial pass and spelling fixes<a href="#appendix-B-4.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-4.2.1">Use "Origin Issuer" consistently when referring to the entity that provides the Client with a state update<a href="#appendix-B-4.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-5">v02<a href="#appendix-B-5" class="pilcrow">¶</a></p>
+<p id="appendix-B-5">v03<a href="#appendix-B-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-6.1">
-          <p id="appendix-B-6.1.1">Diagrams now use Credential instead of Token, and use both Finalization and Presentation as keyword<a href="#appendix-B-6.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-6.1.1">Add "Anonymous credential composition" motivation use case<a href="#appendix-B-6.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-6.2">
-          <p id="appendix-B-6.2.1">Rework the intro to make it consistent with Anonymous credentials evolutions<a href="#appendix-B-6.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-6.2.1">Rename section and update diagrams to use Credential vocabulary: <code>CredentialRequest</code>, <code>CredentialResponse</code>, <code>CredentialFinalization</code>, <code>CredentialPresentation</code> (previously <code>TokenRequest</code>, <code>TokenResponse</code>, <code>Finalisation</code>)<a href="#appendix-B-6.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-6.3">
-          <p id="appendix-B-6.3.1">Have Anonymous credentials use case, given it needs a new architecture<a href="#appendix-B-6.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-6.3.1">Update PRIVACYPASS-ARC reference to IETF working group draft (<code>draft-ietf-privacypass-arc-protocol</code>)<a href="#appendix-B-6.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-6.4">
-          <p id="appendix-B-6.4.1">Editorial pass on PrivacyPass-Reverse header<a href="#appendix-B-6.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-6.4.1">Update PRIVACYPASS-ACT reference to use proper I-D reference (<code>draft-schlesinger-privacypass-act</code>)<a href="#appendix-B-6.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-6.5">
+          <p id="appendix-B-6.5.1">Add normative reference to RFC9577<a href="#appendix-B-6.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-6.6">
+          <p id="appendix-B-6.6.1">Editorial pass and spelling fixes<a href="#appendix-B-6.6.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-7">v01<a href="#appendix-B-7" class="pilcrow">¶</a></p>
+<p id="appendix-B-7">v02<a href="#appendix-B-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-8.1">
-          <p id="appendix-B-8.1.1">Editorial pass on the introduction<a href="#appendix-B-8.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-8.1.1">Diagrams now use Credential instead of Token, and use both Finalization and Presentation as keyword<a href="#appendix-B-8.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-8.2">
-          <p id="appendix-B-8.2.1">Add a motivation section: refunding tokens, bootstraping issuer, attester feedback loop<a href="#appendix-B-8.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-8.2.1">Rework the intro to make it consistent with Anonymous credentials evolutions<a href="#appendix-B-8.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-8.3">
-          <p id="appendix-B-8.3.1">Split protocol overview via HTTP headers in its own section<a href="#appendix-B-8.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-8.3.1">Have Anonymous credentials use case, given it needs a new architecture<a href="#appendix-B-8.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-8.4">
-          <p id="appendix-B-8.4.1">Add consideration about anonymous credentials in joint origin/issuer deployment<a href="#appendix-B-8.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-8.4.1">Editorial pass on PrivacyPass-Reverse header<a href="#appendix-B-8.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-B-9">v00<a href="#appendix-B-9" class="pilcrow">¶</a></p>
+<p id="appendix-B-9">v01<a href="#appendix-B-9" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-B-10.1">
-          <p id="appendix-B-10.1.1">Initial draft<a href="#appendix-B-10.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-10.1.1">Editorial pass on the introduction<a href="#appendix-B-10.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-10.2">
-          <p id="appendix-B-10.2.1">Possibility of a new HTTP request for inlining request<a href="#appendix-B-10.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-10.2.1">Add a motivation section: refunding tokens, bootstraping issuer, attester feedback loop<a href="#appendix-B-10.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-B-10.3">
-          <p id="appendix-B-10.3.1">Privacy considerations about additional metadata<a href="#appendix-B-10.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-B-10.3.1">Split protocol overview via HTTP headers in its own section<a href="#appendix-B-10.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-10.4">
+          <p id="appendix-B-10.4.1">Add consideration about anonymous credentials in joint origin/issuer deployment<a href="#appendix-B-10.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="appendix-B-11">v00<a href="#appendix-B-11" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-12.1">
+          <p id="appendix-B-12.1.1">Initial draft<a href="#appendix-B-12.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-12.2">
+          <p id="appendix-B-12.2.1">Possibility of a new HTTP request for inlining request<a href="#appendix-B-12.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-12.3">
+          <p id="appendix-B-12.3.1">Privacy considerations about additional metadata<a href="#appendix-B-12.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
