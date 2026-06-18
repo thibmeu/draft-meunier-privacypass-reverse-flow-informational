@@ -565,10 +565,11 @@ Table of Contents
               privacypass-bbs-01>.
 
    [REVERSE-FLOW-HTTP-HEADER]
-              "Privacy Pass Reverse Flow HTTP Transport", n.d.,
-              <https://thibmeu.github.io/draft-meunier-privacypass-
-              reverse-flow-informational/draft-meunier-privacypass-
-              reverse-flow-http-transport.html>.
+              Meunier, T., "Privacy Pass Reverse Flow HTTP Transport",
+              Work in Progress, Internet-Draft, draft-meunier-
+              privacypass-reverse-flow-http-00, 18 June 2026,
+              <https://datatracker.ietf.org/doc/html/draft-meunier-
+              privacypass-reverse-flow-http-00>.
 
    [RFC9110]  Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke,
               Ed., "HTTP Semantics", STD 97, RFC 9110,
