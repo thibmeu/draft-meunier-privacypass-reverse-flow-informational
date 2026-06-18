@@ -58,6 +58,13 @@ that allows for a reverse flow from the Origin to the Client.
 
 In other words, it specifies a way for an Origin to act as an Attester + Issuer.
 
+This document does not replace {{RFC9576}}. Each issuance and redemption step
+still follows that architecture. The gap is composition: {{RFC9576}} does not
+define how token redemption at an Origin causes that Origin to issue new
+Client-held state in the same exchange. Reverse Flow defines that composition,
+including Client coordination, transport binding, and the privacy effects of
+letting the Origin's redemption decision shape later tokens.
+
 # Motivation
 
 With Privacy Pass issuance as described in {{RFC9576}}, once a token is presented by a Client,
@@ -426,6 +433,14 @@ for helpful discussion on Privacy Pass architecture and its considerations.
 
 # Changelog
 {:numbered="false"}
+
+v05
+
+- Clarify why Reverse Flow is more than applying {{RFC9576}} twice
+- Add transport requirement text to Deployment Modes
+- Add anonymous credential composition motivation
+- Update terminology and diagrams to use Credential vocabulary
+- Use "Origin Issuer" consistently for the entity providing Client state updates
 
 v04
 
