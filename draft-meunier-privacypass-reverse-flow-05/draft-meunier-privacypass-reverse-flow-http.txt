@@ -1,0 +1,199 @@
+
+
+
+
+Privacy Pass                                                  T. Meunier
+Internet-Draft                                           Cloudflare Inc.
+Intended status: Informational                              18 June 2026
+Expires: 20 December 2026
+
+
+                Privacy Pass Reverse Flow HTTP Transport
+           draft-meunier-privacypass-reverse-flow-http-latest
+
+Abstract
+
+   This document specifies an instantiation of Privacy Pass Reverse Flow
+   [REVERSE-FLOW] where HTTP is used as a transport mechanism.
+
+   It describes a novel HTTP header field that Clients and Origins can
+   use to carry reverse flow data.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://thibmeu.github.io/draft-meunier-privacypass-reverse-flow-
+   informational/draft-meunier-privacypass-reverse-flow-http.html.
+   Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-meunier-privacypass-reverse-
+   flow-http/.
+
+   Discussion of this document takes place on the Privacy Pass Working
+   Group mailing list (mailto:privacy-pass@ietf.org), which is archived
+   at https://mailarchive.ietf.org/arch/browse/privacy-pass/.  Subscribe
+   at https://www.ietf.org/mailman/listinfo/privacy-pass/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-
+   informational.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 20 December 2026.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Terminology
+   3.  PrivacyPass-Reverse Header Field
+     3.1.  Example
+   4.  IANA Considerations
+   5.  References
+     5.1.  Normative References
+     5.2.  Informative References
+   Acknowledgments
+   Changelog
+   Author's Address
+
+1.  Introduction
+
+   This document specifies an instantiation of Privacy Pass Reverse Flow
+   [REVERSE-FLOW] where HTTP is used as a transport mechanism.
+
+   [REVERSE-FLOW] specifies an architecture in which a client can both
+   present a token and initiate a new credential issuance flow.
+
+   As described in Section 4 of [REVERSE-FLOW], this requires in-band
+   encoding of information used by the issuance protocol.
+
+   This document introduces a new HTTP header field as defined in
+   [RFC9110].  This allows Clients to convey a CredentialRequest, and
+   Origins to transmit a CredentialResponse.
+
+2.  Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  PrivacyPass-Reverse Header Field
+
+   A Client or an Origin following [REVERSE-FLOW] MAY include a
+   PrivacyPass-Reverse header field to communicate Privacy Pass protocol
+   data.  This header field contains a base64url (per [BASE64]) encoded
+   CredentialRequest or CredentialResponse.
+
++---------------+        +--------+                                     +--------+
+| Origin Issuer |        | Origin |                                     | Client |
++--+------------+        +---+----+                                     +---+----+
+   |                         |                                              |
+   |                         |<-- PrivacyPass-Reverse: CredentialRequest ---+
+   |<-- CredentialRequest ---+                                              |
+   +--- CredentialResponse ->|                                              |
+   |                         +-- PrivacyPass-Reverse: CredentialResponse -->|
+   |                         |                                              |
+
+   Figure 1: Privacy Pass with a Reverse Flow through PrivacyPass-
+                         Reverse header field
+
+3.1.  Example
+
+   Below is an example request that uses [RFC9577] to pass the request
+   Token, as well as PrivacyPass-Reverse for its reverse flow.
+
+   GET /foo HTTP/1.1
+   Host: example.com
+   Authorization: PrivateToken token="abc..."
+   PrivacyPass-Reverse: "def..."
+
+   HTTP/1.1 200 OK
+   PrivacyPass-Reverse: "001..."
+
+   [BODY]
+
+4.  IANA Considerations
+
+   This document has no IANA actions.
+
+5.  References
+
+5.1.  Normative References
+
+   [BASE64]   Josefsson, S., "The Base16, Base32, and Base64 Data
+              Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
+              <https://www.rfc-editor.org/rfc/rfc4648>.
+
+   [REVERSE-FLOW]
+              Meunier, T., "Privacy Pass Reverse Flow", Work in
+              Progress, Internet-Draft, draft-meunier-privacypass-
+              reverse-flow-04, 13 May 2026,
+              <https://datatracker.ietf.org/doc/html/draft-meunier-
+              privacypass-reverse-flow-04>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+5.2.  Informative References
+
+   [RFC9110]  Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke,
+              Ed., "HTTP Semantics", STD 97, RFC 9110,
+              DOI 10.17487/RFC9110, June 2022,
+              <https://www.rfc-editor.org/rfc/rfc9110>.
+
+   [RFC9577]  Pauly, T., Valdez, S., and C. A. Wood, "The Privacy Pass
+              HTTP Authentication Scheme", RFC 9577,
+              DOI 10.17487/RFC9577, June 2024,
+              <https://www.rfc-editor.org/rfc/rfc9577>.
+
+Acknowledgments
+
+   TODO
+
+Changelog
+
+   v00
+
+   *  Initial draft
+
+Author's Address
+
+   Thibault Meunier
+   Cloudflare Inc.
+   Email: ot-ietf@thibault.uk
