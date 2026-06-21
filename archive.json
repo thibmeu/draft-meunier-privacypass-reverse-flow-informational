@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-24T01:09:05.235817+00:00",
+  "timestamp": "2026-06-21T01:19:45.066911+00:00",
   "repo": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
   "labels": [
     {
@@ -55,15 +55,15 @@
       "id": "I_kwDOMu4RQM8AAAABCONz3w",
       "title": "Split HTTP header section in its own draft",
       "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thibmeu",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Discussed in Privacy Pass Interim 2026-01\nSuggested by @tfpauly\n\nSimilar to how Privacy Pass is structured, it would make sense to have the transport be in its own draft. This can still be in the same repository\n\nWe've seen MOQ use its own transport for instance",
       "createdAt": "2026-05-14T07:31:57Z",
-      "updatedAt": "2026-05-14T07:31:57Z",
-      "closedAt": null,
+      "updatedAt": "2026-06-18T07:36:07Z",
+      "closedAt": "2026-06-18T07:36:07Z",
       "comments": []
     },
     {
@@ -71,16 +71,24 @@
       "id": "I_kwDOMu4RQM8AAAABCOPRYQ",
       "title": "Sharpen text as to why Reverse Flow cannot be satisfied solely with RFC 9576",
       "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thibmeu",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Discussed during Privacy Pass Interim 2026-01\nSuggested by Benjamin Schwartz (not sure about github handle)\n\nReverse flow is essentially RFC 9576 deployed twice. The novelty come around new privacy consideration that have to be taken care of, the need for a transport mechanism, and the integration of a stateful client.",
       "createdAt": "2026-05-14T07:36:03Z",
-      "updatedAt": "2026-05-14T07:36:03Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-06-18T11:19:21Z",
+      "closedAt": "2026-06-18T11:19:21Z",
+      "comments": [
+        {
+          "author": "thibmeu",
+          "authorAssociation": "OWNER",
+          "body": "Closed in 9cbe710fb9aa4fd37fd1cfc44c9daebe6e29d2e6",
+          "createdAt": "2026-06-18T11:19:21Z",
+          "updatedAt": "2026-06-18T11:19:21Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -239,24 +247,26 @@
       "id": "PR_kwDOMu4RQM7eSEV7",
       "title": "Split HTTP header transport into its own draft",
       "url": "https://github.com/thibmeu/draft-meunier-privacypass-reverse-flow-informational/pull/6",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "thibmeu",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "Closes #4\r\n\r\n- Remove the \"Reverse flow with an HTTP header\" section from the architecture draft and move it to a new companion draft (draft-meunier-privacypass-reverse-flow-http-transport)\r\n- Add a \"Deployment modes\" section modelled on RFC9576 section 5, making explicit that transport and deployment model are independent choices\r\n- Reference MOQ-PRIVACYPASS and REVERSE-FLOW-HTTP-HEADER as examples of transport-specific documents\r\n- Drop RFC4648 from normative references (no longer used in this draft)",
       "createdAt": "2026-05-22T09:11:44Z",
-      "updatedAt": "2026-05-22T09:11:44Z",
+      "updatedAt": "2026-06-18T07:36:08Z",
       "baseRepository": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
       "baseRefName": "main",
       "baseRefOid": "4f79b5bc57b362a8f5d02ee94d4be8b6f1f9fc49",
       "headRepository": "thibmeu/draft-meunier-privacypass-reverse-flow-informational",
       "headRefName": "split-draft",
       "headRefOid": "20f21cc2ff1860f54f3b9403b201c6e5d9fe681b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-06-18T07:36:06Z",
+      "mergedAt": "2026-06-18T07:36:06Z",
+      "mergedBy": "thibmeu",
+      "mergeCommit": {
+        "oid": "c1ed38faa906a496bb841ab392f3e0159e0bf858"
+      },
       "comments": [],
       "reviews": []
     }
